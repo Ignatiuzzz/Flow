@@ -4,8 +4,17 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
-from app.database import connect_to_mongo, close_mongo_connection
-from app.routes import health_routes
+from app.database import close_mongo_connection, connect_to_mongo
+from app.routes import (
+    document_routes,
+    evidence_routes,
+    finding_routes,
+    health_routes,
+    highlight_routes,
+    matrix_routes,
+    note_routes,
+    project_routes,
+)
 
 
 settings = get_settings()
@@ -36,6 +45,41 @@ app.add_middleware(
 
 app.include_router(
     health_routes.router,
+    prefix=settings.API_PREFIX
+)
+
+app.include_router(
+    project_routes.router,
+    prefix=settings.API_PREFIX
+)
+
+app.include_router(
+    document_routes.router,
+    prefix=settings.API_PREFIX
+)
+
+app.include_router(
+    highlight_routes.router,
+    prefix=settings.API_PREFIX
+)
+
+app.include_router(
+    finding_routes.router,
+    prefix=settings.API_PREFIX
+)
+
+app.include_router(
+    evidence_routes.router,
+    prefix=settings.API_PREFIX
+)
+
+app.include_router(
+    note_routes.router,
+    prefix=settings.API_PREFIX
+)
+
+app.include_router(
+    matrix_routes.router,
     prefix=settings.API_PREFIX
 )
 
