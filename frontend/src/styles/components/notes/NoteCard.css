@@ -1,9 +1,10 @@
 .note-card {
-  @apply flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:flex-row lg:items-start lg:justify-between;
+  @apply flex flex-col gap-4 rounded-3xl border bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg;
+  border-color: #d9b4c1;
 }
 
 .note-card__main {
-  @apply flex-1;
+  @apply min-w-0 flex-1;
 }
 
 .note-card__top {
@@ -11,29 +12,46 @@
 }
 
 .note-card__badge {
-  @apply rounded-full bg-purple-50 px-3 py-1 text-xs font-bold text-purple-700;
+  @apply rounded-full border px-3 py-1 text-xs font-bold;
+  background-color: #f2dfe5;
+  border-color: #d9b4c1;
+  color: #7a2e49;
 }
 
 .note-card__document {
-  @apply rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700;
+  @apply rounded-full border px-3 py-1 text-xs font-bold;
+  background-color: #faf2f4;
+  border-color: #d9b4c1;
+  color: #7a2e49;
 }
 
 .note-card h3 {
-  @apply mb-2 text-lg font-bold text-slate-900;
+  @apply mb-2 text-lg font-extrabold tracking-tight text-slate-950;
 }
 
 .note-card p {
-  @apply mb-4 text-sm text-slate-600;
+  @apply mb-4 whitespace-pre-wrap text-sm leading-6 text-slate-500;
 }
 
 .note-card__actions {
-  @apply flex flex-wrap gap-2 lg:flex-col;
+  @apply flex flex-wrap gap-2 border-t border-slate-100 pt-4;
 }
 
 .note-card__actions button {
-  @apply rounded-xl bg-slate-100 px-4 py-2 text-center text-sm font-semibold text-slate-800 transition hover:bg-slate-200;
+  @apply rounded-2xl px-4 py-2.5 text-center text-sm font-bold transition;
+  background-color: #f2dfe5;
+  color: #7a2e49;
+}
+
+.note-card__actions button:hover {
+  background-color: #e8cbd5;
 }
 
 .note-card__delete {
-  @apply bg-red-50 text-red-700 hover:bg-red-100;
+  @apply text-red-700;
+  background-color: #fef2f2 !important;
+}
+
+.note-card__delete:hover {
+  background-color: #fee2e2 !important;
 }

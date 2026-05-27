@@ -1,28 +1,141 @@
 .evidences-page {
-  @apply min-h-screen bg-slate-50 p-8;
+  @apply relative min-h-screen overflow-hidden px-5 pt-5 pb-4 text-slate-900 md:px-6 md:pt-6 md:pb-4;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(52, 211, 153, 0.22), transparent 22rem),
+    radial-gradient(circle at 92% 18%, rgba(167, 243, 208, 0.14), transparent 20rem),
+    radial-gradient(circle at 70% 92%, rgba(16, 185, 129, 0.12), transparent 24rem),
+    linear-gradient(135deg, #022c22 0%, #064e3b 45%, #0f172a 100%);
+}
+
+.evidences-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("../../assets/background-pattern.svg"),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-repeat: repeat;
+  background-size:
+    760px 440px,
+    34px 34px,
+    58px 58px;
+  background-position:
+    center 40px,
+    0 0,
+    0 0;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.evidences-page__back,
+.evidences-page__hero,
+.evidences-page__stats,
+.evidences-page__content {
+  position: relative;
+  z-index: 1;
 }
 
 .evidences-page__back {
-  @apply mb-6 rounded-xl bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-300;
+  @apply mb-4 rounded-2xl bg-white/95 px-4 py-2 text-sm font-bold text-emerald-950 shadow-lg ring-1 ring-emerald-900/10 transition hover:bg-emerald-50;
 }
 
-.evidences-page__header {
-  @apply mb-7;
+.evidences-page__hero {
+  @apply relative mb-4 flex flex-col gap-4 overflow-hidden rounded-3xl border bg-white p-5 shadow-2xl lg:flex-row lg:items-center lg:justify-between;
+  border-color: rgba(20, 93, 160, 0.24);
 }
 
-.evidences-page__header h1 {
-  @apply mb-2 text-3xl font-extrabold text-slate-900;
+.evidences-page__hero::after {
+  content: "";
+  position: absolute;
+  right: -70px;
+  top: -90px;
+  width: 240px;
+  height: 240px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(20, 93, 160, 0.14), transparent 68%);
+  pointer-events: none;
 }
 
-.evidences-page__header p {
-  @apply max-w-3xl text-sm text-slate-500;
+.evidences-page__hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.evidences-page__hero-content {
+  @apply max-w-4xl;
+}
+
+.evidences-page__eyebrow {
+  @apply mb-2 inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide;
+  background-color: #ddeeff;
+  border-color: #9cc7f0;
+  color: #145da0;
+}
+
+.evidences-page__hero h1 {
+  @apply mb-2 text-3xl font-extrabold tracking-tight text-slate-950;
+}
+
+.evidences-page__hero p {
+  @apply max-w-3xl text-sm leading-6 text-slate-600;
+}
+
+.evidences-page__summary {
+  @apply flex min-w-[160px] flex-col items-center justify-center rounded-2xl px-4 py-4 text-center text-white shadow-xl ring-1;
+  background-color: #145da0;
+  --tw-ring-color: rgba(156, 199, 240, 0.45);
+}
+
+.evidences-page__summary span {
+  @apply text-center text-sm font-bold uppercase tracking-wide text-white;
+}
+
+.evidences-page__summary strong {
+  @apply mt-1 text-center text-3xl font-extrabold text-white;
+}
+
+.evidences-page__stats {
+  @apply mb-4 grid grid-cols-1 gap-3 md:grid-cols-3;
+}
+
+.evidences-page__stats article {
+  @apply rounded-2xl border bg-white px-5 py-4 shadow-xl;
+  border-color: rgba(20, 93, 160, 0.18);
+}
+
+.evidences-page__stats strong {
+  @apply block text-2xl font-extrabold tracking-tight;
+  color: #145da0;
+}
+
+.evidences-page__stats span {
+  @apply mt-1 block text-sm font-bold text-slate-500;
 }
 
 .evidences-page__content {
-  @apply grid grid-cols-1 gap-6 xl:grid-cols-[520px_1fr];
+  @apply grid grid-cols-1 gap-5 xl:grid-cols-[520px_1fr];
 }
 
 .evidences-page__form,
-.evidences-page__list {
+.evidences-page__main {
   @apply min-w-0;
+}
+
+.evidences-page__main {
+  @apply rounded-3xl border bg-white p-5 shadow-2xl;
+  border-color: rgba(20, 93, 160, 0.24);
+}
+
+.evidences-page__section-header {
+  @apply mb-4 flex flex-col gap-1 border-b border-slate-100 pb-4;
+}
+
+.evidences-page__section-header h2 {
+  @apply text-xl font-bold tracking-tight text-slate-950;
+}
+
+.evidences-page__section-header p {
+  @apply mt-1 text-sm text-slate-500;
 }

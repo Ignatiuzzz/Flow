@@ -12,7 +12,12 @@ function ProjectCard({ project, onOpen, onEdit, onDelete }: ProjectCardProps) {
   return (
     <article className="project-card">
       <div className="project-card__content">
-        <span className="project-card__status">{project.estado}</span>
+        <div className="project-card__top">
+          <span className="project-card__status">{project.estado}</span>
+          <span className="project-card__date">
+            {new Date(project.fechaCreacion).toLocaleDateString()}
+          </span>
+        </div>
 
         <h3>{project.nombre}</h3>
 
@@ -22,16 +27,39 @@ function ProjectCard({ project, onOpen, onEdit, onDelete }: ProjectCardProps) {
             : "Sin descripción registrada."}
         </p>
 
-        <div className="project-card__meta">
-          <span>Hallazgos: {project.hallazgos.length}</span>
-          <span>Evidencias: {project.evidencias.length}</span>
-          <span>Notas: {project.notas.length}</span>
+        <div className="project-card__stats">
+          <div>
+            <strong>{project.documentos.length}</strong>
+            <span>Documentos</span>
+          </div>
+
+          <div>
+            <strong>{project.hallazgos.length}</strong>
+            <span>Hallazgos</span>
+          </div>
+
+          <div>
+            <strong>{project.evidencias.length}</strong>
+            <span>Evidencias</span>
+          </div>
+
+          <div>
+            <strong>{project.notas.length}</strong>
+            <span>Notas</span>
+          </div>
         </div>
       </div>
 
       <div className="project-card__actions">
-        <button onClick={() => onOpen(project.id)}>Abrir</button>
+        <button
+          className="project-card__open"
+          onClick={() => onOpen(project.id)}
+        >
+          Abrir proyecto
+        </button>
+
         <button onClick={() => onEdit(project)}>Editar</button>
+
         <button
           className="project-card__delete"
           onClick={() => onDelete(project.id)}

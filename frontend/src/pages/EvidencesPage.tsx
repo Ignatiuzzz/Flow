@@ -83,27 +83,61 @@ function EvidencesPage() {
     }
   };
 
+  const linkedEvidences = evidences.filter(
+    (evidence) => evidence.hallazgoId
+  ).length;
+
+  const freeEvidences = evidences.length - linkedEvidences;
+
   return (
     <main className="evidences-page">
       <button
         className="evidences-page__back"
         onClick={() => navigate(`/projects/${currentProjectId}`)}
       >
-        Volver al proyecto
+        ← Volver al proyecto
       </button>
 
-      <section className="evidences-page__header">
-        <div>
+      <section className="evidences-page__hero">
+        <div className="evidences-page__hero-content">
+          <span className="evidences-page__eyebrow">
+            Módulo de respaldo
+          </span>
+
           <h1>Evidencias</h1>
+
           <p>
-            Gestiona las evidencias del proyecto, incluyendo las creadas
-            automáticamente desde los hallazgos.
+            Administra los respaldos del proyecto y relaciona evidencias con
+            hallazgos cuando corresponda. Las evidencias permiten sustentar la
+            revisión realizada por el auditor.
           </p>
+        </div>
+
+        <div className="evidences-page__summary">
+          <span>Total evidencias</span>
+          <strong>{evidences.length}</strong>
         </div>
       </section>
 
+      <section className="evidences-page__stats">
+        <article>
+          <strong>{evidences.length}</strong>
+          <span>Evidencias registradas</span>
+        </article>
+
+        <article>
+          <strong>{linkedEvidences}</strong>
+          <span>Relacionadas a hallazgo</span>
+        </article>
+
+        <article>
+          <strong>{freeEvidences}</strong>
+          <span>Generales del proyecto</span>
+        </article>
+      </section>
+
       <section className="evidences-page__content">
-        <div className="evidences-page__form">
+        <aside className="evidences-page__form">
           <EvidenceForm
             projectId={currentProjectId}
             findings={findings}
@@ -111,16 +145,26 @@ function EvidencesPage() {
             onSubmit={handleSubmit}
             onCancelEdit={() => setSelectedEvidence(null)}
           />
-        </div>
+        </aside>
 
-        <div className="evidences-page__list">
+        <section className="evidences-page__main">
+          <div className="evidences-page__section-header">
+            <div>
+              <h2>Evidencias registradas</h2>
+              <p>
+                Revisa, edita, elimina o exporta las fichas de evidencia del
+                proyecto.
+              </p>
+            </div>
+          </div>
+
           <EvidenceList
             evidences={evidences}
             loading={loading}
             onEdit={setSelectedEvidence}
             onDelete={handleDelete}
           />
-        </div>
+        </section>
       </section>
     </main>
   );

@@ -18,14 +18,23 @@ function ProjectList({
   onDelete,
 }: ProjectListProps) {
   if (loading) {
-    return <p className="project-list__message">Cargando proyectos...</p>;
+    return (
+      <div className="project-list__state">
+        <div className="project-list__loader" />
+        <p>Cargando proyectos...</p>
+      </div>
+    );
   }
 
   if (projects.length === 0) {
     return (
-      <p className="project-list__message">
-        Todavía no hay proyectos registrados.
-      </p>
+      <div className="project-list__state">
+        <h3>No hay proyectos todavía</h3>
+        <p>
+          Crea tu primer proyecto para comenzar a registrar documentos,
+          hallazgos, evidencias y notas.
+        </p>
+      </div>
     );
   }
 

@@ -3,5 +3,6 @@
 }
 
 .evidence-list__message {
-  @apply rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500;
+  @apply flex min-h-[260px] flex-col items-center justify-center rounded-3xl border border-dashed bg-white p-8 text-center text-sm leading-6 text-slate-500;
+  border-color: #9cc7f0;
 }

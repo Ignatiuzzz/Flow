@@ -1,0 +1,65 @@
+:root {
+  --color-primary-dark: #3b0764;
+  --color-primary: #6d28d9;
+  --color-primary-hover: #5b21b6;
+  --color-primary-soft: #ede9fe;
+
+  --color-background: #faf9ff;
+  --color-surface: #ffffff;
+  --color-border: #e5e7eb;
+
+  --color-text-main: #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #6b7280;
+
+  --color-projects: #7c3aed;
+  --color-documents: #4f46e5;
+  --color-findings: #ea580c;
+  --color-evidences: #16a34a;
+  --color-notes: #c026d3;
+  --color-matrix: #6d28d9;
+}
+
+.app-background {
+  @apply min-h-screen bg-violet-50 text-gray-900;
+}
+
+.app-card {
+  @apply rounded-2xl border border-gray-200 bg-white shadow-sm;
+}
+
+.app-page {
+  @apply min-h-screen bg-violet-50 p-8 text-gray-900;
+}
+
+.app-page-header {
+  @apply mb-7;
+}
+
+.app-page-title {
+  @apply mb-2 text-3xl font-extrabold text-gray-900;
+}
+
+.app-page-description {
+  @apply max-w-3xl text-sm text-gray-500;
+}
+
+.app-button-primary {
+  @apply rounded-xl bg-violet-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-800 disabled:bg-violet-300;
+}
+
+.app-button-secondary {
+  @apply rounded-xl bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 transition hover:bg-gray-300;
+}
+
+.app-button-danger {
+  @apply rounded-xl bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100;
+}
+
+.app-module-badge {
+  @apply inline-flex rounded-full px-3 py-1 text-xs font-bold;
+}
+
+.app-input {
+  @apply rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-violet-700;
+}

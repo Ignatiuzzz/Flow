@@ -68,26 +68,47 @@ function ProjectsPage() {
 
   return (
     <main className="projects-page">
-      <section className="projects-page__header">
-        <div>
+      <section className="projects-page__hero">
+        <div className="projects-page__hero-content">
+          <span className="projects-page__eyebrow">
+            Herramienta para Auditores
+          </span>
+
           <h1>Proyectos de auditoría</h1>
+
           <p>
-            Crea y administra los proyectos que servirán como base para
-            hallazgos, evidencias, notas y matriz.
+            Organiza trabajos de auditoría, registra hallazgos, relaciona
+            evidencias, administra notas y genera la matriz consolidada del
+            proyecto.
           </p>
+        </div>
+
+        <div className="projects-page__summary">
+          <span>Total de proyectos</span>
+          <strong>{projects.length}</strong>
         </div>
       </section>
 
       <section className="projects-page__content">
-        <div className="projects-page__form">
+        <aside className="projects-page__side">
           <ProjectForm
             selectedProject={selectedProject}
             onSubmit={handleSubmit}
             onCancelEdit={() => setSelectedProject(null)}
           />
-        </div>
+        </aside>
 
-        <div className="projects-page__list">
+        <section className="projects-page__main">
+          <div className="projects-page__section-header">
+            <div>
+              <h2>Proyectos registrados</h2>
+              <p>
+                Selecciona un proyecto para continuar con documentos,
+                hallazgos, evidencias, notas y matriz.
+              </p>
+            </div>
+          </div>
+
           <ProjectList
             projects={projects}
             loading={loading}
@@ -95,7 +116,7 @@ function ProjectsPage() {
             onEdit={setSelectedProject}
             onDelete={handleDelete}
           />
-        </div>
+        </section>
       </section>
     </main>
   );

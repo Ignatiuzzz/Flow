@@ -1,5 +1,6 @@
 .matrix-table__wrapper {
-  @apply w-full overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm;
+  @apply w-full overflow-x-auto rounded-3xl border bg-white shadow-sm;
+  border-color: #b8c5d9;
 }
 
 .matrix-table {
@@ -7,45 +8,89 @@
 }
 
 .matrix-table thead {
-  @apply bg-slate-100;
+  background-color: #e7ecf5;
 }
 
 .matrix-table th {
-  @apply border-b border-slate-200 px-4 py-3 text-xs font-bold uppercase tracking-wide text-slate-700;
+  @apply border-b px-4 py-3 text-xs font-extrabold uppercase tracking-wide;
+  border-color: #b8c5d9;
+  color: #273f68;
 }
 
 .matrix-table td {
-  @apply border-b border-slate-100 px-4 py-3 align-top text-slate-600;
+  @apply border-b px-4 py-3 align-top text-slate-600;
+  border-color: #edf1f7;
+}
+
+.matrix-table tbody tr {
+  @apply transition;
 }
 
 .matrix-table tbody tr:hover {
-  @apply bg-slate-50;
+  background-color: #f7f9fc;
 }
 
-.matrix-table__message {
-  @apply rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500;
+.matrix-table__code {
+  @apply inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase;
+  background-color: #e7ecf5;
+  border-color: #b8c5d9;
+  color: #273f68;
+}
+
+.matrix-table__risk {
+  @apply text-sm font-extrabold;
+  color: #273f68;
 }
 
 .matrix-table__level {
-  @apply inline-flex rounded-full px-3 py-1 text-xs font-bold;
+  @apply inline-flex rounded-full border px-3 py-1 text-xs font-bold;
 }
 
 .matrix-table__level--muy-bajo {
-  @apply bg-emerald-50 text-emerald-700;
+  background-color: #e6f4ef;
+  border-color: #b7d8cd;
+  color: #064e3b;
 }
 
 .matrix-table__level--bajo {
-  @apply bg-green-50 text-green-700;
+  background-color: #eaf7e8;
+  border-color: #b7d9b0;
+  color: #2f6b22;
 }
 
 .matrix-table__level--medio {
-  @apply bg-yellow-50 text-yellow-700;
+  background-color: #f8efd5;
+  border-color: #e4c878;
+  color: #7a5a08;
 }
 
 .matrix-table__level--alto {
-  @apply bg-orange-50 text-orange-700;
+  background-color: #f7e7d8;
+  border-color: #dfb58e;
+  color: #8a4515;
 }
 
 .matrix-table__level--extremo {
-  @apply bg-red-50 text-red-700;
+  background-color: #f8dddd;
+  border-color: #e1a1a1;
+  color: #8f1d1d;
+}
+
+.matrix-table__state {
+  @apply flex min-h-[260px] flex-col items-center justify-center rounded-3xl border border-dashed bg-white p-8 text-center;
+  border-color: #b8c5d9;
+}
+
+.matrix-table__state h3 {
+  @apply mb-2 text-lg font-extrabold tracking-tight text-slate-900;
+}
+
+.matrix-table__state p {
+  @apply max-w-md text-sm leading-6 text-slate-500;
+}
+
+.matrix-table__loader {
+  @apply mb-4 h-10 w-10 animate-spin rounded-full border-4;
+  border-color: #e7ecf5;
+  border-top-color: #273f68;
 }

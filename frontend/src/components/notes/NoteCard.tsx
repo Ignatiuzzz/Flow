@@ -13,7 +13,7 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
       <div className="note-card__main">
         <div className="note-card__top">
           <span className="note-card__badge">
-            {note.hallazgoId ? "Relacionada a hallazgo" : "Nota manual"}
+            {note.hallazgoId ? "Relacionada a hallazgo" : "Nota general"}
           </span>
 
           {note.documentoId && (

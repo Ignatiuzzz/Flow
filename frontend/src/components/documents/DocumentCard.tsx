@@ -16,18 +16,28 @@ function DocumentCard({ document, onDelete }: DocumentCardProps) {
 
   return (
     <article className="document-card">
+      <div className="document-card__icon">
+        {document.tipoArchivo.toUpperCase()}
+      </div>
+
       <div className="document-card__main">
         <div className="document-card__top">
           <span className="document-card__type">
             {document.tipoArchivo.toUpperCase()}
           </span>
+
+          {sizeInMb && <span className="document-card__size">{sizeInMb} MB</span>}
         </div>
 
         <h3>{document.nombreOriginal}</h3>
 
+        <p>
+          Archivo documental registrado en el proyecto para revisión y respaldo.
+        </p>
+
         <div className="document-card__meta">
           <span>Extensión: {document.extension}</span>
-          {sizeInMb && <span>Tamaño: {sizeInMb} MB</span>}
+          <span>Nombre interno: {document.nombreArchivo}</span>
         </div>
       </div>
 

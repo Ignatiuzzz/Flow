@@ -1,5 +1,5 @@
-import { Finding } from "../../types/finding";
 import { findingApi } from "../../api/findingApi";
+import { Finding } from "../../types/finding";
 import "../../styles/components/findings/FindingCard.css";
 
 interface FindingCardProps {
@@ -9,12 +9,15 @@ interface FindingCardProps {
 }
 
 function FindingCard({ finding, onEdit, onDelete }: FindingCardProps) {
+  const levelClass = finding.nivel.replace(" ", "-").toLowerCase();
+
   return (
     <article className="finding-card">
       <div className="finding-card__main">
         <div className="finding-card__top">
           <span className="finding-card__code">{finding.codigo}</span>
-          <span className={`finding-card__level finding-card__level--${finding.nivel.replace(" ", "-").toLowerCase()}`}>
+
+          <span className={`finding-card__level finding-card__level--${levelClass}`}>
             {finding.nivel}
           </span>
         </div>
@@ -28,13 +31,24 @@ function FindingCard({ finding, onEdit, onDelete }: FindingCardProps) {
         </p>
 
         <div className="finding-card__risk">
-          <span>Impacto: {finding.impacto}</span>
-          <span>Urgencia: {finding.urgencia}</span>
-          <span>Riesgo: {finding.riesgo}</span>
+          <div>
+            <strong>{finding.impacto}</strong>
+            <span>Impacto</span>
+          </div>
+
+          <div>
+            <strong>{finding.urgencia}</strong>
+            <span>Urgencia</span>
+          </div>
+
+          <div>
+            <strong>{finding.riesgo}</strong>
+            <span>Riesgo</span>
+          </div>
         </div>
 
         <div className="finding-card__meta">
-          <span>Evidencias relacionadas: {finding.evidencias.length}</span>
+          <span>Evidencias: {finding.evidencias.length}</span>
           <span>Subrayados: {finding.subrayados.length}</span>
         </div>
       </div>

@@ -56,17 +56,24 @@ function ProjectForm({
 
   return (
     <form className="project-form" onSubmit={handleSubmit}>
-      <h2 className="project-form__title">
-        {isEditing ? "Editar proyecto" : "Crear proyecto"}
-      </h2>
+      <div className="project-form__header">
+        <span>{isEditing ? "Modo edición" : "Nuevo proyecto"}</span>
+
+        <h2>{isEditing ? "Editar proyecto" : "Crear proyecto"}</h2>
+
+        <p>
+          Define el proyecto base sobre el cual se registrarán hallazgos,
+          evidencias, notas y matriz.
+        </p>
+      </div>
 
       <div className="project-form__group">
-        <label>Nombre</label>
+        <label>Nombre del proyecto</label>
         <input
           type="text"
           value={nombre}
           onChange={(event) => setNombre(event.target.value)}
-          placeholder="Ej. Auditoría SAFI 2026"
+          placeholder="Ej. Auditoría documental SAFI"
         />
       </div>
 
@@ -75,8 +82,8 @@ function ProjectForm({
         <textarea
           value={descripcion}
           onChange={(event) => setDescripcion(event.target.value)}
-          placeholder="Describe brevemente el objetivo del proyecto"
-          rows={4}
+          placeholder="Describe brevemente el alcance u objetivo del proyecto"
+          rows={5}
         />
       </div>
 
@@ -85,7 +92,7 @@ function ProjectForm({
           {loading
             ? "Guardando..."
             : isEditing
-            ? "Actualizar proyecto"
+            ? "Guardar cambios"
             : "Crear proyecto"}
         </button>
 

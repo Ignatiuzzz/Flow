@@ -12,7 +12,7 @@ from app.controllers.finding_controller import (
     get_findings_by_project,
     update_finding,
 )
-from app.schemas.finding_schema import FindingCreate, FindingUpdate
+from app.schemas.finding_schema import FindingCreate, FindingUpdate, FindingFromHighlightCreate
 
 
 

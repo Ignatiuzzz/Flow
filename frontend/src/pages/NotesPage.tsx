@@ -79,27 +79,62 @@ function NotesPage() {
     }
   };
 
+  const linkedNotes = notes.filter((note) => note.hallazgoId).length;
+  const documentNotes = notes.filter((note) => note.documentoId).length;
+  const generalNotes = notes.length - linkedNotes;
+
   return (
     <main className="notes-page">
       <button
         className="notes-page__back"
         onClick={() => navigate(`/projects/${currentProjectId}`)}
       >
-        Volver al proyecto
+        ← Volver al proyecto
       </button>
 
-      <section className="notes-page__header">
-        <div>
+      <section className="notes-page__hero">
+        <div className="notes-page__hero-content">
+          <span className="notes-page__eyebrow">Módulo de observaciones</span>
+
           <h1>Notas</h1>
+
           <p>
-            Registra notas generales del proyecto o relaciónalas con un hallazgo
-            específico.
+            Registra comentarios, observaciones y apuntes del auditor. Las notas
+            pueden quedar como referencias generales del proyecto o relacionarse
+            con un hallazgo específico.
           </p>
+        </div>
+
+        <div className="notes-page__summary">
+          <span>Total notas</span>
+          <strong>{notes.length}</strong>
         </div>
       </section>
 
+      <section className="notes-page__stats">
+        <article>
+          <strong>{notes.length}</strong>
+          <span>Notas registradas</span>
+        </article>
+
+        <article>
+          <strong>{linkedNotes}</strong>
+          <span>Relacionadas a hallazgo</span>
+        </article>
+
+        <article>
+          <strong>{generalNotes}</strong>
+          <span>Generales del proyecto</span>
+        </article>
+
+        <article>
+          <strong>{documentNotes}</strong>
+          <span>Desde documento</span>
+        </article>
+      </section>
+
       <section className="notes-page__content">
-        <div className="notes-page__form">
+        <aside className="notes-page__form">
           <NoteForm
             projectId={currentProjectId}
             findings={findings}
@@ -107,16 +142,26 @@ function NotesPage() {
             onSubmit={handleSubmit}
             onCancelEdit={() => setSelectedNote(null)}
           />
-        </div>
+        </aside>
 
-        <div className="notes-page__list">
+        <section className="notes-page__main">
+          <div className="notes-page__section-header">
+            <div>
+              <h2>Notas registradas</h2>
+              <p>
+                Administra las notas del proyecto y sus relaciones con hallazgos
+                cuando corresponda.
+              </p>
+            </div>
+          </div>
+
           <NoteList
             notes={notes}
             loading={loading}
             onEdit={setSelectedNote}
             onDelete={handleDelete}
           />
-        </div>
+        </section>
       </section>
     </main>
   );

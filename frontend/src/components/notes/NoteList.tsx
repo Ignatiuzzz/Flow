@@ -11,14 +11,23 @@ interface NoteListProps {
 
 function NoteList({ notes, loading, onEdit, onDelete }: NoteListProps) {
   if (loading) {
-    return <p className="note-list__message">Cargando notas...</p>;
+    return (
+      <div className="note-list__state">
+        <div className="note-list__loader" />
+        <p>Cargando notas...</p>
+      </div>
+    );
   }
 
   if (notes.length === 0) {
     return (
-      <p className="note-list__message">
-        Todavía no hay notas registradas para este proyecto.
-      </p>
+      <div className="note-list__state">
+        <h3>No hay notas todavía</h3>
+        <p>
+          Registra la primera nota del proyecto para documentar observaciones o
+          comentarios relevantes.
+        </p>
+      </div>
     );
   }
 
