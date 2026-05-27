@@ -1,0 +1,31 @@
+# Entorno virtual
+venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Variables de entorno
+.env
+
+# Archivos subidos y generados
+app/uploads/documents/*
+app/uploads/exports/pdf/*
+app/uploads/exports/excel/*
+app/uploads/temp/*
+
+# Mantener carpetas vacías en Git
+!app/uploads/documents/.gitkeep
+!app/uploads/exports/pdf/.gitkeep
+!app/uploads/exports/excel/.gitkeep
+!app/uploads/temp/.gitkeep
+
+# Editores
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
