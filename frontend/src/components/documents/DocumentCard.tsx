@@ -4,10 +4,11 @@ import "../../styles/components/documents/DocumentCard.css";
 
 interface DocumentCardProps {
   document: AuditDocument;
+  onOpen: (documentId: string) => void;
   onDelete: (documentId: string) => void;
 }
 
-function DocumentCard({ document, onDelete }: DocumentCardProps) {
+function DocumentCard({ document, onOpen, onDelete }: DocumentCardProps) {
   const fileUrl = documentApi.fileUrl(document.id);
 
   const sizeInMb = document.tamanioBytes
@@ -32,15 +33,16 @@ function DocumentCard({ document, onDelete }: DocumentCardProps) {
       </div>
 
       <div className="document-card__actions">
-        <a href={fileUrl} target="_blank" rel="noreferrer">
+        <button type="button" onClick={() => onOpen(document.id)}>
           Abrir
-        </a>
+        </button>
 
         <a href={fileUrl} download>
           Descargar
         </a>
 
         <button
+          type="button"
           className="document-card__delete"
           onClick={() => onDelete(document.id)}
         >

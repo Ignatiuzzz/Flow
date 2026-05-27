@@ -44,6 +44,10 @@ function DocumentsPage() {
     }
   };
 
+  const handleOpen = (documentId: string) => {
+    navigate(`/projects/${currentProjectId}/documents/${documentId}/viewer`);
+  };
+
   const handleDelete = async (documentId: string) => {
     const confirmed = window.confirm(
       "¿Estás seguro de eliminar este documento?"
@@ -73,7 +77,7 @@ function DocumentsPage() {
         <div>
           <h1>Documentos</h1>
           <p>
-            Sube y administra los documentos base del proyecto. Luego estos
+            Sube y administra los documentos PDF del proyecto. Luego estos
             documentos podrán ser visualizados y subrayados.
           </p>
         </div>
@@ -88,6 +92,7 @@ function DocumentsPage() {
           <DocumentList
             documents={documents}
             loading={loading}
+            onOpen={handleOpen}
             onDelete={handleDelete}
           />
         </div>

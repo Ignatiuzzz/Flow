@@ -17,11 +17,10 @@ function DocumentUploader({ onUpload }: DocumentUploaderProps) {
       return;
     }
 
-    const allowedExtensions = ["pdf", "docx"];
     const extension = file.name.split(".").pop()?.toLowerCase();
 
-    if (!extension || !allowedExtensions.includes(extension)) {
-      alert("Solo se permiten archivos PDF o DOCX.");
+    if (extension !== "pdf") {
+      alert("Por ahora solo se permiten archivos PDF.");
       event.target.value = "";
       setSelectedFile(null);
       return;
@@ -34,7 +33,7 @@ function DocumentUploader({ onUpload }: DocumentUploaderProps) {
     event.preventDefault();
 
     if (!selectedFile) {
-      alert("Selecciona un archivo antes de subir.");
+      alert("Selecciona un archivo PDF antes de subir.");
       return;
     }
 
@@ -52,17 +51,13 @@ function DocumentUploader({ onUpload }: DocumentUploaderProps) {
       <div className="document-uploader__header">
         <h2>Subir documento</h2>
         <p>
-          Adjunta documentos PDF o DOCX que servirán como respaldo del proyecto.
+          Adjunta documentos PDF que servirán como respaldo del proyecto.
         </p>
       </div>
 
       <div className="document-uploader__field">
-        <label>Archivo</label>
-        <input
-          type="file"
-          accept=".pdf,.docx"
-          onChange={handleFileChange}
-        />
+        <label>Archivo PDF</label>
+        <input type="file" accept=".pdf,application/pdf" onChange={handleFileChange} />
       </div>
 
       {selectedFile && (

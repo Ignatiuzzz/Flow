@@ -1,0 +1,59 @@
+.document-viewer {
+  @apply w-full;
+}
+
+.document-viewer__toolbar {
+  @apply sticky top-0 z-30 mb-6 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm backdrop-blur lg:flex-row lg:items-center lg:justify-between;
+}
+
+.document-viewer__toolbar h2 {
+  @apply mb-1 text-xl font-bold text-slate-900;
+}
+
+.document-viewer__toolbar p {
+  @apply text-sm text-slate-500;
+}
+
+.document-viewer__zoom {
+  @apply flex items-center gap-3;
+}
+
+.document-viewer__zoom button {
+  @apply flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold text-white transition hover:bg-blue-700;
+}
+
+.document-viewer__zoom span {
+  @apply min-w-16 rounded-xl bg-slate-100 px-4 py-2 text-center text-sm font-bold text-slate-700;
+}
+
+.document-viewer__content {
+  @apply flex flex-col items-center gap-8;
+}
+
+.document-viewer__page {
+  @apply relative rounded-2xl border border-slate-200 bg-white p-4 shadow-sm;
+}
+
+.document-viewer__page-number {
+  @apply mb-3 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600;
+}
+
+.document-viewer__message {
+  @apply rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500;
+}
+
+.document-viewer__message--error {
+  @apply border-red-200 bg-red-50 text-red-700;
+}
+
+.react-pdf__Page {
+  @apply overflow-hidden rounded-xl;
+}
+
+.react-pdf__Page canvas {
+  @apply max-w-full;
+}
+
+.react-pdf__Page__textContent {
+  @apply select-text;
+}

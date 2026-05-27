@@ -6,6 +6,7 @@ import EvidencesPage from "../pages/EvidencesPage";
 import NotesPage from "../pages/NotesPage";
 import MatrixPage from "../pages/MatrixPage";
 import DocumentsPage from "../pages/DocumentsPage";
+import DocumentViewerPage from "../pages/DocumentViewerPage";
 
 function AppRouter() {
   return (
@@ -17,6 +18,11 @@ function AppRouter() {
         <Route
           path="/projects/:projectId/documents"
           element={<DocumentsPage />}
+        />
+
+        <Route
+          path="/projects/:projectId/documents/:documentId/viewer"
+          element={<DocumentViewerPage />}
         />
 
         <Route path="/projects/:projectId/findings" element={<FindingsPage />} />
