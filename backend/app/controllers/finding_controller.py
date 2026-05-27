@@ -3,40 +3,21 @@ from datetime import datetime, timezone
 from fastapi import HTTPException, status
 
 from app.database import get_database
-from app.models.evidence_model import EvidenceModel
 from app.models.finding_model import FindingModel
-from app.models.enums import RiskLevel
 from app.schemas.finding_schema import FindingCreate, FindingUpdate
+from app.services.evidence_service import build_initial_evidence_from_finding
+from app.services.finding_service import (
+    get_evidence_sync_fields,
+    prepare_finding_data,
+    prepare_finding_update_data,
+    should_sync_evidence_fields,
+)
+from app.services.pdf_service import generate_finding_pdf
+from app.services.word_service import generate_finding_word
 from app.utils.mongo import serialize_document, serialize_documents, to_object_id
 
 
 COLLECTION = "findings"
-
-
-def calculate_risk(impacto: int, urgencia: int) -> int:
-    return impacto * urgencia
-
-
-def calculate_risk_level(riesgo: int) -> RiskLevel:
-    if riesgo <= 2:
-        return RiskLevel.MUY_BAJO
-
-    if 3 <= riesgo <= 4:
-        return RiskLevel.BAJO
-
-    if 5 <= riesgo <= 9:
-        return RiskLevel.MEDIO
-
-    if 9 < riesgo < 20:
-        return RiskLevel.ALTO
-
-    if riesgo >= 20:
-        return RiskLevel.EXTREMO
-
-    raise HTTPException(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        detail="Valores errados para calcular el nivel de riesgo"
-    )
 
 
 async def create_finding(finding_data: FindingCreate):
@@ -50,13 +31,7 @@ async def create_finding(finding_data: FindingCreate):
             detail="Proyecto no encontrado"
         )
 
-    riesgo = calculate_risk(finding_data.impacto, finding_data.urgencia)
-    nivel = calculate_risk_level(riesgo)
-
-    finding_dict = finding_data.model_dump()
-    finding_dict["riesgo"] = riesgo
-    finding_dict["nivel"] = nivel
-    finding_dict["evidencias"] = []
+    finding_dict = prepare_finding_data(finding_data.model_dump())
 
     finding = FindingModel(**finding_dict)
 
@@ -66,18 +41,13 @@ async def create_finding(finding_data: FindingCreate):
 
     finding_id = finding_result.inserted_id
 
-    evidence = EvidenceModel(
-        proyectoId=finding_data.proyectoId,
-        hallazgoId=finding_id,
-        nombre=f"Evidencia de {finding_data.nombre}",
-        codigo=f"E-{finding_data.codigo}",
+    evidence = build_initial_evidence_from_finding(
+        proyecto_id=finding_data.proyectoId,
+        hallazgo_id=finding_id,
+        finding_name=finding_data.nombre,
+        finding_code=finding_data.codigo,
         criterio=finding_data.criterio,
         objetivo=finding_data.objetivo,
-        descripcionEvidencia=None,
-        documentoId=None,
-        documentoNombre=None,
-        subtitulo=None,
-        subrayados=[]
     )
 
     evidence_result = await db["evidences"].insert_one(
@@ -88,7 +58,14 @@ async def create_finding(finding_data: FindingCreate):
 
     await db[COLLECTION].update_one(
         {"_id": finding_id},
-        {"$push": {"evidencias": evidence_id}}
+        {
+            "$push": {
+                "evidencias": evidence_id
+            },
+            "$set": {
+                "fechaActualizacion": datetime.now(timezone.utc)
+            }
+        }
     )
 
     await db["projects"].update_one(
@@ -156,34 +133,29 @@ async def update_finding(finding_id: str, finding_data: FindingUpdate):
             detail="No se enviaron datos para actualizar"
         )
 
-    impacto = update_data.get("impacto", existing_finding["impacto"])
-    urgencia = update_data.get("urgencia", existing_finding["urgencia"])
-
-    riesgo = calculate_risk(impacto, urgencia)
-    nivel = calculate_risk_level(riesgo)
-
-    update_data["riesgo"] = riesgo
-    update_data["nivel"] = nivel
+    update_data = prepare_finding_update_data(update_data, existing_finding)
     update_data["fechaActualizacion"] = datetime.now(timezone.utc)
 
     await db[COLLECTION].update_one(
         {"_id": finding_object_id},
-        {"$set": update_data}
+        {
+            "$set": update_data
+        }
     )
 
-    if "criterio" in update_data or "objetivo" in update_data:
-        evidence_update = {}
+    if should_sync_evidence_fields(update_data):
+        evidence_update = get_evidence_sync_fields(update_data)
 
-        if "criterio" in update_data:
-            evidence_update["criterio"] = update_data["criterio"]
-
-        if "objetivo" in update_data:
-            evidence_update["objetivo"] = update_data["objetivo"]
-
-        await db["evidences"].update_many(
-            {"hallazgoId": finding_object_id},
-            {"$set": evidence_update}
-        )
+        if evidence_update:
+            await db["evidences"].update_many(
+                {"hallazgoId": finding_object_id},
+                {
+                    "$set": {
+                        **evidence_update,
+                        "fechaActualizacion": datetime.now(timezone.utc)
+                    }
+                }
+            )
 
     updated_finding = await db[COLLECTION].find_one({"_id": finding_object_id})
 
@@ -207,7 +179,14 @@ async def delete_finding(finding_id: str):
 
     await db["projects"].update_one(
         {"_id": finding["proyectoId"]},
-        {"$pull": {"hallazgos": finding_object_id}}
+        {
+            "$pull": {
+                "hallazgos": finding_object_id
+            },
+            "$set": {
+                "fechaActualizacion": datetime.now(timezone.utc)
+            }
+        }
     )
 
     return {
@@ -249,4 +228,42 @@ async def get_finding_related_documents(finding_id: str):
     return {
         "hallazgoId": finding_id,
         "documentosRelacionados": related_items
+    }
+
+
+async def export_finding_pdf(finding_id: str):
+    db = get_database()
+
+    finding = await db[COLLECTION].find_one({"_id": to_object_id(finding_id)})
+
+    if not finding:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Hallazgo no encontrado"
+        )
+
+    file_path = generate_finding_pdf(finding)
+
+    return {
+        "message": "Ficha de hallazgo generada en PDF",
+        "filePath": file_path
+    }
+
+
+async def export_finding_word(finding_id: str):
+    db = get_database()
+
+    finding = await db[COLLECTION].find_one({"_id": to_object_id(finding_id)})
+
+    if not finding:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Hallazgo no encontrado"
+        )
+
+    file_path = generate_finding_word(finding)
+
+    return {
+        "message": "Ficha de hallazgo generada en Word",
+        "filePath": file_path
     }

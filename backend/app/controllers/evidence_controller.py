@@ -5,6 +5,9 @@ from fastapi import HTTPException, status
 from app.database import get_database
 from app.models.evidence_model import EvidenceModel
 from app.schemas.evidence_schema import EvidenceCreate, EvidenceUpdate
+from app.services.evidence_service import complete_evidence_data_from_finding
+from app.services.pdf_service import generate_evidence_pdf
+from app.services.word_service import generate_evidence_word
 from app.utils.mongo import serialize_document, serialize_documents, to_object_id
 
 
@@ -33,11 +36,10 @@ async def create_evidence(evidence_data: EvidenceCreate):
                 detail="Hallazgo no encontrado"
             )
 
-        if not evidence_dict.get("criterio"):
-            evidence_dict["criterio"] = finding.get("criterio")
-
-        if not evidence_dict.get("objetivo"):
-            evidence_dict["objetivo"] = finding.get("objetivo")
+        evidence_dict = complete_evidence_data_from_finding(
+            evidence_data=evidence_dict,
+            finding=finding
+        )
 
     evidence = EvidenceModel(**evidence_dict)
 
@@ -46,15 +48,26 @@ async def create_evidence(evidence_data: EvidenceCreate):
     await db["projects"].update_one(
         {"_id": evidence_data.proyectoId},
         {
-            "$push": {"evidencias": result.inserted_id},
-            "$set": {"fechaActualizacion": datetime.now(timezone.utc)}
+            "$push": {
+                "evidencias": result.inserted_id
+            },
+            "$set": {
+                "fechaActualizacion": datetime.now(timezone.utc)
+            }
         }
     )
 
     if evidence_data.hallazgoId:
         await db["findings"].update_one(
             {"_id": evidence_data.hallazgoId},
-            {"$push": {"evidencias": result.inserted_id}}
+            {
+                "$push": {
+                    "evidencias": result.inserted_id
+                },
+                "$set": {
+                    "fechaActualizacion": datetime.now(timezone.utc)
+                }
+            }
         )
 
     created_evidence = await db[COLLECTION].find_one({"_id": result.inserted_id})
@@ -103,6 +116,16 @@ async def get_evidence_by_id(evidence_id: str):
 async def update_evidence(evidence_id: str, evidence_data: EvidenceUpdate):
     db = get_database()
 
+    evidence_object_id = to_object_id(evidence_id)
+
+    existing_evidence = await db[COLLECTION].find_one({"_id": evidence_object_id})
+
+    if not existing_evidence:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evidencia no encontrada"
+        )
+
     update_data = evidence_data.model_dump(exclude_unset=True)
 
     if not update_data:
@@ -113,18 +136,14 @@ async def update_evidence(evidence_id: str, evidence_data: EvidenceUpdate):
 
     update_data["fechaActualizacion"] = datetime.now(timezone.utc)
 
-    result = await db[COLLECTION].update_one(
-        {"_id": to_object_id(evidence_id)},
-        {"$set": update_data}
+    await db[COLLECTION].update_one(
+        {"_id": evidence_object_id},
+        {
+            "$set": update_data
+        }
     )
 
-    if result.matched_count == 0:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Evidencia no encontrada"
-        )
-
-    updated_evidence = await db[COLLECTION].find_one({"_id": to_object_id(evidence_id)})
+    updated_evidence = await db[COLLECTION].find_one({"_id": evidence_object_id})
 
     return serialize_document(updated_evidence)
 
@@ -146,15 +165,67 @@ async def delete_evidence(evidence_id: str):
 
     await db["projects"].update_one(
         {"_id": evidence["proyectoId"]},
-        {"$pull": {"evidencias": evidence_object_id}}
+        {
+            "$pull": {
+                "evidencias": evidence_object_id
+            },
+            "$set": {
+                "fechaActualizacion": datetime.now(timezone.utc)
+            }
+        }
     )
 
     if evidence.get("hallazgoId"):
         await db["findings"].update_one(
             {"_id": evidence["hallazgoId"]},
-            {"$pull": {"evidencias": evidence_object_id}}
+            {
+                "$pull": {
+                    "evidencias": evidence_object_id
+                },
+                "$set": {
+                    "fechaActualizacion": datetime.now(timezone.utc)
+                }
+            }
         )
 
     return {
         "message": "Evidencia eliminada correctamente"
+    }
+
+
+async def export_evidence_pdf(evidence_id: str):
+    db = get_database()
+
+    evidence = await db[COLLECTION].find_one({"_id": to_object_id(evidence_id)})
+
+    if not evidence:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evidencia no encontrada"
+        )
+
+    file_path = generate_evidence_pdf(evidence)
+
+    return {
+        "message": "Ficha de evidencia generada en PDF",
+        "filePath": file_path
+    }
+
+
+async def export_evidence_word(evidence_id: str):
+    db = get_database()
+
+    evidence = await db[COLLECTION].find_one({"_id": to_object_id(evidence_id)})
+
+    if not evidence:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evidencia no encontrada"
+        )
+
+    file_path = generate_evidence_word(evidence)
+
+    return {
+        "message": "Ficha de evidencia generada en Word",
+        "filePath": file_path
     }

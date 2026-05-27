@@ -17,6 +17,7 @@ folders = [
     "app/uploads/exports",
     "app/uploads/exports/pdf",
     "app/uploads/exports/excel",
+    "app/uploads/exports/word",
     "app/uploads/temp",
 ]
 
@@ -38,6 +39,7 @@ files = [
     "app/uploads/documents/.gitkeep",
     "app/uploads/exports/pdf/.gitkeep",
     "app/uploads/exports/excel/.gitkeep",
+    "app/uploads/exports/word/.gitkeep",
     "app/uploads/temp/.gitkeep",
 
     ".env",
