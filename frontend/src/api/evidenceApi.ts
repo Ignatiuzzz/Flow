@@ -4,6 +4,7 @@ import {
   EvidenceCreate,
   EvidenceUpdate,
 } from "../types/evidence";
+import { HighlightCoordinates } from "../types/highlight";
 
 export interface EvidenceFromHighlightCreate {
   proyectoId: string;
@@ -13,6 +14,7 @@ export interface EvidenceFromHighlightCreate {
   textoSubrayado: string;
   subtitulo?: string;
   observacion?: string;
+  coordenadas?: HighlightCoordinates;
 }
 
 export const evidenceApi = {

@@ -1,5 +1,6 @@
 import { axiosClient } from "./axiosClient";
 import { Finding, FindingCreate, FindingUpdate } from "../types/finding";
+import { HighlightCoordinates } from "../types/highlight";
 
 export interface FindingFromHighlightCreate {
   proyectoId: string;
@@ -8,6 +9,7 @@ export interface FindingFromHighlightCreate {
   textoSubrayado: string;
   subtitulo?: string;
   observacion?: string;
+  coordenadas?: HighlightCoordinates;
 
   nombre: string;
   codigo: string;

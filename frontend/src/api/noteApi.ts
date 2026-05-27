@@ -1,5 +1,6 @@
 import { axiosClient } from "./axiosClient";
 import { Note, NoteCreate, NoteUpdate } from "../types/note";
+import { HighlightCoordinates } from "../types/highlight";
 
 export interface NoteFromHighlightCreate {
   proyectoId: string;
@@ -9,6 +10,7 @@ export interface NoteFromHighlightCreate {
 
   textoSubrayado: string;
   subtitulo?: string;
+  coordenadas?: HighlightCoordinates;
 }
 
 export const noteApi = {

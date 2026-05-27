@@ -1,30 +1,39 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.models.base_model import PyObjectId
 from app.models.enums import HighlightType
 
 
-class HighlightCoordinatesSchema(BaseModel):
-    pagina: Optional[int] = None
+class HighlightRectSchema(BaseModel):
+    x: float
+    y: float
+    width: float
+    height: float
 
-    x: Optional[float] = None
-    y: Optional[float] = None
-    width: Optional[float] = None
-    height: Optional[float] = None
+
+class HighlightPageCoordinatesSchema(BaseModel):
+    pagina: int
+    rects: List[HighlightRectSchema] = Field(default_factory=list)
+
+
+class HighlightCoordinatesSchema(BaseModel):
+    paginas: List[HighlightPageCoordinatesSchema] = Field(default_factory=list)
 
 
 class HighlightCreate(BaseModel):
     proyectoId: PyObjectId
     documentoId: PyObjectId
 
-    textoSubrayado: str
+    textoSubrayado: str = Field(..., min_length=1)
+
     subtitulo: Optional[str] = None
     observacion: Optional[str] = None
 
     tipo: HighlightType
+
     esNota: bool = False
 
     hallazgoId: Optional[PyObjectId] = None
@@ -35,11 +44,11 @@ class HighlightCreate(BaseModel):
 
 
 class HighlightUpdate(BaseModel):
-    textoSubrayado: Optional[str] = None
     subtitulo: Optional[str] = None
     observacion: Optional[str] = None
 
     tipo: Optional[HighlightType] = None
+
     esNota: Optional[bool] = None
 
     hallazgoId: Optional[PyObjectId] = None
@@ -56,11 +65,13 @@ class HighlightResponse(BaseModel):
     documentoId: PyObjectId
 
     textoSubrayado: str
+
     subtitulo: Optional[str] = None
     observacion: Optional[str] = None
 
     tipo: HighlightType
-    esNota: bool
+
+    esNota: bool = False
 
     hallazgoId: Optional[PyObjectId] = None
     evidenciaId: Optional[PyObjectId] = None
