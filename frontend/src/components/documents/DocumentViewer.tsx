@@ -119,6 +119,24 @@ function DocumentViewer({
     return pageNumber ? Number(pageNumber) : null;
   };
 
+  const normalizeRect = (rect: HighlightRect): HighlightRect => {
+    return {
+      x: rect.x / scale,
+      y: rect.y / scale,
+      width: rect.width / scale,
+      height: rect.height / scale,
+    };
+  };
+
+  const scaleRect = (rect: HighlightRect): HighlightRect => {
+    return {
+      x: rect.x * scale,
+      y: rect.y * scale,
+      width: rect.width * scale,
+      height: rect.height * scale,
+    };
+  };
+
   const buildCoordinatesFromRange = (range: Range): HighlightCoordinates => {
     const pageMap = new Map<number, HighlightRect[]>();
 
@@ -140,15 +158,17 @@ function DocumentViewer({
 
       const pageCanvasRect = pageCanvasElement.getBoundingClientRect();
 
-      const relativeRect: HighlightRect = {
+      const visibleRect: HighlightRect = {
         x: rect.left - pageCanvasRect.left,
         y: rect.top - pageCanvasRect.top,
         width: rect.width,
         height: rect.height,
       };
 
+      const normalizedRect = normalizeRect(visibleRect);
+
       const currentRects = pageMap.get(pageNumber) || [];
-      currentRects.push(relativeRect);
+      currentRects.push(normalizedRect);
       pageMap.set(pageNumber, currentRects);
     });
 
@@ -259,9 +279,12 @@ function DocumentViewer({
 
   const getSavedHighlightIdsAtPoint = (
     pageNumber: number,
-    x: number,
-    y: number
+    visibleX: number,
+    visibleY: number
   ): string[] => {
+    const normalizedX = visibleX / scale;
+    const normalizedY = visibleY / scale;
+
     return savedHighlights
       .filter((highlight) => {
         const pageCoordinates = highlight.coordenadas?.paginas?.find(
@@ -271,8 +294,10 @@ function DocumentViewer({
         if (!pageCoordinates) return false;
 
         return pageCoordinates.rects.some((rect) => {
-          const withinX = x >= rect.x && x <= rect.x + rect.width;
-          const withinY = y >= rect.y && y <= rect.y + rect.height;
+          const withinX =
+            normalizedX >= rect.x && normalizedX <= rect.x + rect.width;
+          const withinY =
+            normalizedY >= rect.y && normalizedY <= rect.y + rect.height;
 
           return withinX && withinY;
         });
@@ -292,13 +317,13 @@ function DocumentViewer({
 
     const pageCanvasRect = pageCanvasElement.getBoundingClientRect();
 
-    const relativeX = event.clientX - pageCanvasRect.left;
-    const relativeY = event.clientY - pageCanvasRect.top;
+    const visibleX = event.clientX - pageCanvasRect.left;
+    const visibleY = event.clientY - pageCanvasRect.top;
 
     const relatedHighlightIds = getSavedHighlightIdsAtPoint(
       pageNumber,
-      relativeX,
-      relativeY
+      visibleX,
+      visibleY
     );
 
     if (relatedHighlightIds.length === 0) return;
@@ -326,34 +351,38 @@ function DocumentViewer({
 
       if (!pageCoordinates) return [];
 
-      return pageCoordinates.rects.map((rect, index) => (
-        <button
-          type="button"
-          key={`${highlight.id}-${index}`}
-          className={
-            highlight.status === "temporary"
-              ? "document-viewer__highlight-rect document-viewer__highlight-rect--temporary"
-              : activeTool === "erase"
-              ? "document-viewer__highlight-rect document-viewer__highlight-rect--saved document-viewer__highlight-rect--eraser-hover"
-              : "document-viewer__highlight-rect document-viewer__highlight-rect--saved"
-          }
-          style={{
-            left: rect.x,
-            top: rect.y,
-            width: rect.width,
-            height: rect.height,
-          }}
-          onClick={(event) => {
-            if (highlight.status !== "saved") return;
-            handleSavedRectClick(pageNumber, event);
-          }}
-          aria-label={
-            activeTool === "erase"
-              ? "Borrar subrayado"
-              : "Ver detalle del subrayado"
-          }
-        />
-      ));
+      return pageCoordinates.rects.map((rect, index) => {
+        const visibleRect = scaleRect(rect);
+
+        return (
+          <button
+            type="button"
+            key={`${highlight.id}-${index}`}
+            className={
+              highlight.status === "temporary"
+                ? "document-viewer__highlight-rect document-viewer__highlight-rect--temporary"
+                : activeTool === "erase"
+                ? "document-viewer__highlight-rect document-viewer__highlight-rect--saved document-viewer__highlight-rect--eraser-hover"
+                : "document-viewer__highlight-rect document-viewer__highlight-rect--saved"
+            }
+            style={{
+              left: visibleRect.x,
+              top: visibleRect.y,
+              width: visibleRect.width,
+              height: visibleRect.height,
+            }}
+            onClick={(event) => {
+              if (highlight.status !== "saved") return;
+              handleSavedRectClick(pageNumber, event);
+            }}
+            aria-label={
+              activeTool === "erase"
+                ? "Borrar subrayado"
+                : "Ver detalle del subrayado"
+            }
+          />
+        );
+      });
     });
   };
 
