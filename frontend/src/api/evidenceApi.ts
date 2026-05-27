@@ -5,9 +5,24 @@ import {
   EvidenceUpdate,
 } from "../types/evidence";
 
+export interface EvidenceFromHighlightCreate {
+  proyectoId: string;
+  documentoId: string;
+  evidenciaId: string;
+
+  textoSubrayado: string;
+  subtitulo?: string;
+  observacion?: string;
+}
+
 export const evidenceApi = {
   create: async (data: EvidenceCreate): Promise<Evidence> => {
     const response = await axiosClient.post<Evidence>("/evidences/", data);
+    return response.data;
+  },
+
+  relateFromHighlight: async (data: EvidenceFromHighlightCreate) => {
+    const response = await axiosClient.post("/evidences/from-highlight", data);
     return response.data;
   },
 

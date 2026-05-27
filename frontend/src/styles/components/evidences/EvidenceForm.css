@@ -1,17 +1,26 @@
 .evidence-form {
-  @apply rounded-2xl border border-slate-200 bg-white p-6 shadow-sm;
+  @apply rounded-3xl border bg-white p-6 shadow-2xl;
+  border-color: rgba(20, 93, 160, 0.24);
 }
 
 .evidence-form__header {
-  @apply mb-6;
+  @apply mb-5 border-b border-slate-100 pb-5;
 }
 
 .evidence-form__header h2 {
-  @apply mb-2 text-xl font-bold text-slate-900;
+  @apply mb-2 text-2xl font-extrabold tracking-tight text-slate-950;
 }
 
 .evidence-form__header p {
-  @apply text-sm text-slate-500;
+  @apply text-sm leading-6 text-slate-500;
+}
+
+.evidence-form__header::before {
+  content: "Nueva evidencia";
+  @apply mb-3 inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide;
+  background-color: #ddeeff;
+  border-color: #9cc7f0;
+  color: #145da0;
 }
 
 .evidence-form__grid {
@@ -27,22 +36,41 @@
 }
 
 .evidence-form__group label {
-  @apply text-sm font-semibold text-slate-700;
+  @apply text-sm font-bold text-slate-700;
 }
 
 .evidence-form__group input,
 .evidence-form__group textarea,
 .evidence-form__group select {
-  @apply rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-blue-600;
+  @apply rounded-2xl border bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:bg-white focus:ring-4;
+  border-color: #bdd9f5;
 }
+
+.evidence-form__group input:focus,
+.evidence-form__group textarea:focus,
+.evidence-form__group select:focus {
+  border-color: #145da0;
+  --tw-ring-color: rgba(221, 238, 255, 0.95);
+}
+
 .evidence-form__actions {
-  @apply mt-6 flex flex-wrap gap-3;
+  @apply mt-5 flex flex-wrap gap-3;
 }
 
 .evidence-form__actions button {
-  @apply rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:bg-blue-300;
+  @apply rounded-2xl px-5 py-3 text-sm font-bold text-white shadow-sm transition disabled:opacity-60;
+  background-color: #145da0;
+}
+
+.evidence-form__actions button:hover {
+  background-color: #0b4478;
 }
 
 .evidence-form__cancel {
-  @apply bg-slate-500 hover:bg-slate-600;
+  @apply text-slate-800;
+  background-color: #e5e7eb !important;
+}
+
+.evidence-form__cancel:hover {
+  background-color: #d1d5db !important;
 }

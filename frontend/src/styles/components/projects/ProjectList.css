@@ -1,14 +1,19 @@
 .project-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  @apply flex flex-col gap-4;
 }
 
-.project-list__message {
-  background: #ffffff;
-  border: 1px dashed #cbd5e1;
-  border-radius: 16px;
-  padding: 24px;
-  color: #64748b;
-  text-align: center;
+.project-list__state {
+  @apply flex min-h-[260px] flex-col items-center justify-center rounded-3xl border border-dashed border-emerald-300 bg-white p-8 text-center;
+}
+
+.project-list__state h3 {
+  @apply mb-2 text-lg font-extrabold text-slate-900;
+}
+
+.project-list__state p {
+  @apply max-w-md text-sm leading-6 text-slate-500;
+}
+
+.project-list__loader {
+  @apply mb-4 h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-900;
 }

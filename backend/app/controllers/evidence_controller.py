@@ -4,7 +4,13 @@ from fastapi import HTTPException, status
 
 from app.database import get_database
 from app.models.evidence_model import EvidenceModel
-from app.schemas.evidence_schema import EvidenceCreate, EvidenceUpdate
+from app.models.highlight_model import HighlightModel
+from app.models.enums import HighlightType
+from app.schemas.evidence_schema import (
+    EvidenceCreate,
+    EvidenceFromHighlightCreate,
+    EvidenceUpdate,
+)
 from app.services.evidence_service import complete_evidence_data_from_finding
 from app.services.pdf_service import generate_evidence_pdf
 from app.services.word_service import generate_evidence_word
@@ -73,6 +79,99 @@ async def create_evidence(evidence_data: EvidenceCreate):
     created_evidence = await db[COLLECTION].find_one({"_id": result.inserted_id})
 
     return serialize_document(created_evidence)
+
+
+async def relate_evidence_from_highlight(data: EvidenceFromHighlightCreate):
+    db = get_database()
+
+    project = await db["projects"].find_one({"_id": data.proyectoId})
+
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Proyecto no encontrado"
+        )
+
+    document = await db["documents"].find_one({"_id": data.documentoId})
+
+    if not document:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Documento no encontrado"
+        )
+
+    evidence = await db[COLLECTION].find_one({"_id": data.evidenciaId})
+
+    if not evidence:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evidencia no encontrada"
+        )
+
+    if evidence.get("proyectoId") != data.proyectoId:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La evidencia no pertenece al proyecto indicado"
+        )
+
+    hallazgo_id = evidence.get("hallazgoId")
+
+    highlight = HighlightModel(
+        proyectoId=data.proyectoId,
+        documentoId=data.documentoId,
+        textoSubrayado=data.textoSubrayado,
+        subtitulo=data.subtitulo,
+        observacion=data.observacion,
+        tipo=HighlightType.EVIDENCIA,
+        esNota=False,
+        hallazgoId=hallazgo_id,
+        evidenciaId=data.evidenciaId,
+        notaId=None,
+        coordenadas=data.coordenadas,
+    )
+
+    highlight_result = await db["highlights"].insert_one(
+        highlight.model_dump(by_alias=True)
+    )
+
+    highlight_id = highlight_result.inserted_id
+
+    await db[COLLECTION].update_one(
+        {"_id": data.evidenciaId},
+        {
+            "$push": {
+                "subrayados": highlight_id
+            },
+            "$set": {
+                "documentoId": data.documentoId,
+                "documentoNombre": document.get("nombreOriginal"),
+                "subtitulo": data.subtitulo,
+                "fechaActualizacion": datetime.now(timezone.utc)
+            }
+        }
+    )
+
+    if hallazgo_id:
+        await db["findings"].update_one(
+            {"_id": hallazgo_id},
+            {
+                "$push": {
+                    "subrayados": highlight_id
+                },
+                "$set": {
+                    "fechaActualizacion": datetime.now(timezone.utc)
+                }
+            }
+        )
+
+    created_highlight = await db["highlights"].find_one({"_id": highlight_id})
+    updated_evidence = await db[COLLECTION].find_one({"_id": data.evidenciaId})
+
+    return {
+        "message": "Subrayado relacionado a evidencia correctamente",
+        "subrayado": serialize_document(created_highlight),
+        "evidencia": serialize_document(updated_evidence),
+    }
 
 
 async def get_evidences_by_project(project_id: str):

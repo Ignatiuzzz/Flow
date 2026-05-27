@@ -85,9 +85,10 @@ function NoteForm({
     <form className="note-form" onSubmit={handleSubmit}>
       <div className="note-form__header">
         <h2>{isEditing ? "Editar nota" : "Registrar nota"}</h2>
+
         <p>
-          Registra notas generales del proyecto o relaciónalas opcionalmente con
-          un hallazgo.
+          Registra una observación general o relaciónala con un hallazgo
+          específico del proyecto.
         </p>
       </div>
 
@@ -121,7 +122,7 @@ function NoteForm({
         <textarea
           value={texto}
           onChange={(event) => setTexto(event.target.value)}
-          rows={6}
+          rows={7}
           placeholder="Escribe la nota o comentario del auditor"
         />
       </div>
@@ -131,7 +132,7 @@ function NoteForm({
           {loading
             ? "Guardando..."
             : isEditing
-            ? "Actualizar nota"
+            ? "Guardar cambios"
             : "Crear nota"}
         </button>
 

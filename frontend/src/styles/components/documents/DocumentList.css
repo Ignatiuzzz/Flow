@@ -2,6 +2,21 @@
   @apply flex flex-col gap-4;
 }
 
-.document-list__message {
-  @apply rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500;
+.document-list__state {
+  @apply flex min-h-[260px] flex-col items-center justify-center rounded-3xl border border-dashed bg-white p-8 text-center;
+  border-color: #aacdd2;
+}
+
+.document-list__state h3 {
+  @apply mb-2 text-lg font-extrabold tracking-tight text-slate-900;
+}
+
+.document-list__state p {
+  @apply max-w-md text-sm leading-6 text-slate-500;
+}
+
+.document-list__loader {
+  @apply mb-4 h-10 w-10 animate-spin rounded-full border-4;
+  border-color: #d5e9ec;
+  border-top-color: #0f5963;
 }

@@ -1,70 +1,65 @@
 .project-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+  @apply flex flex-col gap-5 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-500/40 hover:shadow-lg;
 }
 
 .project-card__content {
-  flex: 1;
+  @apply min-w-0 flex-1;
+}
+
+.project-card__top {
+  @apply mb-3 flex flex-wrap items-center gap-2;
 }
 
 .project-card__status {
-  display: inline-block;
-  background: #e0f2fe;
-  color: #0369a1;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 10px;
+  @apply rounded-full border px-3 py-1 text-xs font-bold capitalize;
+  background-color: #e6f4ef;
+  border-color: #b7d8cd;
+  color: #064e3b;
+}
+
+.project-card__date {
+  @apply rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500;
 }
 
 .project-card h3 {
-  font-size: 18px;
-  color: #0f172a;
-  margin-bottom: 8px;
+  @apply mb-2 text-xl font-extrabold tracking-tight text-slate-950;
 }
 
 .project-card p {
-  color: #64748b;
-  font-size: 14px;
-  margin-bottom: 14px;
+  @apply mb-5 text-sm leading-6 text-slate-500;
 }
 
-.project-card__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  font-size: 13px;
-  color: #475569;
+.project-card__stats {
+  @apply grid grid-cols-2 gap-3 md:grid-cols-4;
+}
+
+.project-card__stats div {
+  @apply rounded-2xl border px-4 py-3;
+  background-color: #f3faf7;
+  border-color: #d3ede3;
+}
+
+.project-card__stats strong {
+  @apply block text-lg font-extrabold;
+  color: #022c22;
+}
+
+.project-card__stats span {
+  @apply text-xs font-semibold text-slate-500;
 }
 
 .project-card__actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  @apply flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4;
 }
 
 .project-card__actions button {
-  border: none;
-  border-radius: 10px;
-  padding: 10px 14px;
-  background: #f1f5f9;
-  color: #0f172a;
-  cursor: pointer;
-  font-weight: 600;
+  @apply rounded-2xl bg-slate-100 px-4 py-2.5 text-center text-sm font-bold text-slate-800 transition hover:bg-slate-200;
 }
 
-.project-card__actions button:hover {
-  background: #e2e8f0;
+.project-card__open {
+  @apply min-w-[160px] bg-emerald-900 text-white hover:bg-emerald-950;
 }
 
 .project-card__delete {
-  background: #fee2e2 !important;
-  color: #b91c1c !important;
+  @apply bg-red-50 text-red-700 hover:bg-red-100;
 }

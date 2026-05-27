@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from app.controllers.note_controller import (
     create_note,
+    create_note_from_highlight,
     delete_note,
     get_note_by_id,
     get_notes_by_document,
@@ -9,7 +10,11 @@ from app.controllers.note_controller import (
     get_notes_by_project,
     update_note,
 )
-from app.schemas.note_schema import NoteCreate, NoteUpdate
+from app.schemas.note_schema import (
+    NoteCreate,
+    NoteFromHighlightCreate,
+    NoteUpdate,
+)
 
 
 router = APIRouter(
@@ -21,6 +26,11 @@ router = APIRouter(
 @router.post("/")
 async def create_note_route(note_data: NoteCreate):
     return await create_note(note_data)
+
+
+@router.post("/from-highlight")
+async def create_note_from_highlight_route(data: NoteFromHighlightCreate):
+    return await create_note_from_highlight(data)
 
 
 @router.get("/project/{project_id}")

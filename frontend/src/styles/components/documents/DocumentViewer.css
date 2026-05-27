@@ -46,6 +46,14 @@
   @apply border-red-200 bg-red-50 text-red-700;
 }
 
+.document-viewer__highlight-button {
+  @apply fixed z-[60] rounded-full bg-yellow-400 px-4 py-2 text-xs font-bold text-slate-900 shadow-lg transition hover:bg-yellow-300;
+}
+
+.document-viewer__selection-highlight {
+  @apply rounded bg-yellow-300 px-0.5;
+}
+
 .react-pdf__Page {
   @apply overflow-hidden rounded-xl;
 }

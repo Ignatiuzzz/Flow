@@ -1,17 +1,26 @@
 .note-form {
-  @apply rounded-2xl border border-slate-200 bg-white p-6 shadow-sm;
+  @apply rounded-3xl border bg-white p-6 shadow-2xl;
+  border-color: rgba(122, 46, 73, 0.24);
 }
 
 .note-form__header {
-  @apply mb-6;
+  @apply mb-5 border-b border-slate-100 pb-5;
+}
+
+.note-form__header::before {
+  content: "Nueva nota";
+  @apply mb-3 inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide;
+  background-color: #f2dfe5;
+  border-color: #d9b4c1;
+  color: #7a2e49;
 }
 
 .note-form__header h2 {
-  @apply mb-2 text-xl font-bold text-slate-900;
+  @apply mb-2 text-2xl font-extrabold tracking-tight text-slate-950;
 }
 
 .note-form__header p {
-  @apply text-sm text-slate-500;
+  @apply text-sm leading-6 text-slate-500;
 }
 
 .note-form__group {
@@ -19,23 +28,41 @@
 }
 
 .note-form__group label {
-  @apply text-sm font-semibold text-slate-700;
+  @apply text-sm font-bold text-slate-700;
 }
 
 .note-form__group input,
 .note-form__group textarea,
 .note-form__group select {
-  @apply rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-blue-600;
+  @apply rounded-2xl border bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:bg-white focus:ring-4;
+  border-color: #e2c3ce;
+}
+
+.note-form__group input:focus,
+.note-form__group textarea:focus,
+.note-form__group select:focus {
+  border-color: #7a2e49;
+  --tw-ring-color: rgba(242, 223, 229, 0.95);
 }
 
 .note-form__actions {
-  @apply mt-6 flex flex-wrap gap-3;
+  @apply mt-5 flex flex-wrap gap-3;
 }
 
 .note-form__actions button {
-  @apply rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:bg-blue-300;
+  @apply rounded-2xl px-5 py-3 text-sm font-bold text-white shadow-sm transition disabled:opacity-60;
+  background-color: #7a2e49;
+}
+
+.note-form__actions button:hover {
+  background-color: #5e2238;
 }
 
 .note-form__cancel {
-  @apply bg-slate-500 hover:bg-slate-600;
+  @apply text-slate-800;
+  background-color: #e5e7eb !important;
+}
+
+.note-form__cancel:hover {
+  background-color: #d1d5db !important;
 }

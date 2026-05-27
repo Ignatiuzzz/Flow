@@ -16,14 +16,23 @@ function FindingList({
   onDelete,
 }: FindingListProps) {
   if (loading) {
-    return <p className="finding-list__message">Cargando hallazgos...</p>;
+    return (
+      <div className="finding-list__state">
+        <div className="finding-list__loader" />
+        <p>Cargando hallazgos...</p>
+      </div>
+    );
   }
 
   if (findings.length === 0) {
     return (
-      <p className="finding-list__message">
-        Todavía no hay hallazgos registrados para este proyecto.
-      </p>
+      <div className="finding-list__state">
+        <h3>No hay hallazgos todavía</h3>
+        <p>
+          Registra el primer hallazgo del proyecto para alimentar la matriz de
+          auditoría.
+        </p>
+      </div>
     );
   }
 

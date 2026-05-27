@@ -16,14 +16,23 @@ function DocumentList({
   onDelete,
 }: DocumentListProps) {
   if (loading) {
-    return <p className="document-list__message">Cargando documentos...</p>;
+    return (
+      <div className="document-list__state">
+        <div className="document-list__loader" />
+        <p>Cargando documentos...</p>
+      </div>
+    );
   }
 
   if (documents.length === 0) {
     return (
-      <p className="document-list__message">
-        Todavía no hay documentos subidos para este proyecto.
-      </p>
+      <div className="document-list__state">
+        <h3>No hay documentos todavía</h3>
+        <p>
+          Sube el primer documento del proyecto para iniciar el trabajo de
+          revisión documental.
+        </p>
+      </div>
     );
   }
 

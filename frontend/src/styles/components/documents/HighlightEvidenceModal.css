@@ -1,0 +1,53 @@
+.highlight-modal__overlay {
+    @apply fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/50 p-6;
+}
+
+.highlight-evidence-modal {
+    @apply w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl;
+}
+
+.highlight-evidence-modal__header {
+    @apply mb-5 flex items-center justify-between gap-4;
+}
+
+.highlight-evidence-modal__header h2 {
+    @apply text-xl font-bold text-slate-900;
+}
+
+.highlight-evidence-modal__header button {
+    @apply rounded-full bg-slate-100 px-3 py-1 text-xl font-bold text-slate-600 hover:bg-slate-200;
+}
+
+.highlight-evidence-modal__selected {
+    @apply mb-5 rounded-xl bg-yellow-50 p-4 text-sm text-slate-700;
+}
+
+.highlight-evidence-modal__selected p {
+    @apply mt-2 text-slate-600;
+}
+
+.highlight-evidence-modal__group {
+    @apply mb-4 flex flex-col gap-2;
+}
+
+.highlight-evidence-modal__group label {
+    @apply text-sm font-semibold text-slate-700;
+}
+
+.highlight-evidence-modal__group input,
+.highlight-evidence-modal__group textarea,
+.highlight-evidence-modal__group select {
+    @apply rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-600;
+}
+
+.highlight-evidence-modal__actions {
+    @apply mt-6 flex flex-wrap gap-3;
+}
+
+.highlight-evidence-modal__actions button {
+    @apply rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:bg-emerald-300;
+}
+
+.highlight-evidence-modal__actions button:nth-child(2) {
+    @apply bg-slate-500 hover:bg-slate-600;
+}

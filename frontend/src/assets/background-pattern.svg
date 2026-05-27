@@ -1,0 +1,65 @@
+<svg width="900" height="520" viewBox="0 0 900 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.9">
+    <path
+      d="M70 140C155 45 285 38 372 115C459 192 570 210 682 130C755 78 830 92 875 135"
+      stroke="#A7F3D0"
+      stroke-width="2"
+      stroke-linecap="round"
+      opacity="0.28"
+    />
+
+    <path
+      d="M30 310C125 225 248 228 345 305C442 382 565 392 675 318C755 264 820 270 888 330"
+      stroke="#6EE7B7"
+      stroke-width="2"
+      stroke-linecap="round"
+      opacity="0.22"
+    />
+
+    <path
+      d="M140 455C235 370 338 376 425 430C520 488 622 486 720 418C786 372 845 378 890 420"
+      stroke="#ECFDF5"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      opacity="0.16"
+    />
+  </g>
+
+  <g opacity="0.8">
+    <circle cx="130" cy="95" r="7" fill="#A7F3D0" opacity="0.42"/>
+    <circle cx="210" cy="185" r="4" fill="#ECFDF5" opacity="0.35"/>
+    <circle cx="335" cy="82" r="5" fill="#6EE7B7" opacity="0.38"/>
+    <circle cx="505" cy="158" r="6" fill="#A7F3D0" opacity="0.30"/>
+    <circle cx="755" cy="112" r="5" fill="#ECFDF5" opacity="0.30"/>
+
+    <circle cx="88" cy="355" r="5" fill="#6EE7B7" opacity="0.36"/>
+    <circle cx="265" cy="288" r="7" fill="#A7F3D0" opacity="0.32"/>
+    <circle cx="445" cy="348" r="4" fill="#ECFDF5" opacity="0.28"/>
+    <circle cx="650" cy="292" r="6" fill="#6EE7B7" opacity="0.30"/>
+    <circle cx="815" cy="350" r="7" fill="#A7F3D0" opacity="0.28"/>
+
+    <circle cx="190" cy="438" r="5" fill="#ECFDF5" opacity="0.26"/>
+    <circle cx="380" cy="462" r="6" fill="#A7F3D0" opacity="0.25"/>
+    <circle cx="560" cy="430" r="4" fill="#6EE7B7" opacity="0.30"/>
+    <circle cx="742" cy="468" r="5" fill="#ECFDF5" opacity="0.24"/>
+  </g>
+
+  <g opacity="0.22">
+    <rect x="612" y="58" width="74" height="74" rx="20" stroke="#A7F3D0" stroke-width="2"/>
+    <rect x="682" y="212" width="58" height="58" rx="16" stroke="#ECFDF5" stroke-width="1.5"/>
+    <rect x="95" y="235" width="66" height="66" rx="18" stroke="#6EE7B7" stroke-width="2"/>
+  </g>
+
+  <g opacity="0.18">
+    <path
+      d="M790 188L820 218L790 248L760 218L790 188Z"
+      stroke="#A7F3D0"
+      stroke-width="2"
+    />
+    <path
+      d="M245 60L270 85L245 110L220 85L245 60Z"
+      stroke="#ECFDF5"
+      stroke-width="1.7"
+    />
+  </g>
+</svg>

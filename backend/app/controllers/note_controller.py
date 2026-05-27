@@ -4,7 +4,13 @@ from fastapi import HTTPException, status
 
 from app.database import get_database
 from app.models.note_model import NoteModel
-from app.schemas.note_schema import NoteCreate, NoteUpdate
+from app.models.highlight_model import HighlightModel
+from app.models.enums import HighlightType
+from app.schemas.note_schema import (
+    NoteCreate,
+    NoteFromHighlightCreate,
+    NoteUpdate,
+)
 from app.utils.mongo import serialize_document, serialize_documents, to_object_id
 
 
@@ -79,6 +85,114 @@ async def create_note(note_data: NoteCreate):
     created_note = await db[COLLECTION].find_one({"_id": result.inserted_id})
 
     return serialize_document(created_note)
+
+
+async def create_note_from_highlight(data: NoteFromHighlightCreate):
+    db = get_database()
+
+    project = await db["projects"].find_one({"_id": data.proyectoId})
+
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Proyecto no encontrado"
+        )
+
+    document = await db["documents"].find_one({"_id": data.documentoId})
+
+    if not document:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Documento no encontrado"
+        )
+
+    if data.hallazgoId:
+        finding = await db["findings"].find_one({"_id": data.hallazgoId})
+
+        if not finding:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Hallazgo no encontrado"
+            )
+
+    highlight = HighlightModel(
+        proyectoId=data.proyectoId,
+        documentoId=data.documentoId,
+        textoSubrayado=data.textoSubrayado,
+        subtitulo=data.subtitulo,
+        observacion=None,
+        tipo=HighlightType.NOTA,
+        esNota=True,
+        hallazgoId=data.hallazgoId,
+        evidenciaId=None,
+        notaId=None,
+        coordenadas=data.coordenadas,
+    )
+
+    highlight_result = await db["highlights"].insert_one(
+        highlight.model_dump(by_alias=True)
+    )
+
+    highlight_id = highlight_result.inserted_id
+
+    note = NoteModel(
+        proyectoId=data.proyectoId,
+        hallazgoId=data.hallazgoId,
+        documentoId=data.documentoId,
+        subrayadoId=highlight_id,
+        subtitulo=data.subtitulo,
+        texto=data.textoSubrayado,
+    )
+
+    note_result = await db[COLLECTION].insert_one(
+        note.model_dump(by_alias=True)
+    )
+
+    note_id = note_result.inserted_id
+
+    await db["highlights"].update_one(
+        {"_id": highlight_id},
+        {
+            "$set": {
+                "notaId": note_id,
+                "fechaActualizacion": datetime.now(timezone.utc)
+            }
+        }
+    )
+
+    await db["projects"].update_one(
+        {"_id": data.proyectoId},
+        {
+            "$push": {
+                "notas": note_id
+            },
+            "$set": {
+                "fechaActualizacion": datetime.now(timezone.utc)
+            }
+        }
+    )
+
+    if data.hallazgoId:
+        await db["findings"].update_one(
+            {"_id": data.hallazgoId},
+            {
+                "$push": {
+                    "subrayados": highlight_id
+                },
+                "$set": {
+                    "fechaActualizacion": datetime.now(timezone.utc)
+                }
+            }
+        )
+
+    created_note = await db[COLLECTION].find_one({"_id": note_id})
+    created_highlight = await db["highlights"].find_one({"_id": highlight_id})
+
+    return {
+        "message": "Nota creada desde subrayado correctamente",
+        "nota": serialize_document(created_note),
+        "subrayado": serialize_document(created_highlight),
+    }
 
 
 async def get_notes_by_project(project_id: str):

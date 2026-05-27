@@ -46,29 +46,42 @@ function DocumentUploader({ onUpload }: DocumentUploaderProps) {
     }
   };
 
+  const selectedFileSize = selectedFile
+    ? (selectedFile.size / (1024 * 1024)).toFixed(2)
+    : null;
+
   return (
     <form className="document-uploader" onSubmit={handleSubmit}>
       <div className="document-uploader__header">
-        <h2>Subir documento</h2>
+        <span>Nuevo documento</span>
+
+        <h2>Subir archivo</h2>
+
         <p>
-          Adjunta documentos PDF que servirán como respaldo del proyecto.
+          Adjunta documentos PDF que serán usados como base documental
+          del proyecto.
         </p>
       </div>
 
-      <div className="document-uploader__field">
-        <label>Archivo PDF</label>
-        <input type="file" accept=".pdf,application/pdf" onChange={handleFileChange} />
-      </div>
+      <label className="document-uploader__dropzone">
+        <input type="file" accept=".pdf,.docx" onChange={handleFileChange} />
+
+        <div>
+          <strong>Seleccionar archivo</strong>
+          <small>Formatos permitidos: PDF</small>
+        </div>
+      </label>
 
       {selectedFile && (
         <div className="document-uploader__selected">
-          <span>Archivo seleccionado:</span>
+          <span>Archivo seleccionado</span>
           <strong>{selectedFile.name}</strong>
+          {selectedFileSize && <small>{selectedFileSize} MB</small>}
         </div>
       )}
 
       <button type="submit" disabled={loading}>
-        {loading ? "Subiendo..." : "Subir documento"}
+        {loading ? "Subiendo documento..." : "Subir documento"}
       </button>
     </form>
   );

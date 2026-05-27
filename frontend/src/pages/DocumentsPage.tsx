@@ -64,38 +64,77 @@ function DocumentsPage() {
     }
   };
 
+  const pdfCount = documents.filter((document) => document.tipoArchivo === "pdf").length;
+  const docxCount = documents.filter((document) => document.tipoArchivo === "docx").length;
+
   return (
     <main className="documents-page">
       <button
         className="documents-page__back"
         onClick={() => navigate(`/projects/${currentProjectId}`)}
       >
-        Volver al proyecto
+        ← Volver al proyecto
       </button>
 
-      <section className="documents-page__header">
-        <div>
+      <section className="documents-page__hero">
+        <div className="documents-page__hero-content">
+          <span className="documents-page__eyebrow">Módulo documental</span>
+
           <h1>Documentos</h1>
+
           <p>
-            Sube y administra los documentos PDF del proyecto. Luego estos
-            documentos podrán ser visualizados y subrayados.
+            Sube y administra los documentos base del proyecto. Estos archivos
+            servirán como respaldo para revisar, analizar y posteriormente
+            generar subrayados relacionados con hallazgos, evidencias o notas.
           </p>
+        </div>
+
+        <div className="documents-page__summary">
+          <span>Total documentos</span>
+          <strong>{documents.length}</strong>
         </div>
       </section>
 
-      <section className="documents-page__content">
-        <div className="documents-page__uploader">
-          <DocumentUploader onUpload={handleUpload} />
-        </div>
+      <section className="documents-page__stats">
+        <article>
+          <strong>{documents.length}</strong>
+          <span>Archivos subidos</span>
+        </article>
 
-        <div className="documents-page__list">
+        <article>
+          <strong>{pdfCount}</strong>
+          <span>PDF</span>
+        </article>
+
+        <article>
+          <strong>{docxCount}</strong>
+          <span>Word</span>
+        </article>
+      </section>
+
+      <section className="documents-page__content">
+        <aside className="documents-page__uploader">
+          <DocumentUploader onUpload={handleUpload} />
+        </aside>
+
+        <section className="documents-page__main">
+          <div className="documents-page__section-header">
+            <div>
+              <h2>Documentos registrados</h2>
+              <p>
+                Revisa los documentos cargados, abre el archivo original o
+                elimínalo si ya no corresponde al proyecto.
+              </p>
+            </div>
+          </div>
+
           <DocumentList
             documents={documents}
             loading={loading}
             onOpen={handleOpen}
             onDelete={handleDelete}
           />
-        </div>
+        </section>
       </section>
     </main>
   );

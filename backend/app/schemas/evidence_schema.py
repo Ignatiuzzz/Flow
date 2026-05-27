@@ -4,6 +4,7 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 from app.models.base_model import PyObjectId
+from app.schemas.highlight_schema import HighlightCoordinatesSchema
 
 
 class EvidenceCreate(BaseModel):
@@ -76,3 +77,14 @@ class EvidenceResponse(BaseModel):
         json_encoders = {
             PyObjectId: str
         }
+
+
+class EvidenceFromHighlightCreate(BaseModel):
+    proyectoId: PyObjectId
+    documentoId: PyObjectId
+    evidenciaId: PyObjectId
+
+    textoSubrayado: str = Field(..., min_length=1)
+    subtitulo: Optional[str] = None
+    observacion: Optional[str] = None
+    coordenadas: Optional[HighlightCoordinatesSchema] = None

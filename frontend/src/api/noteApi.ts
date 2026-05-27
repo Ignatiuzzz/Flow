@@ -1,9 +1,24 @@
 import { axiosClient } from "./axiosClient";
 import { Note, NoteCreate, NoteUpdate } from "../types/note";
 
+export interface NoteFromHighlightCreate {
+  proyectoId: string;
+  documentoId: string;
+
+  hallazgoId?: string;
+
+  textoSubrayado: string;
+  subtitulo?: string;
+}
+
 export const noteApi = {
   create: async (data: NoteCreate): Promise<Note> => {
     const response = await axiosClient.post<Note>("/notes/", data);
+    return response.data;
+  },
+
+  createFromHighlight: async (data: NoteFromHighlightCreate) => {
+    const response = await axiosClient.post("/notes/from-highlight", data);
     return response.data;
   },
 

@@ -4,6 +4,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 from app.models.base_model import PyObjectId
+from app.schemas.highlight_schema import HighlightCoordinatesSchema
 
 
 class NoteCreate(BaseModel):
@@ -47,3 +48,14 @@ class NoteResponse(BaseModel):
         json_encoders = {
             PyObjectId: str
         }
+
+
+class NoteFromHighlightCreate(BaseModel):
+    proyectoId: PyObjectId
+    documentoId: PyObjectId
+
+    hallazgoId: Optional[PyObjectId] = None
+
+    textoSubrayado: str = Field(..., min_length=1)
+    subtitulo: Optional[str] = None
+    coordenadas: Optional[HighlightCoordinatesSchema] = None

@@ -9,9 +9,14 @@ from app.controllers.evidence_controller import (
     get_evidence_by_id,
     get_evidences_by_finding,
     get_evidences_by_project,
+    relate_evidence_from_highlight,
     update_evidence,
 )
-from app.schemas.evidence_schema import EvidenceCreate, EvidenceUpdate
+from app.schemas.evidence_schema import (
+    EvidenceCreate,
+    EvidenceFromHighlightCreate,
+    EvidenceUpdate,
+)
 
 
 router = APIRouter(
@@ -23,6 +28,11 @@ router = APIRouter(
 @router.post("/")
 async def create_evidence_route(evidence_data: EvidenceCreate):
     return await create_evidence(evidence_data)
+
+
+@router.post("/from-highlight")
+async def relate_evidence_from_highlight_route(data: EvidenceFromHighlightCreate):
+    return await relate_evidence_from_highlight(data)
 
 
 @router.get("/project/{project_id}")

@@ -8,14 +8,23 @@ interface MatrixTableProps {
 
 function MatrixTable({ findings, loading }: MatrixTableProps) {
   if (loading) {
-    return <p className="matrix-table__message">Cargando matriz...</p>;
+    return (
+      <div className="matrix-table__state">
+        <div className="matrix-table__loader" />
+        <p>Cargando matriz...</p>
+      </div>
+    );
   }
 
   if (findings.length === 0) {
     return (
-      <p className="matrix-table__message">
-        Todavía no hay hallazgos registrados para generar la matriz.
-      </p>
+      <div className="matrix-table__state">
+        <h3>No hay hallazgos todavía</h3>
+        <p>
+          Registra hallazgos en el proyecto para generar automáticamente la
+          matriz consolidada.
+        </p>
+      </div>
     );
   }
 
@@ -43,7 +52,9 @@ function MatrixTable({ findings, loading }: MatrixTableProps) {
         <tbody>
           {findings.map((finding) => (
             <tr key={finding.id}>
-              <td>{finding.codigo}</td>
+              <td>
+                <span className="matrix-table__code">{finding.codigo}</span>
+              </td>
               <td>{finding.nombre}</td>
               <td>{finding.descripcion || "-"}</td>
               <td>{finding.criterio || "-"}</td>
@@ -53,7 +64,9 @@ function MatrixTable({ findings, loading }: MatrixTableProps) {
               <td>{finding.conclusion || "-"}</td>
               <td>{finding.impacto}</td>
               <td>{finding.urgencia}</td>
-              <td>{finding.riesgo}</td>
+              <td>
+                <strong className="matrix-table__risk">{finding.riesgo}</strong>
+              </td>
               <td>
                 <span
                   className={`matrix-table__level matrix-table__level--${finding.nivel

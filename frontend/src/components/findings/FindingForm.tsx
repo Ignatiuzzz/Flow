@@ -103,10 +103,13 @@ function FindingForm({
   return (
     <form className="finding-form" onSubmit={handleSubmit}>
       <div className="finding-form__header">
+        <span>{isEditing ? "Modo edición" : "Nuevo hallazgo"}</span>
+
         <h2>{isEditing ? "Editar hallazgo" : "Registrar hallazgo"}</h2>
+
         <p>
-          Al crear un hallazgo, el backend generará automáticamente una evidencia
-          inicial relacionada.
+          Completa la ficha del hallazgo. El riesgo se calcula a partir del
+          impacto y la urgencia.
         </p>
       </div>
 
@@ -147,6 +150,7 @@ function FindingForm({
             value={criterio}
             onChange={(event) => setCriterio(event.target.value)}
             rows={3}
+            placeholder="Norma, control o criterio evaluado"
           />
         </div>
 
@@ -156,6 +160,7 @@ function FindingForm({
             value={objetivo}
             onChange={(event) => setObjetivo(event.target.value)}
             rows={3}
+            placeholder="Objetivo de control o evaluación"
           />
         </div>
       </div>
@@ -234,7 +239,7 @@ function FindingForm({
           {loading
             ? "Guardando..."
             : isEditing
-            ? "Actualizar hallazgo"
+            ? "Guardar cambios"
             : "Crear hallazgo"}
         </button>
 

@@ -1,0 +1,52 @@
+.highlight-modal__overlay {
+    @apply fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/50 p-6;
+}
+
+.highlight-note-modal {
+    @apply w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl;
+}
+
+.highlight-note-modal__header {
+    @apply mb-5 flex items-center justify-between gap-4;
+}
+
+.highlight-note-modal__header h2 {
+    @apply text-xl font-bold text-slate-900;
+}
+
+.highlight-note-modal__header button {
+    @apply rounded-full bg-slate-100 px-3 py-1 text-xl font-bold text-slate-600 hover:bg-slate-200;
+}
+
+.highlight-note-modal__selected {
+    @apply mb-5 rounded-xl bg-yellow-50 p-4 text-sm text-slate-700;
+}
+
+.highlight-note-modal__selected p {
+    @apply mt-2 text-slate-600;
+}
+
+.highlight-note-modal__group {
+    @apply mb-4 flex flex-col gap-2;
+}
+
+.highlight-note-modal__group label {
+    @apply text-sm font-semibold text-slate-700;
+}
+
+.highlight-note-modal__group input,
+.highlight-note-modal__group select {
+    @apply rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-600;
+}
+
+.highlight-note-modal__actions {
+    @apply mt-6 flex flex-wrap gap-3;
+}
+
+.highlight-note-modal__actions button {
+    @apply rounded-xl bg-purple-600 px-5 py-3 text-sm font-semibold text-white hover:bg-purple-700 disabled:bg-purple-300;
+}
+
+.highlight-note-modal__actions button:nth-child(2) {
+    @apply bg-slate-500 hover:bg-slate-600;
+}
