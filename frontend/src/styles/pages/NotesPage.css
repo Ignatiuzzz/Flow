@@ -1,0 +1,28 @@
+.notes-page {
+  @apply min-h-screen bg-slate-50 p-8;
+}
+
+.notes-page__back {
+  @apply mb-6 rounded-xl bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-300;
+}
+
+.notes-page__header {
+  @apply mb-7;
+}
+
+.notes-page__header h1 {
+  @apply mb-2 text-3xl font-extrabold text-slate-900;
+}
+
+.notes-page__header p {
+  @apply max-w-3xl text-sm text-slate-500;
+}
+
+.notes-page__content {
+  @apply grid grid-cols-1 gap-6 xl:grid-cols-[520px_1fr];
+}
+
+.notes-page__form,
+.notes-page__list {
+  @apply min-w-0;
+}

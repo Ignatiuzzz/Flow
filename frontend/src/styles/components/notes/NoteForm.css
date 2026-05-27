@@ -1,0 +1,41 @@
+.note-form {
+  @apply rounded-2xl border border-slate-200 bg-white p-6 shadow-sm;
+}
+
+.note-form__header {
+  @apply mb-6;
+}
+
+.note-form__header h2 {
+  @apply mb-2 text-xl font-bold text-slate-900;
+}
+
+.note-form__header p {
+  @apply text-sm text-slate-500;
+}
+
+.note-form__group {
+  @apply mb-4 flex flex-col gap-2;
+}
+
+.note-form__group label {
+  @apply text-sm font-semibold text-slate-700;
+}
+
+.note-form__group input,
+.note-form__group textarea,
+.note-form__group select {
+  @apply rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-blue-600;
+}
+
+.note-form__actions {
+  @apply mt-6 flex flex-wrap gap-3;
+}
+
+.note-form__actions button {
+  @apply rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:bg-blue-300;
+}
+
+.note-form__cancel {
+  @apply bg-slate-500 hover:bg-slate-600;
+}

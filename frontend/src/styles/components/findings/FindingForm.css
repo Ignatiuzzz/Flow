@@ -1,0 +1,48 @@
+.finding-form {
+  @apply rounded-2xl border border-slate-200 bg-white p-6 shadow-sm;
+}
+
+.finding-form__header {
+  @apply mb-6;
+}
+
+.finding-form__header h2 {
+  @apply mb-2 text-xl font-bold text-slate-900;
+}
+
+.finding-form__header p {
+  @apply text-sm text-slate-500;
+}
+
+.finding-form__grid {
+  @apply grid gap-4;
+}
+
+.finding-form__grid--two {
+  @apply grid-cols-1 md:grid-cols-2;
+}
+
+.finding-form__group {
+  @apply mb-4 flex flex-col gap-2;
+}
+
+.finding-form__group label {
+  @apply text-sm font-semibold text-slate-700;
+}
+
+.finding-form__group input,
+.finding-form__group textarea {
+  @apply rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-blue-600;
+}
+
+.finding-form__actions {
+  @apply mt-6 flex flex-wrap gap-3;
+}
+
+.finding-form__actions button {
+  @apply rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:bg-blue-300;
+}
+
+.finding-form__cancel {
+  @apply bg-slate-500 hover:bg-slate-600;
+}

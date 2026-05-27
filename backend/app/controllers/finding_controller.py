@@ -4,8 +4,6 @@ from fastapi import HTTPException, status
 
 from app.database import get_database
 from app.models.finding_model import FindingModel
-from app.schemas.finding_schema import FindingCreate, FindingUpdate
-from app.services.evidence_service import build_initial_evidence_from_finding
 from app.services.finding_service import (
     get_evidence_sync_fields,
     prepare_finding_data,
@@ -15,6 +13,11 @@ from app.services.finding_service import (
 from app.services.pdf_service import generate_finding_pdf
 from app.services.word_service import generate_finding_word
 from app.utils.mongo import serialize_document, serialize_documents, to_object_id
+from app.models.evidence_model import EvidenceModel
+from app.models.highlight_model import HighlightModel
+from app.models.enums import HighlightType
+from app.schemas.finding_schema import FindingCreate, FindingUpdate, FindingFromHighlightCreate
+from app.services.evidence_service import build_initial_evidence_from_finding
 
 
 COLLECTION = "findings"
@@ -41,6 +44,69 @@ async def create_finding(finding_data: FindingCreate):
 
     finding_id = finding_result.inserted_id
 
+    await db["projects"].update_one(
+        {"_id": finding_data.proyectoId},
+        {
+            "$push": {
+                "hallazgos": finding_id
+            },
+            "$set": {
+                "fechaActualizacion": datetime.now(timezone.utc)
+            }
+        }
+    )
+
+    created_finding = await db[COLLECTION].find_one({"_id": finding_id})
+
+    return serialize_document(created_finding)
+
+async def create_finding_from_highlight(finding_data: FindingFromHighlightCreate):
+    db = get_database()
+
+    project = await db["projects"].find_one({"_id": finding_data.proyectoId})
+
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Proyecto no encontrado"
+        )
+
+    document = await db["documents"].find_one({"_id": finding_data.documentoId})
+
+    if not document:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Documento no encontrado"
+        )
+
+    finding_dict = {
+        "proyectoId": finding_data.proyectoId,
+        "nombre": finding_data.nombre,
+        "codigo": finding_data.codigo,
+        "descripcion": finding_data.descripcion or finding_data.textoSubrayado,
+        "criterio": finding_data.criterio,
+        "objetivo": finding_data.objetivo,
+        "causa": finding_data.causa,
+        "efecto": finding_data.efecto,
+        "conclusion": finding_data.conclusion,
+        "impacto": finding_data.impacto,
+        "urgencia": finding_data.urgencia,
+        "justificacionRiesgo": finding_data.justificacionRiesgo,
+        "recomendaciones": finding_data.recomendaciones,
+        "subrayados": [],
+        "evidencias": [],
+    }
+
+    finding_dict = prepare_finding_data(finding_dict)
+
+    finding = FindingModel(**finding_dict)
+
+    finding_result = await db[COLLECTION].insert_one(
+        finding.model_dump(by_alias=True)
+    )
+
+    finding_id = finding_result.inserted_id
+
     evidence = build_initial_evidence_from_finding(
         proyecto_id=finding_data.proyectoId,
         hallazgo_id=finding_id,
@@ -50,17 +116,55 @@ async def create_finding(finding_data: FindingCreate):
         objetivo=finding_data.objetivo,
     )
 
+    evidence.documentoId = finding_data.documentoId
+    evidence.documentoNombre = document.get("nombreOriginal")
+    evidence.subtitulo = finding_data.subtitulo
+    evidence.descripcionEvidencia = finding_data.textoSubrayado
+
     evidence_result = await db["evidences"].insert_one(
         evidence.model_dump(by_alias=True)
     )
 
     evidence_id = evidence_result.inserted_id
 
+    highlight = HighlightModel(
+        proyectoId=finding_data.proyectoId,
+        documentoId=finding_data.documentoId,
+        textoSubrayado=finding_data.textoSubrayado,
+        subtitulo=finding_data.subtitulo,
+        observacion=finding_data.observacion,
+        tipo=HighlightType.HALLAZGO,
+        esNota=False,
+        hallazgoId=finding_id,
+        evidenciaId=evidence_id,
+        notaId=None,
+        coordenadas=finding_data.coordenadas,
+    )
+
+    highlight_result = await db["highlights"].insert_one(
+        highlight.model_dump(by_alias=True)
+    )
+
+    highlight_id = highlight_result.inserted_id
+
     await db[COLLECTION].update_one(
         {"_id": finding_id},
         {
             "$push": {
+                "subrayados": highlight_id,
                 "evidencias": evidence_id
+            },
+            "$set": {
+                "fechaActualizacion": datetime.now(timezone.utc)
+            }
+        }
+    )
+
+    await db["evidences"].update_one(
+        {"_id": evidence_id},
+        {
+            "$push": {
+                "subrayados": highlight_id
             },
             "$set": {
                 "fechaActualizacion": datetime.now(timezone.utc)
@@ -82,8 +186,15 @@ async def create_finding(finding_data: FindingCreate):
     )
 
     created_finding = await db[COLLECTION].find_one({"_id": finding_id})
+    created_evidence = await db["evidences"].find_one({"_id": evidence_id})
+    created_highlight = await db["highlights"].find_one({"_id": highlight_id})
 
-    return serialize_document(created_finding)
+    return {
+        "message": "Hallazgo creado desde subrayado correctamente",
+        "hallazgo": serialize_document(created_finding),
+        "evidencia": serialize_document(created_evidence),
+        "subrayado": serialize_document(created_highlight),
+    }
 
 
 async def get_findings_by_project(project_id: str):

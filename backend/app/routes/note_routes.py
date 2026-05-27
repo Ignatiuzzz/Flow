@@ -5,6 +5,7 @@ from app.controllers.note_controller import (
     delete_note,
     get_note_by_id,
     get_notes_by_document,
+    get_notes_by_finding,
     get_notes_by_project,
     update_note,
 )
@@ -30,6 +31,11 @@ async def get_notes_by_project_route(project_id: str):
 @router.get("/document/{document_id}")
 async def get_notes_by_document_route(document_id: str):
     return await get_notes_by_document(document_id)
+
+
+@router.get("/finding/{finding_id}")
+async def get_notes_by_finding_route(finding_id: str):
+    return await get_notes_by_finding(finding_id)
 
 
 @router.get("/{note_id}")

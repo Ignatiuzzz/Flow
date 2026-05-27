@@ -48,7 +48,6 @@ def generate_matrix_excel(project_id: str, findings: List[dict]) -> str:
         "Urgencia",
         "Riesgo",
         "Nivel",
-        "Justificación del Riesgo",
         "Recomendaciones",
         "Fecha de Creación",
         "Fecha de Actualización",
@@ -70,7 +69,6 @@ def generate_matrix_excel(project_id: str, findings: List[dict]) -> str:
             finding.get("urgencia", ""),
             finding.get("riesgo", ""),
             safe_text(finding.get("nivel")),
-            safe_text(finding.get("justificacionRiesgo")),
             safe_text(finding.get("recomendaciones")),
             safe_text(finding.get("fechaCreacion")),
             safe_text(finding.get("fechaActualizacion")),
@@ -114,9 +112,8 @@ def generate_matrix_excel(project_id: str, findings: List[dict]) -> str:
         "K": 12,
         "L": 15,
         "M": 45,
-        "N": 45,
+        "N": 25,
         "O": 25,
-        "P": 25,
     }
 
     for column, width in column_widths.items():

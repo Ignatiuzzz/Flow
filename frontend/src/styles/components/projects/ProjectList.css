@@ -1,0 +1,14 @@
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.project-list__message {
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+  padding: 24px;
+  color: #64748b;
+  text-align: center;
+}

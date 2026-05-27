@@ -1,0 +1,40 @@
+.document-card {
+  @apply flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:flex-row lg:items-start lg:justify-between;
+}
+
+.document-card__main {
+  @apply flex-1;
+}
+
+.document-card__top {
+  @apply mb-3 flex flex-wrap gap-2;
+}
+
+.document-card__type {
+  @apply rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700;
+}
+
+.document-card h3 {
+  @apply mb-3 break-words text-lg font-bold text-slate-900;
+}
+
+.document-card__meta {
+  @apply flex flex-wrap gap-3 text-xs text-slate-500;
+}
+
+.document-card__meta span {
+  @apply rounded-lg bg-slate-50 px-3 py-2;
+}
+
+.document-card__actions {
+  @apply flex flex-wrap gap-2 lg:flex-col;
+}
+
+.document-card__actions button,
+.document-card__actions a {
+  @apply rounded-xl bg-slate-100 px-4 py-2 text-center text-sm font-semibold text-slate-800 no-underline transition hover:bg-slate-200;
+}
+
+.document-card__delete {
+  @apply bg-red-50 text-red-700 hover:bg-red-100;
+}

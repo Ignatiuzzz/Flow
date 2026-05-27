@@ -3,6 +3,7 @@ from fastapi.responses import FileResponse
 
 from app.controllers.finding_controller import (
     create_finding,
+    create_finding_from_highlight,
     delete_finding,
     export_finding_pdf,
     export_finding_word,
@@ -14,6 +15,7 @@ from app.controllers.finding_controller import (
 from app.schemas.finding_schema import FindingCreate, FindingUpdate
 
 
+
 router = APIRouter(
     prefix="/findings",
     tags=["Findings"]
@@ -23,6 +25,12 @@ router = APIRouter(
 @router.post("/")
 async def create_finding_route(finding_data: FindingCreate):
     return await create_finding(finding_data)
+
+@router.post("/from-highlight")
+async def create_finding_from_highlight_route(
+    finding_data: FindingFromHighlightCreate
+):
+    return await create_finding_from_highlight(finding_data)
 
 
 @router.get("/project/{project_id}")

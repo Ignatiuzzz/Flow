@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 
 from app.models.base_model import PyObjectId
 from app.models.enums import RiskLevel
+from app.schemas.highlight_schema import HighlightCoordinatesSchema
 
 
 class FindingCreate(BaseModel):
@@ -87,3 +88,29 @@ class FindingResponse(BaseModel):
         json_encoders = {
             PyObjectId: str
         }
+        
+class FindingFromHighlightCreate(BaseModel):
+    proyectoId: PyObjectId
+    documentoId: PyObjectId
+
+    textoSubrayado: str
+    subtitulo: Optional[str] = None
+    observacion: Optional[str] = None
+    coordenadas: Optional[HighlightCoordinatesSchema] = None
+
+    nombre: str = Field(..., min_length=1, max_length=150)
+    codigo: str = Field(..., min_length=1, max_length=50)
+
+    descripcion: Optional[str] = None
+
+    criterio: Optional[str] = None
+    objetivo: Optional[str] = None
+    causa: Optional[str] = None
+    efecto: Optional[str] = None
+    conclusion: Optional[str] = None
+
+    impacto: int = Field(default=1, ge=1)
+    urgencia: int = Field(default=1, ge=1)
+
+    justificacionRiesgo: Optional[str] = None
+    recomendaciones: Optional[str] = None

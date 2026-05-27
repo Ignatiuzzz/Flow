@@ -1,0 +1,28 @@
+.documents-page {
+  @apply min-h-screen bg-slate-50 p-8;
+}
+
+.documents-page__back {
+  @apply mb-6 rounded-xl bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-300;
+}
+
+.documents-page__header {
+  @apply mb-7;
+}
+
+.documents-page__header h1 {
+  @apply mb-2 text-3xl font-extrabold text-slate-900;
+}
+
+.documents-page__header p {
+  @apply max-w-3xl text-sm text-slate-500;
+}
+
+.documents-page__content {
+  @apply grid grid-cols-1 gap-6 xl:grid-cols-[420px_1fr];
+}
+
+.documents-page__uploader,
+.documents-page__list {
+  @apply min-w-0;
+}

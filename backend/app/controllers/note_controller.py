@@ -22,41 +22,57 @@ async def create_note(note_data: NoteCreate):
             detail="Proyecto no encontrado"
         )
 
-    document = await db["documents"].find_one({"_id": note_data.documentoId})
+    if note_data.hallazgoId:
+        finding = await db["findings"].find_one({"_id": note_data.hallazgoId})
 
-    if not document:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Documento no encontrado"
-        )
+        if not finding:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Hallazgo no encontrado"
+            )
 
-    highlight = await db["highlights"].find_one({"_id": note_data.subrayadoId})
+    if note_data.documentoId:
+        document = await db["documents"].find_one({"_id": note_data.documentoId})
 
-    if not highlight:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Subrayado no encontrado"
-        )
+        if not document:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Documento no encontrado"
+            )
+
+    if note_data.subrayadoId:
+        highlight = await db["highlights"].find_one({"_id": note_data.subrayadoId})
+
+        if not highlight:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Subrayado no encontrado"
+            )
 
     note = NoteModel(**note_data.model_dump())
     result = await db[COLLECTION].insert_one(note.model_dump(by_alias=True))
 
-    await db["highlights"].update_one(
-        {"_id": note_data.subrayadoId},
-        {
-            "$set": {
-                "notaId": result.inserted_id,
-                "esNota": True,
-                "fechaActualizacion": datetime.now(timezone.utc)
+    if note_data.subrayadoId:
+        await db["highlights"].update_one(
+            {"_id": note_data.subrayadoId},
+            {
+                "$set": {
+                    "notaId": result.inserted_id,
+                    "esNota": True,
+                    "fechaActualizacion": datetime.now(timezone.utc)
+                }
             }
-        }
-    )
+        )
 
     await db["projects"].update_one(
         {"_id": note_data.proyectoId},
         {
-            "$push": {"notas": result.inserted_id},
-            "$set": {"fechaActualizacion": datetime.now(timezone.utc)}
+            "$push": {
+                "notas": result.inserted_id
+            },
+            "$set": {
+                "fechaActualizacion": datetime.now(timezone.utc)
+            }
         }
     )
 
@@ -89,6 +105,18 @@ async def get_notes_by_document(document_id: str):
     return serialize_documents(notes)
 
 
+async def get_notes_by_finding(finding_id: str):
+    db = get_database()
+
+    cursor = db[COLLECTION].find(
+        {"hallazgoId": to_object_id(finding_id)}
+    ).sort("fechaCreacion", -1)
+
+    notes = await cursor.to_list(length=None)
+
+    return serialize_documents(notes)
+
+
 async def get_note_by_id(note_id: str):
     db = get_database()
 
@@ -106,6 +134,16 @@ async def get_note_by_id(note_id: str):
 async def update_note(note_id: str, note_data: NoteUpdate):
     db = get_database()
 
+    note_object_id = to_object_id(note_id)
+
+    existing_note = await db[COLLECTION].find_one({"_id": note_object_id})
+
+    if not existing_note:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Nota no encontrada"
+        )
+
     update_data = note_data.model_dump(exclude_unset=True)
 
     if not update_data:
@@ -114,20 +152,43 @@ async def update_note(note_id: str, note_data: NoteUpdate):
             detail="No se enviaron datos para actualizar"
         )
 
+    if update_data.get("hallazgoId"):
+        finding = await db["findings"].find_one({"_id": update_data["hallazgoId"]})
+
+        if not finding:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Hallazgo no encontrado"
+            )
+
+    if update_data.get("documentoId"):
+        document = await db["documents"].find_one({"_id": update_data["documentoId"]})
+
+        if not document:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Documento no encontrado"
+            )
+
+    if update_data.get("subrayadoId"):
+        highlight = await db["highlights"].find_one({"_id": update_data["subrayadoId"]})
+
+        if not highlight:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Subrayado no encontrado"
+            )
+
     update_data["fechaActualizacion"] = datetime.now(timezone.utc)
 
-    result = await db[COLLECTION].update_one(
-        {"_id": to_object_id(note_id)},
-        {"$set": update_data}
+    await db[COLLECTION].update_one(
+        {"_id": note_object_id},
+        {
+            "$set": update_data
+        }
     )
 
-    if result.matched_count == 0:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Nota no encontrada"
-        )
-
-    updated_note = await db[COLLECTION].find_one({"_id": to_object_id(note_id)})
+    updated_note = await db[COLLECTION].find_one({"_id": note_object_id})
 
     return serialize_document(updated_note)
 
@@ -149,19 +210,27 @@ async def delete_note(note_id: str):
 
     await db["projects"].update_one(
         {"_id": note["proyectoId"]},
-        {"$pull": {"notas": note_object_id}}
-    )
-
-    await db["highlights"].update_one(
-        {"_id": note["subrayadoId"]},
         {
+            "$pull": {
+                "notas": note_object_id
+            },
             "$set": {
-                "notaId": None,
-                "esNota": False,
                 "fechaActualizacion": datetime.now(timezone.utc)
             }
         }
     )
+
+    if note.get("subrayadoId"):
+        await db["highlights"].update_one(
+            {"_id": note["subrayadoId"]},
+            {
+                "$set": {
+                    "notaId": None,
+                    "esNota": False,
+                    "fechaActualizacion": datetime.now(timezone.utc)
+                }
+            }
+        )
 
     return {
         "message": "Nota eliminada correctamente"

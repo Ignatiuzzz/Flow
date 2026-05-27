@@ -1,0 +1,70 @@
+.project-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.project-card__content {
+  flex: 1;
+}
+
+.project-card__status {
+  display: inline-block;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.project-card h3 {
+  font-size: 18px;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.project-card p {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.project-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.project-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.project-card__actions button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #f1f5f9;
+  color: #0f172a;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.project-card__actions button:hover {
+  background: #e2e8f0;
+}
+
+.project-card__delete {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+}

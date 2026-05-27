@@ -1,0 +1,48 @@
+.evidence-card {
+  @apply flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:flex-row lg:items-start lg:justify-between;
+}
+
+.evidence-card__main {
+  @apply flex-1;
+}
+
+.evidence-card__top {
+  @apply mb-3 flex flex-wrap items-center gap-2;
+}
+
+.evidence-card__code {
+  @apply rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700;
+}
+
+.evidence-card__linked {
+  @apply rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700;
+}
+
+.evidence-card h3 {
+  @apply mb-2 text-lg font-bold text-slate-900;
+}
+
+.evidence-card p {
+  @apply mb-4 text-sm text-slate-600;
+}
+
+.evidence-card__meta {
+  @apply flex flex-wrap gap-3 text-xs text-slate-500;
+}
+
+.evidence-card__meta span {
+  @apply rounded-lg bg-slate-50 px-3 py-2;
+}
+
+.evidence-card__actions {
+  @apply flex flex-wrap gap-2 lg:flex-col;
+}
+
+.evidence-card__actions button,
+.evidence-card__actions a {
+  @apply rounded-xl bg-slate-100 px-4 py-2 text-center text-sm font-semibold text-slate-800 no-underline transition hover:bg-slate-200;
+}
+
+.evidence-card__delete {
+  @apply bg-red-50 text-red-700 hover:bg-red-100;
+}
