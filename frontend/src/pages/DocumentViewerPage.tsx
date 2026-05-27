@@ -6,6 +6,7 @@ import { findingApi } from "../api/findingApi";
 import { highlightApi } from "../api/highlightApi";
 import { noteApi } from "../api/noteApi";
 import DocumentViewer from "../components/documents/DocumentViewer";
+import HighlightDeletePopup from "../components/documents/HighlightDeletePopup";
 import HighlightEvidenceModal from "../components/documents/HighlightEvidenceModal";
 import HighlightFindingModal from "../components/documents/HighlightFindingModal";
 import HighlightInfoPopup from "../components/documents/HighlightInfoPopup";
@@ -42,6 +43,14 @@ function DocumentViewerPage() {
     HighlightRelations[]
   >([]);
   const [relationsPosition, setRelationsPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const [deleteRelationsList, setDeleteRelationsList] = useState<
+    HighlightRelations[]
+  >([]);
+  const [deletePosition, setDeletePosition] = useState<{
     x: number;
     y: number;
   } | null>(null);
@@ -98,11 +107,18 @@ function DocumentViewerPage() {
     setRelationsPosition(null);
   };
 
+  const closeDeletePopup = () => {
+    setDeleteRelationsList([]);
+    setDeletePosition(null);
+  };
+
   const handleSavedHighlightClick = async (
     highlightIds: string[],
     position: { x: number; y: number }
   ) => {
     try {
+      closeDeletePopup();
+
       const relations = await Promise.all(
         highlightIds.map((highlightId) => highlightApi.getRelations(highlightId))
       );
@@ -112,6 +128,69 @@ function DocumentViewerPage() {
     } catch (error) {
       console.error(error);
       alert("No se pudieron cargar las relaciones del subrayado.");
+    }
+  };
+
+  const deleteHighlightById = async (highlightId: string) => {
+    const confirmed = window.confirm("¿Deseas eliminar este subrayado?");
+
+    if (!confirmed) return;
+
+    try {
+      await highlightApi.delete(highlightId);
+      await loadPageData();
+      closeDeletePopup();
+      closeRelationsPopup();
+    } catch (error) {
+      console.error(error);
+      alert("No se pudo eliminar el subrayado.");
+    }
+  };
+
+  const deleteAllSelectedHighlights = async () => {
+    const confirmed = window.confirm(
+      "¿Deseas eliminar todos los subrayados seleccionados?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await Promise.all(
+        deleteRelationsList.map((relations) =>
+          highlightApi.delete(relations.subrayado.id)
+        )
+      );
+
+      await loadPageData();
+      closeDeletePopup();
+      closeRelationsPopup();
+    } catch (error) {
+      console.error(error);
+      alert("No se pudieron eliminar todos los subrayados.");
+    }
+  };
+
+  const handleEraseHighlightClick = async (
+    highlightIds: string[],
+    position: { x: number; y: number }
+  ) => {
+    try {
+      closeRelationsPopup();
+
+      const relations = await Promise.all(
+        highlightIds.map((highlightId) => highlightApi.getRelations(highlightId))
+      );
+
+      if (relations.length === 1) {
+        await deleteHighlightById(relations[0].subrayado.id);
+        return;
+      }
+
+      setDeleteRelationsList(relations);
+      setDeletePosition(position);
+    } catch (error) {
+      console.error(error);
+      alert("No se pudieron cargar los subrayados para borrar.");
     }
   };
 
@@ -144,20 +223,24 @@ function DocumentViewerPage() {
           documentName={documentData.nombreOriginal}
           savedHighlights={highlights}
           onSavedHighlightClick={handleSavedHighlightClick}
+          onEraseHighlightClick={handleEraseHighlightClick}
           onRegisterFinding={(text, coordinates) => {
             closeRelationsPopup();
+            closeDeletePopup();
             setSelectedText(text);
             setSelectedCoordinates(coordinates);
             setMode("finding");
           }}
           onRelateEvidence={(text, coordinates) => {
             closeRelationsPopup();
+            closeDeletePopup();
             setSelectedText(text);
             setSelectedCoordinates(coordinates);
             setMode("evidence");
           }}
           onCreateNote={(text, coordinates) => {
             closeRelationsPopup();
+            closeDeletePopup();
             setSelectedText(text);
             setSelectedCoordinates(coordinates);
             setMode("note");
@@ -170,6 +253,16 @@ function DocumentViewerPage() {
           relationsList={selectedRelationsList}
           position={relationsPosition}
           onClose={closeRelationsPopup}
+        />
+      )}
+
+      {deleteRelationsList.length > 0 && deletePosition && (
+        <HighlightDeletePopup
+          relationsList={deleteRelationsList}
+          position={deletePosition}
+          onDeleteOne={deleteHighlightById}
+          onDeleteAll={deleteAllSelectedHighlights}
+          onClose={closeDeletePopup}
         />
       )}
 

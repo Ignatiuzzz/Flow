@@ -13,6 +13,8 @@ import "../../styles/components/documents/DocumentViewer.css";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
+type ViewerTool = "none" | "highlight" | "erase";
+
 interface DocumentViewerProps {
   fileUrl: string;
   documentName: string;
@@ -33,6 +35,10 @@ interface DocumentViewerProps {
     highlightIds: string[],
     position: { x: number; y: number }
   ) => void;
+  onEraseHighlightClick?: (
+    highlightIds: string[],
+    position: { x: number; y: number }
+  ) => void;
 }
 
 interface TemporaryHighlight {
@@ -48,10 +54,11 @@ function DocumentViewer({
   onRelateEvidence,
   onCreateNote,
   onSavedHighlightClick,
+  onEraseHighlightClick,
 }: DocumentViewerProps) {
   const [numPages, setNumPages] = useState<number>(0);
   const [scale, setScale] = useState(1);
-  const [isHighlighterActive, setIsHighlighterActive] = useState(false);
+  const [activeTool, setActiveTool] = useState<ViewerTool>("none");
 
   const [selectedText, setSelectedText] = useState("");
   const [selectedCoordinates, setSelectedCoordinates] =
@@ -87,6 +94,15 @@ function DocumentViewer({
   const handleZoomOut = () => {
     setScale((previousScale) => Math.max(previousScale - 0.15, 0.7));
     clearTemporaryHighlight();
+  };
+
+  const toggleTool = (tool: ViewerTool) => {
+    clearTemporaryHighlight();
+
+    setActiveTool((currentTool) => {
+      if (currentTool === tool) return "none";
+      return tool;
+    });
   };
 
   const getPageFromPoint = (x: number, y: number): number | null => {
@@ -136,12 +152,12 @@ function DocumentViewer({
       pageMap.set(pageNumber, currentRects);
     });
 
-    const paginas: HighlightPageCoordinates[] = Array.from(pageMap.entries()).map(
-      ([pagina, rects]) => ({
-        pagina,
-        rects,
-      })
-    );
+    const paginas: HighlightPageCoordinates[] = Array.from(
+      pageMap.entries()
+    ).map(([pagina, rects]) => ({
+      pagina,
+      rects,
+    }));
 
     return {
       paginas,
@@ -164,7 +180,7 @@ function DocumentViewer({
   };
 
   const handleMouseUp = () => {
-    if (!isHighlighterActive) return;
+    if (activeTool !== "highlight") return;
 
     const selection = window.getSelection();
     const text = selection?.toString().trim();
@@ -264,6 +280,42 @@ function DocumentViewer({
       .map((highlight) => highlight.id);
   };
 
+  const handleSavedRectClick = (
+    pageNumber: number,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
+
+    const pageCanvasElement = pageCanvasRefs.current[pageNumber];
+
+    if (!pageCanvasElement) return;
+
+    const pageCanvasRect = pageCanvasElement.getBoundingClientRect();
+
+    const relativeX = event.clientX - pageCanvasRect.left;
+    const relativeY = event.clientY - pageCanvasRect.top;
+
+    const relatedHighlightIds = getSavedHighlightIdsAtPoint(
+      pageNumber,
+      relativeX,
+      relativeY
+    );
+
+    if (relatedHighlightIds.length === 0) return;
+
+    const position = {
+      x: Math.min(event.clientX + 12, window.innerWidth - 410),
+      y: Math.max(event.clientY - 20, 12),
+    };
+
+    if (activeTool === "erase") {
+      onEraseHighlightClick?.(relatedHighlightIds, position);
+      return;
+    }
+
+    onSavedHighlightClick?.(relatedHighlightIds, position);
+  };
+
   const renderHighlightRects = (pageNumber: number) => {
     const highlights = getHighlightsForPage(pageNumber);
 
@@ -281,6 +333,8 @@ function DocumentViewer({
           className={
             highlight.status === "temporary"
               ? "document-viewer__highlight-rect document-viewer__highlight-rect--temporary"
+              : activeTool === "erase"
+              ? "document-viewer__highlight-rect document-viewer__highlight-rect--saved document-viewer__highlight-rect--eraser-hover"
               : "document-viewer__highlight-rect document-viewer__highlight-rect--saved"
           }
           style={{
@@ -291,32 +345,13 @@ function DocumentViewer({
           }}
           onClick={(event) => {
             if (highlight.status !== "saved") return;
-
-            event.stopPropagation();
-
-            const pageCanvasElement = pageCanvasRefs.current[pageNumber];
-
-            if (!pageCanvasElement) return;
-
-            const pageCanvasRect = pageCanvasElement.getBoundingClientRect();
-
-            const relativeX = event.clientX - pageCanvasRect.left;
-            const relativeY = event.clientY - pageCanvasRect.top;
-
-            const relatedHighlightIds = getSavedHighlightIdsAtPoint(
-              pageNumber,
-              relativeX,
-              relativeY
-            );
-
-            if (relatedHighlightIds.length === 0) return;
-
-            onSavedHighlightClick?.(relatedHighlightIds, {
-              x: Math.min(event.clientX + 12, window.innerWidth - 410),
-              y: Math.max(event.clientY - 20, 12),
-            });
+            handleSavedRectClick(pageNumber, event);
           }}
-          aria-label="Ver detalle del subrayado"
+          aria-label={
+            activeTool === "erase"
+              ? "Borrar subrayado"
+              : "Ver detalle del subrayado"
+          }
         />
       ));
     });
@@ -328,8 +363,8 @@ function DocumentViewer({
         <div>
           <h2>{documentName}</h2>
           <p>
-            Activa el resaltador, selecciona texto dentro del PDF y elige una
-            acción.
+            Activa el resaltador para crear subrayados o el borrador para
+            eliminarlos.
           </p>
         </div>
 
@@ -337,22 +372,43 @@ function DocumentViewer({
           <button
             type="button"
             className={
-              isHighlighterActive
-                ? "document-viewer__highlighter document-viewer__highlighter--active"
-                : "document-viewer__highlighter"
+              activeTool === "highlight"
+                ? "document-viewer__tool-button document-viewer__tool-button--highlight document-viewer__tool-button--active"
+                : "document-viewer__tool-button document-viewer__tool-button--highlight"
             }
-            onClick={() => setIsHighlighterActive((current) => !current)}
+            onClick={() => toggleTool("highlight")}
             title="Resaltador"
             aria-label="Activar resaltador"
           >
             <svg
-              className="document-viewer__highlighter-icon"
+              className="document-viewer__tool-icon"
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
               <path d="M4 20h16v2H4v-2Z" />
               <path d="M15.2 3.4 20.6 8.8 9.7 19.7H4.3v-5.4L15.2 3.4Z" />
               <path d="M16.6 2 22 7.4l-1.4 1.4-5.4-5.4L16.6 2Z" />
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            className={
+              activeTool === "erase"
+                ? "document-viewer__tool-button document-viewer__tool-button--erase document-viewer__tool-button--active"
+                : "document-viewer__tool-button document-viewer__tool-button--erase"
+            }
+            onClick={() => toggleTool("erase")}
+            title="Borrador"
+            aria-label="Activar borrador"
+          >
+            <svg
+              className="document-viewer__tool-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M16.2 3.8 21 8.6 10.8 18.8H6L3 15.8 16.2 3.8Z" />
+              <path d="M5.2 20h15.6v2H5.2v-2Z" />
             </svg>
           </button>
 
@@ -372,8 +428,10 @@ function DocumentViewer({
 
       <div
         className={
-          isHighlighterActive
+          activeTool === "highlight"
             ? "document-viewer__content document-viewer__content--highlighting"
+            : activeTool === "erase"
+            ? "document-viewer__content document-viewer__content--erasing"
             : "document-viewer__content"
         }
         onMouseUp={handleMouseUp}
@@ -392,10 +450,7 @@ function DocumentViewer({
             const pageNumber = index + 1;
 
             return (
-              <div
-                className="document-viewer__page"
-                key={`page_${pageNumber}`}
-              >
+              <div className="document-viewer__page" key={`page_${pageNumber}`}>
                 <span className="document-viewer__page-number">
                   Página {pageNumber}
                 </span>
