@@ -33,11 +33,23 @@ export function AISuggestButton({ onSuggest, onApply, isLoading, iconOnly }: AIS
         toast("La IA no generó sugerencias para los campos actuales.", { icon: "ℹ️" });
       }
     } catch (error: any) {
-      console.error("Error obteniendo sugerencias:", error);
-      
-      if (error.response && error.response.data && error.response.data.detail) {
-        toast.error(error.response.data.detail);
+      const httpStatus = error?.response?.status;
+      const detail = error?.response?.data?.detail;
+
+      if (httpStatus === 429) {
+        toast(detail || "Límite de la IA alcanzado. Espera un momento e intenta de nuevo.", {
+          icon: "⏳",
+          duration: 6000,
+        });
+      } else if (httpStatus === 503) {
+        toast(detail || "El servicio de IA está ocupado. Intenta en unos segundos.", {
+          icon: "⚠️",
+          duration: 5000,
+        });
+      } else if (detail) {
+        toast.error(detail, { duration: 5000 });
       } else {
+        console.error("Error IA inesperado:", error);
         toast.error("Hubo un error al comunicarse con la IA. Por favor, intenta de nuevo.");
       }
     } finally {

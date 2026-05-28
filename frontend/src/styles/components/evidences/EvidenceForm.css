@@ -60,6 +60,7 @@
 .evidence-form__cancel {
   @apply text-slate-700 shadow-none hover:shadow-sm;
   background-color: #f1f5f9 !important;
+  color: #0f172a !important;
 }
 
 .evidence-form__cancel:hover {

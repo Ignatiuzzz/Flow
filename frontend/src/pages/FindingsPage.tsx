@@ -16,6 +16,8 @@ function FindingsPage() {
   const currentProjectId = projectId || "";
 
   const [selectedFinding, setSelectedFinding] = useState<Finding | null>(null);
+  const [textoSubrayadoOrigen, setTextoSubrayadoOrigen] = useState<string | undefined>(undefined);
+  const [documentoIdOrigen, setDocumentoIdOrigen] = useState<string | undefined>(undefined);
 
   const { data: findings = [], isLoading: loading } = useQuery({
     queryKey: ["findings", currentProjectId],
@@ -58,9 +60,19 @@ function FindingsPage() {
     }
   };
 
-  const handleEdit = (finding: Finding) => {
+  const handleEdit = async (finding: Finding) => {
     setSelectedFinding(finding);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setTextoSubrayadoOrigen(undefined);
+    setDocumentoIdOrigen(undefined);
+    try {
+      const related = await findingApi.getRelatedDocuments(finding.id);
+      if (related.documentosRelacionados.length > 0) {
+        const first = related.documentosRelacionados[0];
+        setTextoSubrayadoOrigen(first.subrayado?.textoSubrayado || undefined);
+        setDocumentoIdOrigen(first.documento?.id || undefined);
+      }
+    } catch {
+    }
   };
 
   const handleDelete = (id: string) => {
@@ -138,8 +150,14 @@ function FindingsPage() {
           <FindingForm
             projectId={currentProjectId}
             selectedFinding={selectedFinding}
+            textoSubrayadoOrigen={textoSubrayadoOrigen}
+            documentoIdOrigen={documentoIdOrigen}
             onSubmit={handleCreateOrUpdate}
-            onCancelEdit={() => setSelectedFinding(null)}
+            onCancelEdit={() => {
+              setSelectedFinding(null);
+              setTextoSubrayadoOrigen(undefined);
+              setDocumentoIdOrigen(undefined);
+            }}
           />
         </aside>
 

@@ -8,6 +8,8 @@ import "../../styles/components/findings/FindingForm.css";
 interface FindingFormProps {
   projectId: string;
   selectedFinding?: Finding | null;
+  textoSubrayadoOrigen?: string;
+  documentoIdOrigen?: string;
   onSubmit: (data: FindingCreate) => Promise<void>;
   onCancelEdit?: () => void;
 }
@@ -15,6 +17,8 @@ interface FindingFormProps {
 function FindingForm({
   projectId,
   selectedFinding,
+  textoSubrayadoOrigen,
+  documentoIdOrigen,
   onSubmit,
   onCancelEdit,
 }: FindingFormProps) {
@@ -71,9 +75,12 @@ function FindingForm({
   const handleSuggest = async () => {
     return await aiApi.suggestFinding({
       proyectoId: projectId,
+      documentoId: documentoIdOrigen,
       nombre: nombre.trim(),
       codigo: codigo.trim(),
       descripcion: descripcion.trim(),
+      // Si hay un texto subrayado del hallazgo de origen, lo incluimos como contexto
+      textoSubrayado: textoSubrayadoOrigen || undefined,
       camposExistentes: {
         criterio: criterio.trim(),
         objetivo: objetivo.trim(),
@@ -143,13 +150,15 @@ function FindingForm({
           impacto y la urgencia.
         </p>
 
-        <div style={{ marginTop: '16px' }}>
-          <AISuggestButton 
-            onSuggest={handleSuggest} 
-            onApply={handleApplySuggestions} 
-            isLoading={loading}
-          />
-        </div>
+        {isEditing && (
+          <div style={{ marginTop: '16px' }}>
+            <AISuggestButton 
+              onSuggest={handleSuggest} 
+              onApply={handleApplySuggestions} 
+              isLoading={loading}
+            />
+          </div>
+        )}
       </div>
 
       <div className="finding-form__grid finding-form__grid--two">

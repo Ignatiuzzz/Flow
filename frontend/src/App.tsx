@@ -5,7 +5,7 @@ function App() {
   return (
     <>
       <Toaster 
-        position="top-right"
+        position="bottom-right"
         toastOptions={{
           className: 'bg-white/95 backdrop-blur-xl text-slate-900 shadow-premium rounded-2xl border border-slate-200/60 font-semibold tracking-tight !px-5 !py-4',
           duration: 4000,

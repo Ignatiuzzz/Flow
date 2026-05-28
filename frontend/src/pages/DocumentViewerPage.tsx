@@ -263,6 +263,8 @@ function DocumentViewerPage() {
       {mode === "finding" && selectedText && selectedCoordinates && (
         <HighlightFindingModal
           selectedText={selectedText}
+          proyectoId={currentProjectId}
+          documentoId={currentDocumentId}
           onClose={closeModal}
           onSubmit={async (data) => {
             await findingApi.createFromHighlight({

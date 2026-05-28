@@ -146,15 +146,38 @@ def delete_document_index(document_id: str) -> bool:
         return False
 
 
-def search_relevant_chunks(query: str, project_id: str, top_k: int = 4) -> str:
+def is_document_indexed(document_id: str) -> bool:
+    if not collection:
+        return False
+    try:
+        results = collection.get(
+            where={"documentoId": str(document_id)},
+            limit=1
+        )
+        return len(results.get("ids", [])) > 0
+    except Exception as e:
+        logger.error(f"Error verificando índice del documento {document_id}: {e}")
+        return False
+
+
+def search_relevant_chunks(query: str, project_id: str, top_k: int = 4, document_id: Optional[str] = None) -> str:
     if not collection or not query.strip():
         return ""
         
     try:
+        where_filter: dict = {"proyectoId": str(project_id)}
+        if document_id:
+            where_filter = {
+                "$and": [
+                    {"proyectoId": str(project_id)},
+                    {"documentoId": str(document_id)},
+                ]
+            }
+
         results = collection.query(
             query_texts=[query],
             n_results=top_k,
-            where={"proyectoId": str(project_id)}
+            where=where_filter
         )
         
         if not results['documents'] or not results['documents'][0]:

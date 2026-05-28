@@ -2,6 +2,7 @@ import { axiosClient } from "./axiosClient";
 
 export interface AISuggestFindingRequest {
   proyectoId: string;
+  documentoId?: string;
   nombre?: string;
   codigo?: string;
   descripcion?: string;
@@ -21,6 +22,7 @@ export interface AISuggestFromHighlightRequest {
   textoSubrayado: string;
   tipo: "hallazgo" | "evidencia";
   proyectoId?: string;
+  documentoId?: string;
 }
 
 export interface AIImproveTextRequest {

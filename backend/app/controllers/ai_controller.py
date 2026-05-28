@@ -22,6 +22,19 @@ from app.utils.mongo import to_object_id
 logger = logging.getLogger(__name__)
 
 
+def _ai_error_to_http(e: ValueError) -> HTTPException:
+    msg = str(e)
+    if "Límite" in msg or "Cuota" in msg or "429" in msg:
+        return HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=msg)
+    if "alta demanda" in msg or "503" in msg:
+        return HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=msg)
+    if "no existe" in msg or "no se encuentra" in msg or "404" in msg:
+        return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=msg)
+    if "Acceso denegado" in msg or "403" in msg:
+        return HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=msg)
+    return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
+
+
 async def suggest_finding(request: AISuggestFindingRequest) -> AISuggestionResponse:
     db = get_database()
 
@@ -58,6 +71,7 @@ async def suggest_finding(request: AISuggestFindingRequest) -> AISuggestionRespo
     }
 
     project_context = {
+        "id": str(project["_id"]),
         "nombre": project.get("nombre"),
         "descripcion": project.get("descripcion"),
     }
@@ -68,6 +82,7 @@ async def suggest_finding(request: AISuggestFindingRequest) -> AISuggestionRespo
             existing_fields=request.camposExistentes,
             project_context=project_context,
             existing_findings=findings_context,
+            document_id=str(request.documentoId) if request.documentoId else None,
         )
 
         return AISuggestionResponse(
@@ -76,10 +91,7 @@ async def suggest_finding(request: AISuggestFindingRequest) -> AISuggestionRespo
         )
 
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise _ai_error_to_http(e)
     except Exception as e:
         logger.error(f"Error al generar sugerencias de hallazgo: {e}")
         raise HTTPException(
@@ -121,6 +133,7 @@ async def suggest_evidence(request: AISuggestEvidenceRequest) -> AISuggestionRes
     }
 
     project_context = {
+        "id": str(project["_id"]),
         "nombre": project.get("nombre"),
         "descripcion": project.get("descripcion"),
     }
@@ -139,10 +152,7 @@ async def suggest_evidence(request: AISuggestEvidenceRequest) -> AISuggestionRes
         )
 
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise _ai_error_to_http(e)
     except Exception as e:
         logger.error(f"Error al generar sugerencias de evidencia: {e}")
         raise HTTPException(
@@ -159,6 +169,7 @@ async def suggest_from_highlight(request: AISuggestFromHighlightRequest) -> AISu
         project = await db["projects"].find_one({"_id": request.proyectoId})
         if project:
             project_context = {
+                "id": str(project["_id"]),
                 "nombre": project.get("nombre"),
                 "descripcion": project.get("descripcion")
             }
@@ -167,7 +178,8 @@ async def suggest_from_highlight(request: AISuggestFromHighlightRequest) -> AISu
         suggestions = await ai_suggest_from_highlight(
             texto=request.textoSubrayado,
             tipo=request.tipo,
-            project_context=project_context
+            project_context=project_context,
+            document_id=str(request.documentoId) if request.documentoId else None,
         )
         
         return AISuggestionResponse(
@@ -175,10 +187,7 @@ async def suggest_from_highlight(request: AISuggestFromHighlightRequest) -> AISu
             mensaje="Sugerencias generadas correctamente"
         )
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise _ai_error_to_http(e)
     except Exception as e:
         logger.error(f"Error al generar sugerencias desde subrayado: {e}")
         raise HTTPException(
@@ -201,10 +210,7 @@ async def suggest_improve_text(request: AIImproveTextRequest) -> dict:
         }
 
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise _ai_error_to_http(e)
     except Exception as e:
         logger.error(f"Error al mejorar texto: {e}")
         raise HTTPException(

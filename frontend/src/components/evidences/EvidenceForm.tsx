@@ -145,13 +145,15 @@ function EvidenceForm({
           como evidencia general del proyecto.
         </p>
 
-        <div style={{ marginTop: '16px' }}>
-          <AISuggestButton 
-            onSuggest={handleSuggest} 
-            onApply={handleApplySuggestions} 
-            isLoading={loading}
-          />
-        </div>
+        {isEditing && (
+          <div style={{ marginTop: '16px' }}>
+            <AISuggestButton 
+              onSuggest={handleSuggest} 
+              onApply={handleApplySuggestions} 
+              isLoading={loading}
+            />
+          </div>
+        )}
       </div>
 
       <div className="evidence-form__group">

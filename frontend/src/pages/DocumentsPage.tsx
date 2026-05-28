@@ -1,7 +1,8 @@
 import toast from "react-hot-toast";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Sparkles } from "lucide-react";
 import { documentApi } from "../api/documentApi";
 import DocumentList from "../components/documents/DocumentList";
 import DocumentUploader from "../components/documents/DocumentUploader";
@@ -40,6 +41,23 @@ function DocumentsPage() {
     onError: (error) => {
       console.error(error);
       toast.error("No se pudo eliminar el documento.");
+    },
+  });
+
+  const [reindexResult, setReindexResult] = useState<{ enCola: number; yaIndexados: number } | null>(null);
+
+  const reindexMutation = useMutation({
+    mutationFn: () => documentApi.reindexProject(currentProjectId),
+    onSuccess: (data) => {
+      setReindexResult({ enCola: data.enCola, yaIndexados: data.yaIndexados });
+      if (data.enCola > 0) {
+        toast.success(`Re-indexado iniciado: ${data.enCola} documento(s) en cola.`);
+      } else {
+        toast(`Todos los documentos ya estaban indexados (${data.yaIndexados}).`, { icon: "✅" });
+      }
+    },
+    onError: () => {
+      toast.error("No se pudo iniciar el re-indexado.");
     },
   });
 
@@ -113,11 +131,44 @@ function DocumentsPage() {
 
         <section className="documents-page__main">
           <div className="documents-page__section-header">
-            <h2>Repositorio del proyecto</h2>
-            <p>
-              Explora, filtra y visualiza los documentos asociados a esta
-              auditoría.
-            </p>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
+              <div>
+                <h2>Repositorio del proyecto</h2>
+                <p>
+                  Explora, filtra y visualiza los documentos asociados a esta
+                  auditoría.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => reindexMutation.mutate()}
+                disabled={reindexMutation.isPending}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "10px 18px",
+                  borderRadius: "12px",
+                  border: "1.5px solid #6366f1",
+                  background: reindexMutation.isPending ? "#e0e7ff" : "#f5f3ff",
+                  color: "#4338ca",
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  cursor: reindexMutation.isPending ? "not-allowed" : "pointer",
+                  transition: "background 0.2s",
+                  whiteSpace: "nowrap",
+                }}
+                title="Re-indexar documentos para IA"
+              >
+                <Sparkles size={16} />
+                {reindexMutation.isPending ? "Indexando..." : "Re-indexar IA"}
+              </button>
+            </div>
+            {reindexResult && (
+              <p style={{ fontSize: "13px", color: "#6366f1", marginTop: "6px" }}>
+                Última indexación: {reindexResult.enCola} en cola · {reindexResult.yaIndexados} ya indexados
+              </p>
+            )}
           </div>
 
           <DocumentList

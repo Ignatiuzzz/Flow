@@ -46,4 +46,14 @@ export const documentApi = {
   fileUrl: (documentId: string): string => {
     return `${process.env.REACT_APP_API_URL}/documents/${documentId}/file`;
   },
+
+  reindexProject: async (projectId: string): Promise<{
+    message: string;
+    enCola: number;
+    yaIndexados: number;
+    total: number;
+  }> => {
+    const response = await axiosClient.post(`/documents/reindex/${projectId}`);
+    return response.data;
+  },
 };

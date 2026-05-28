@@ -65,7 +65,7 @@ function HighlightEvidenceModal({
     return (
         <div className="highlight-modal__overlay fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/50 p-6">
             <form className="highlight-evidence-modal w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl" onSubmit={handleSubmit}>
-                <div className="highlight-evidence-modal__header mb-5 flex items-center justify-between gap-4 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-slate-900 [&_button]:rounded-full [&_button]:bg-slate-100 [&_button]:px-3 [&_button]:py-1 [&_button]:text-xl [&_button]:font-bold [&_button]:text-slate-600 [&_button]:hover:bg-slate-200">
+                <div className="highlight-evidence-modal__header mb-5 flex items-center justify-between gap-4 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-slate-900">
                     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                         <h2>Relacionar evidencia</h2>
                         <AISuggestButton 
@@ -74,7 +74,7 @@ function HighlightEvidenceModal({
                             iconOnly 
                         />
                     </div>
-                    <button type="button" onClick={onClose}>
+                    <button type="button" onClick={onClose} className="rounded-full bg-slate-100 px-3 py-1 text-xl font-bold text-slate-600 hover:bg-slate-200">
                         ×
                     </button>
                 </div>

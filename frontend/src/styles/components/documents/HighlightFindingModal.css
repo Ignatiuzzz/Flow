@@ -14,7 +14,7 @@
   @apply text-xl font-bold text-slate-900;
 }
 
-.highlight-finding-modal__header button {
+.highlight-finding-modal__close-button {
   @apply rounded-full bg-slate-100 px-3 py-1 text-xl font-bold text-slate-600 hover:bg-slate-200;
 }
 

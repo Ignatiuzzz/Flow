@@ -4,7 +4,7 @@ from app.database import get_database
 from app.models.document_model import DocumentModel
 from app.schemas.document_schema import DocumentCreate, DocumentUpdate
 from app.utils.mongo import serialize_document, serialize_documents, to_object_id
-from app.services.rag_service import index_document, delete_document_index
+from app.services.rag_service import index_document, delete_document_index, is_document_indexed
 
 
 COLLECTION = "documents"
@@ -121,4 +121,51 @@ async def delete_document(document_id: str):
 
     return {
         "message": "Documento eliminado correctamente"
+    }
+
+
+async def reindex_project_documents(project_id: str, background_tasks: BackgroundTasks):
+    db = get_database()
+
+    project = await db["projects"].find_one({"_id": to_object_id(project_id)})
+    if not project:
+        from fastapi import HTTPException, status
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Proyecto no encontrado"
+        )
+
+    cursor = db[COLLECTION].find({"proyectoId": to_object_id(project_id)})
+    documents = await cursor.to_list(length=None)
+
+    queued = 0
+    already_indexed = 0
+
+    for doc in documents:
+        serialized = serialize_document(doc)
+        doc_id = serialized.get("id", "")
+        file_path = serialized.get("rutaArchivo", "")
+        doc_name = serialized.get("nombreOriginal", "")
+
+        if not file_path:
+            continue
+
+        if is_document_indexed(doc_id):
+            already_indexed += 1
+            continue
+
+        background_tasks.add_task(
+            index_document,
+            file_path=file_path,
+            project_id=project_id,
+            document_id=doc_id,
+            document_name=doc_name
+        )
+        queued += 1
+
+    return {
+        "message": f"Re-indexado iniciado: {queued} documento(s) en cola, {already_indexed} ya estaban indexados.",
+        "enCola": queued,
+        "yaIndexados": already_indexed,
+        "total": len(documents),
     }

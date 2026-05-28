@@ -8,6 +8,7 @@ from app.controllers.document_controller import (
     delete_document,
     get_document_by_id,
     get_documents_by_project,
+    reindex_project_documents,
     update_document,
 )
 from app.schemas.document_schema import DocumentCreate, DocumentUpdate
@@ -76,3 +77,9 @@ async def delete_document_route(document_id: str):
         delete_file_by_path(file_path)
 
     return response
+
+
+@router.post("/reindex/{project_id}")
+async def reindex_documents_route(project_id: str, background_tasks: BackgroundTasks):
+    """Re-indexa en ChromaDB todos los documentos del proyecto que aún no estén indexados."""
+    return await reindex_project_documents(project_id, background_tasks)

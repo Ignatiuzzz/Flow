@@ -7,6 +7,7 @@ from app.models.base_model import PyObjectId
 
 class AISuggestFindingRequest(BaseModel):
     proyectoId: PyObjectId
+    documentoId: Optional[PyObjectId] = None
 
     nombre: Optional[str] = None
     codigo: Optional[str] = None
@@ -30,6 +31,7 @@ class AISuggestFromHighlightRequest(BaseModel):
     textoSubrayado: str
     tipo: str
     proyectoId: Optional[PyObjectId] = None
+    documentoId: Optional[PyObjectId] = None
 
 
 class AIImproveTextRequest(BaseModel):

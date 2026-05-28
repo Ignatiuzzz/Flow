@@ -46,6 +46,7 @@ def _build_finding_prompt(
     existing_fields: dict,
     project_context: Optional[dict] = None,
     existing_findings: Optional[List[dict]] = None,
+    document_id: Optional[str] = None,
 ) -> str:
     prompt_parts = []
 
@@ -57,17 +58,34 @@ def _build_finding_prompt(
             f"- Nombre: {project_context.get('nombre', 'N/A')}\n"
             f"- Descripción: {project_context.get('descripcion', 'N/A')}\n"
         )
-        
-        query = context.get('nombre') or context.get('descripcion') or (project_context.get('nombre', ''))
-        rag_context = search_relevant_chunks(query, project_context.get('id', ''))
-        
-        if rag_context:
-            prompt_parts.append(
-                f"\n## Contexto extraído de los documentos del proyecto\n"
-                f"La siguiente información fue encontrada en los documentos del proyecto y es altamente relevante:\n"
-                f"{rag_context}\n"
-                f"Usa este contexto para formular el hallazgo de forma precisa.\n"
+
+        form_empty = not context.get('nombre') and not context.get('descripcion') and not context.get('textoSubrayado')
+
+        if form_empty:
+            query = project_context.get('nombre', '') + " hallazgo auditoría"
+            rag_context = search_relevant_chunks(
+                query, project_context.get('id', ''), top_k=6, document_id=document_id
             )
+            if rag_context:
+                prompt_parts.append(
+                    f"\n## Contexto extraído de los documentos del proyecto\n"
+                    f"El formulario está vacío. Utiliza la siguiente información de los documentos del proyecto "
+                    f"para proponer un hallazgo de auditoría relevante:\n"
+                    f"{rag_context}\n"
+                    f"Basa tus sugerencias principalmente en este contexto.\n"
+                )
+        else:
+            query = context.get('textoSubrayado') or context.get('nombre') or context.get('descripcion') or project_context.get('nombre', '')
+            rag_context = search_relevant_chunks(
+                query, project_context.get('id', ''), top_k=4, document_id=document_id
+            )
+            if rag_context:
+                prompt_parts.append(
+                    f"\n## Contexto extraído de los documentos del proyecto\n"
+                    f"La siguiente información fue encontrada en los documentos del proyecto y es altamente relevante:\n"
+                    f"{rag_context}\n"
+                    f"Usa este contexto para formular el hallazgo de forma precisa.\n"
+                )
 
     if existing_findings and len(existing_findings) > 0:
         findings_summary = []
@@ -193,7 +211,7 @@ def _build_evidence_prompt(
     return "\n".join(prompt_parts)
 
 
-def _build_suggest_from_highlight_prompt(texto: str, tipo: str, project_context: Optional[dict] = None) -> str:
+def _build_suggest_from_highlight_prompt(texto: str, tipo: str, project_context: Optional[dict] = None, document_id: Optional[str] = None) -> str:
     prompt_parts = []
 
     if tipo == "hallazgo":
@@ -206,6 +224,16 @@ def _build_suggest_from_highlight_prompt(texto: str, tipo: str, project_context:
             f"\n## Contexto del Proyecto\n"
             f"- Nombre: {project_context.get('nombre', 'N/A')}"
         )
+        rag_context = search_relevant_chunks(
+            texto, project_context.get('id', ''), top_k=3, document_id=document_id
+        )
+        if rag_context:
+            prompt_parts.append(
+                f"\n## Contexto adicional del documento\n"
+                f"El siguiente texto rodea o es relevante al fragmento subrayado:\n"
+                f"{rag_context}\n"
+                f"Úsalo para enriquecer tu respuesta, pero basa el nombre/descripción en el texto subrayado.\n"
+            )
 
     prompt_parts.append(f"\n## Texto Subrayado:\n\"{texto}\"")
 
@@ -299,6 +327,7 @@ async def suggest_finding_fields(
     existing_fields: dict,
     project_context: Optional[dict] = None,
     existing_findings: Optional[List[dict]] = None,
+    document_id: Optional[str] = None,
 ) -> dict:
     client = _get_client()
     model = _get_model()
@@ -308,6 +337,7 @@ async def suggest_finding_fields(
         existing_fields=existing_fields,
         project_context=project_context,
         existing_findings=existing_findings,
+        document_id=document_id,
     )
 
     try:
@@ -324,6 +354,12 @@ async def suggest_finding_fields(
     except APIError as e:
         if e.code == 429:
             raise ValueError("Límite de la IA alcanzado (Cuota o Tokens). Por favor, espera 1 minuto para volver a intentarlo.")
+        elif e.code == 503:
+            raise ValueError("El servicio de IA está experimentando alta demanda (503). Por favor, intenta de nuevo en unos momentos.")
+        elif e.code == 404:
+            raise ValueError(f"El modelo configurado '{model}' no existe o no se encuentra disponible (404).")
+        elif e.code == 403:
+            raise ValueError("Acceso denegado (403). Verifica que tu API Key sea válida y tenga permisos.")
         raise
     except Exception as e:
         logger.error(f"Error generando contenido con Gemini: {e}")
@@ -360,6 +396,12 @@ async def suggest_evidence_fields(
     except APIError as e:
         if e.code == 429:
             raise ValueError("Límite de la IA alcanzado (Cuota o Tokens). Por favor, espera 1 minuto para volver a intentarlo.")
+        elif e.code == 503:
+            raise ValueError("El servicio de IA está experimentando alta demanda (503). Por favor, intenta de nuevo en unos momentos.")
+        elif e.code == 404:
+            raise ValueError(f"El modelo configurado '{model}' no existe o no se encuentra disponible (404).")
+        elif e.code == 403:
+            raise ValueError("Acceso denegado (403). Verifica que tu API Key sea válida y tenga permisos.")
         raise
     except Exception as e:
         logger.error(f"Error generando contenido con Gemini: {e}")
@@ -369,12 +411,13 @@ async def suggest_evidence_fields(
 async def suggest_from_highlight(
     texto: str,
     tipo: str,
-    project_context: Optional[dict] = None
+    project_context: Optional[dict] = None,
+    document_id: Optional[str] = None,
 ) -> dict:
     client = _get_client()
     model = _get_model()
 
-    prompt = _build_suggest_from_highlight_prompt(texto, tipo, project_context)
+    prompt = _build_suggest_from_highlight_prompt(texto, tipo, project_context, document_id)
 
     try:
         response = client.models.generate_content(
@@ -390,6 +433,12 @@ async def suggest_from_highlight(
     except APIError as e:
         if e.code == 429:
             raise ValueError("Límite de la IA alcanzado (Cuota o Tokens). Por favor, intenta nuevamente en un momento.")
+        elif e.code == 503:
+            raise ValueError("El servicio de IA está experimentando alta demanda (503). Por favor, intenta de nuevo en unos momentos.")
+        elif e.code == 404:
+            raise ValueError(f"El modelo configurado '{model}' no existe o no se encuentra disponible (404).")
+        elif e.code == 403:
+            raise ValueError("Acceso denegado (403). Verifica que tu API Key sea válida y tenga permisos.")
         raise
     except Exception as e:
         logger.error(f"Error generando contenido con Gemini: {e}")
@@ -406,16 +455,28 @@ async def improve_text(
 
     prompt = _build_improve_prompt(text, field_name, context)
 
-    response = client.models.generate_content(
-        model=model,
-        contents=prompt,
-        config={
-            "system_instruction": SYSTEM_PROMPT,
-            "temperature": 0.5,
-            "max_output_tokens": 1024,
-        },
-    )
-
-    result = _parse_json_response(response.text)
-
-    return {"textoMejorado": result.get("textoMejorado", text)}
+    try:
+        response = client.models.generate_content(
+            model=model,
+            contents=prompt,
+            config={
+                "system_instruction": SYSTEM_PROMPT,
+                "temperature": 0.5,
+                "max_output_tokens": 1024,
+            },
+        )
+        result = _parse_json_response(response.text)
+        return {"textoMejorado": result.get("textoMejorado", text)}
+    except APIError as e:
+        if e.code == 429:
+            raise ValueError("Límite de la IA alcanzado (Cuota o Tokens). Por favor, intenta nuevamente en un momento.")
+        elif e.code == 503:
+            raise ValueError("El servicio de IA está experimentando alta demanda (503). Por favor, intenta de nuevo en unos momentos.")
+        elif e.code == 404:
+            raise ValueError(f"El modelo configurado '{model}' no existe o no se encuentra disponible (404).")
+        elif e.code == 403:
+            raise ValueError("Acceso denegado (403). Verifica que tu API Key sea válida y tenga permisos.")
+        raise
+    except Exception as e:
+        logger.error(f"Error mejorando texto con Gemini: {e}")
+        raise
