@@ -58,4 +58,5 @@ class NoteFromHighlightCreate(BaseModel):
 
     textoSubrayado: str = Field(..., min_length=1)
     subtitulo: Optional[str] = None
+    observacion: Optional[str] = None
     coordenadas: Optional[HighlightCoordinatesSchema] = None

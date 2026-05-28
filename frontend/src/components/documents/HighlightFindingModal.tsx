@@ -5,7 +5,9 @@ interface HighlightFindingModalProps {
     selectedText: string;
     onClose: () => void;
     onSubmit: (data: {
+        codigo: string;
         nombre: string;
+        subtitulo: string;
         descripcion: string;
         observacion: string;
     }) => Promise<void>;
@@ -16,13 +18,20 @@ function HighlightFindingModal({
     onClose,
     onSubmit,
 }: HighlightFindingModalProps) {
+    const [codigo, setCodigo] = useState("");
     const [nombre, setNombre] = useState("");
+    const [subtitulo, setSubtitulo] = useState("");
     const [descripcion, setDescripcion] = useState(selectedText);
     const [observacion, setObservacion] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
+
+        if (!codigo.trim()) {
+            alert("El código del hallazgo es obligatorio.");
+            return;
+        }
 
         if (!nombre.trim()) {
             alert("El nombre del hallazgo es obligatorio.");
@@ -38,7 +47,9 @@ function HighlightFindingModal({
             setLoading(true);
 
             await onSubmit({
+                codigo: codigo.trim(),
                 nombre: nombre.trim(),
+                subtitulo: subtitulo.trim(),
                 descripcion: descripcion.trim(),
                 observacion: observacion.trim(),
             });
@@ -64,12 +75,32 @@ function HighlightFindingModal({
                     <p>{selectedText}</p>
                 </div>
 
+                <div className="highlight-finding-modal__grid highlight-finding-modal__grid--two">
+                    <div className="highlight-finding-modal__group">
+                        <label>Código del hallazgo</label>
+                        <input
+                            value={codigo}
+                            onChange={(event) => setCodigo(event.target.value)}
+                            placeholder="Ej. H-001"
+                        />
+                    </div>
+
+                    <div className="highlight-finding-modal__group">
+                        <label>Nombre del hallazgo</label>
+                        <input
+                            value={nombre}
+                            onChange={(event) => setNombre(event.target.value)}
+                            placeholder="Ej. Ausencia de procedimiento documentado"
+                        />
+                    </div>
+                </div>
+
                 <div className="highlight-finding-modal__group">
-                    <label>Nombre del hallazgo</label>
+                    <label>Subtítulo del documento</label>
                     <input
-                        value={nombre}
-                        onChange={(event) => setNombre(event.target.value)}
-                        placeholder="Ej. Ausencia de procedimiento documentado"
+                        value={subtitulo}
+                        onChange={(event) => setSubtitulo(event.target.value)}
+                        placeholder="Ej. Gestión de operaciones"
                     />
                 </div>
 

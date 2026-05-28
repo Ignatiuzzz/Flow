@@ -267,39 +267,37 @@ function DocumentViewerPage() {
       )}
 
       {mode === "finding" && selectedText && selectedCoordinates && (
-        <HighlightFindingModal
-          selectedText={selectedText}
-          onClose={closeModal}
-          onSubmit={async (data) => {
-            const generatedCode = `H-DOC-${Date.now()}`;
+  <HighlightFindingModal
+    selectedText={selectedText}
+    onClose={closeModal}
+    onSubmit={async (data) => {
+      await findingApi.createFromHighlight({
+        proyectoId: currentProjectId,
+        documentoId: currentDocumentId,
+        textoSubrayado: selectedText,
+        coordenadas: selectedCoordinates,
+        subtitulo: data.subtitulo,
+        observacion: data.observacion,
+        nombre: data.nombre,
+        codigo: data.codigo,
+        descripcion: data.descripcion,
+        criterio: "",
+        objetivo: "",
+        causa: "",
+        efecto: "",
+        conclusion: "",
+        impacto: 1,
+        urgencia: 1,
+        justificacionRiesgo: "",
+        recomendaciones: "",
+      });
 
-            await findingApi.createFromHighlight({
-              proyectoId: currentProjectId,
-              documentoId: currentDocumentId,
-              textoSubrayado: selectedText,
-              coordenadas: selectedCoordinates,
-              subtitulo: "",
-              observacion: data.observacion,
-              nombre: data.nombre,
-              codigo: generatedCode,
-              descripcion: data.descripcion,
-              criterio: "",
-              objetivo: "",
-              causa: "",
-              efecto: "",
-              conclusion: "",
-              impacto: 1,
-              urgencia: 1,
-              justificacionRiesgo: "",
-              recomendaciones: "",
-            });
-
-            alert("Hallazgo creado desde subrayado.");
-            await loadPageData();
-            clearSelection();
-          }}
-        />
-      )}
+      alert("Hallazgo creado desde subrayado.");
+      await loadPageData();
+      clearSelection();
+    }}
+  />
+)}
 
       {mode === "evidence" && selectedText && selectedCoordinates && (
         <HighlightEvidenceModal

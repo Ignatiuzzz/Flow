@@ -10,6 +10,7 @@ export interface NoteFromHighlightCreate {
 
   textoSubrayado: string;
   subtitulo?: string;
+  observacion?: string;
   coordenadas?: HighlightCoordinates;
 }
 

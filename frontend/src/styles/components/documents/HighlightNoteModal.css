@@ -35,8 +35,9 @@
 }
 
 .highlight-note-modal__group input,
-.highlight-note-modal__group select {
-    @apply rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-600;
+.highlight-note-modal__group select,
+.highlight-note-modal__group textarea {
+  @apply rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-600;
 }
 
 .highlight-note-modal__actions {

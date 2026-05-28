@@ -120,7 +120,7 @@ async def create_note_from_highlight(data: NoteFromHighlightCreate):
         documentoId=data.documentoId,
         textoSubrayado=data.textoSubrayado,
         subtitulo=data.subtitulo,
-        observacion=None,
+        observacion=data.observacion,
         tipo=HighlightType.NOTA,
         esNota=True,
         hallazgoId=data.hallazgoId,
