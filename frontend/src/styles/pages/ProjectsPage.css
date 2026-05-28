@@ -1,42 +1,5 @@
 .projects-page {
   @apply relative min-h-screen overflow-hidden p-6 text-slate-900 md:p-8;
-  background:
-    radial-gradient(circle at 10% 8%, rgba(52, 211, 153, 0.22), transparent 22rem),
-    radial-gradient(circle at 92% 18%, rgba(167, 243, 208, 0.14), transparent 20rem),
-    radial-gradient(circle at 70% 92%, rgba(16, 185, 129, 0.12), transparent 24rem),
-    linear-gradient(135deg, #022c22 0%, #064e3b 45%, #0f172a 100%);
-}
-
-.projects-page::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    url("../../assets/background-pattern.svg"),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(45deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
-  background-repeat: repeat;
-  background-size:
-    760px 440px,
-    34px 34px,
-    58px 58px;
-  background-position:
-    center 40px,
-    0 0,
-    0 0;
-  opacity: 1;
-  pointer-events: none;
-  z-index: 0;
-  animation: float 20s ease-in-out infinite;
-}
-
-.projects-page::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 .projects-page__hero,
@@ -46,18 +9,18 @@
 }
 
 .projects-page__hero {
-  @apply relative mb-8 flex flex-col gap-6 overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-lg p-7 shadow-2xl lg:flex-row lg:items-center lg:justify-between animate-fade-in-up;
+  @apply relative mb-8 flex flex-col gap-6 overflow-hidden rounded-3xl border border-white/20 bg-white/80 backdrop-blur-xl p-8 shadow-premium lg:flex-row lg:items-center lg:justify-between animate-fade-in-up;
 }
 
 .projects-page__hero::after {
   content: "";
   position: absolute;
-  right: -70px;
-  top: -90px;
+  right: -50px;
+  top: -50px;
   width: 260px;
   height: 260px;
   border-radius: 9999px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.12), transparent 68%);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.08), transparent 70%);
   pointer-events: none;
 }
 
@@ -71,35 +34,34 @@
 }
 
 .projects-page__eyebrow {
-  @apply mb-3 inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide;
-  background-color: #e6f4ef;
-  border-color: #b7d8cd;
+  @apply mb-4 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider;
+  background-color: rgba(230, 244, 239, 0.5);
+  border-color: rgba(16, 185, 129, 0.2);
   color: #064e3b;
 }
 
 .projects-page__hero h1 {
-  @apply mb-3 text-4xl font-extrabold tracking-tight text-slate-950;
+  @apply mb-4 text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900;
 }
 
 .projects-page__hero p {
-  @apply max-w-3xl text-sm leading-6 text-slate-600 md:text-base;
+  @apply max-w-3xl text-sm md:text-base leading-relaxed text-slate-600;
 }
 
 .projects-page__summary {
-  @apply flex min-w-[160px] flex-col items-center justify-center rounded-2xl bg-emerald-950 px-4 py-4 text-center text-white shadow-xl ring-1 ring-emerald-700/40 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300;
-  animation: pulse-glow 3s infinite;
+  @apply flex min-w-[180px] flex-col items-center justify-center rounded-2xl bg-emerald-900 px-6 py-5 text-center text-white shadow-soft ring-1 ring-white/10 hover:shadow-premium hover:-translate-y-1 transition-all duration-300;
 }
 
 .projects-page__summary span {
-  @apply text-center text-sm font-bold uppercase tracking-wide text-white;
+  @apply text-center text-xs font-bold uppercase tracking-widest text-emerald-100;
 }
 
 .projects-page__summary strong {
-  @apply mt-1 text-center text-3xl font-extrabold text-white;
+  @apply mt-2 text-center text-4xl font-extrabold text-white;
 }
 
 .projects-page__content {
-  @apply grid grid-cols-1 gap-6 xl:grid-cols-[420px_1fr];
+  @apply grid grid-cols-1 gap-8 xl:grid-cols-[440px_1fr];
 }
 
 .projects-page__side,
@@ -108,18 +70,18 @@
 }
 
 .projects-page__main {
-  @apply rounded-3xl border border-white/20 bg-white/80 backdrop-blur-md p-6 shadow-2xl animate-fade-in-up;
+  @apply rounded-3xl border border-white/40 bg-white/90 backdrop-blur-xl p-8 shadow-premium animate-fade-in-up;
   animation-delay: 0.1s;
 }
 
 .projects-page__section-header {
-  @apply mb-5 flex flex-col gap-2 border-b border-slate-100 pb-5;
+  @apply mb-6 flex flex-col gap-2 border-b border-slate-200/60 pb-6;
 }
 
 .projects-page__section-header h2 {
-  @apply text-xl font-bold text-slate-950;
+  @apply text-2xl font-bold tracking-tight text-slate-900;
 }
 
 .projects-page__section-header p {
   @apply mt-1 text-sm text-slate-500;
-}
+}

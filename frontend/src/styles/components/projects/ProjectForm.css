@@ -1,47 +1,47 @@
 .project-form {
-  @apply rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md p-6 shadow-2xl animate-slide-in-left;
+  @apply rounded-3xl border border-white/40 bg-white/90 backdrop-blur-xl p-8 shadow-premium animate-slide-in-left;
 }
 
 .project-form__header {
-  @apply mb-6 border-b border-slate-100 pb-5;
+  @apply mb-6 border-b border-slate-200/60 pb-6;
 }
 
 .project-form__header span {
-  @apply mb-3 inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide;
-  background-color: #e6f4ef;
-  border-color: #b7d8cd;
+  @apply mb-4 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider;
+  background-color: rgba(230, 244, 239, 0.5);
+  border-color: rgba(16, 185, 129, 0.2);
   color: #064e3b;
 }
 
 .project-form__header h2 {
-  @apply mb-2 text-2xl font-extrabold tracking-tight text-slate-950;
+  @apply mb-2 text-2xl font-bold tracking-tight text-slate-900;
 }
 
 .project-form__header p {
-  @apply text-sm leading-6 text-slate-500;
+  @apply text-sm leading-relaxed text-slate-600;
 }
 
 .project-form__group {
-  @apply mb-5 flex flex-col gap-2;
+  @apply mb-6 flex flex-col gap-2;
 }
 
 .project-form__group label {
-  @apply text-sm font-bold text-slate-800;
+  @apply text-sm font-semibold text-slate-700;
 }
 
 .project-form__group input,
 .project-form__group textarea {
-  @apply rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/20 focus:shadow-[0_0_15px_rgba(16,185,129,0.2)];
+  @apply rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-900 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-slate-400 focus:bg-white focus:ring-4 focus:ring-slate-100 focus:shadow-sm hover:border-slate-300;
 }
 
 .project-form__actions {
-  @apply mt-6 flex flex-wrap gap-3;
+  @apply mt-8 flex flex-wrap gap-4;
 }
 
 .project-form__actions button {
-  @apply rounded-2xl bg-emerald-950 px-5 py-3 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:bg-emerald-900 hover:shadow-[0_4px_15px_rgba(16,185,129,0.3)] hover:-translate-y-0.5 disabled:bg-emerald-300;
+  @apply rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-slate-800 hover:shadow hover:-translate-y-0.5 disabled:bg-slate-300;
 }
 
 .project-form__cancel {
-  @apply bg-slate-200 text-slate-800 hover:bg-slate-300;
+  @apply !bg-white border border-slate-200 !text-slate-700 hover:!bg-slate-50 hover:border-slate-300 !shadow-sm hover:!shadow;
 }

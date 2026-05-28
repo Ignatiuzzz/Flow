@@ -75,10 +75,10 @@ function ProjectsPage() {
   };
 
   return (
-    <main className="projects-page relative min-h-screen overflow-hidden p-6 text-slate-900 md:p-8">
-      <section className="projects-page__hero relative mb-8 flex flex-col gap-6 overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-lg p-7 shadow-2xl lg:flex-row lg:items-center lg:justify-between animate-fade-in-up [&_h1]:mb-3 [&_h1]:text-4xl [&_h1]:font-extrabold [&_h1]:tracking-tight [&_h1]:text-slate-950 [&_p]:max-w-3xl [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-600 [&_p]:md:text-base">
-        <div className="projects-page__hero-content max-w-4xl">
-          <span className="projects-page__eyebrow mb-3 inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide">
+    <main className="projects-page">
+      <section className="projects-page__hero">
+        <div className="projects-page__hero-content">
+          <span className="projects-page__eyebrow">
             Herramienta para Auditores
           </span>
 
@@ -91,13 +91,13 @@ function ProjectsPage() {
           </p>
         </div>
 
-        <div className="projects-page__summary flex min-w-[160px] flex-col items-center justify-center rounded-2xl bg-emerald-950 px-4 py-4 text-center text-white shadow-xl ring-1 ring-emerald-700/40 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 [&_span]:text-center [&_span]:text-sm [&_span]:font-bold [&_span]:uppercase [&_span]:tracking-wide [&_span]:text-white [&_strong]:mt-1 [&_strong]:text-center [&_strong]:text-3xl [&_strong]:font-extrabold [&_strong]:text-white">
+        <div className="projects-page__summary">
           <span>Total de proyectos</span>
           <strong>{projects.length}</strong>
         </div>
       </section>
 
-      <section className="projects-page__content grid grid-cols-1 gap-6 xl:grid-cols-[420px_1fr]">
+      <section className="projects-page__content">
         <aside className="projects-page__side">
           <ProjectForm
             selectedProject={selectedProject}
@@ -106,8 +106,8 @@ function ProjectsPage() {
           />
         </aside>
 
-        <section className="projects-page__main rounded-3xl border border-white/20 bg-white/80 backdrop-blur-md p-6 shadow-2xl animate-fade-in-up">
-          <div className="projects-page__section-header mb-5 flex flex-col gap-2 border-b border-slate-100 pb-5 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-slate-950 [&_p]:mt-1 [&_p]:text-sm [&_p]:text-slate-500">
+        <section className="projects-page__main">
+          <div className="projects-page__section-header">
             <div>
               <h2>Proyectos registrados</h2>
               <p>

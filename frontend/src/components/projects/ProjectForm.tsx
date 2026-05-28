@@ -56,8 +56,8 @@ function ProjectForm({
   };
 
   return (
-    <form className="project-form rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md p-6 shadow-2xl animate-slide-in-left" onSubmit={handleSubmit}>
-      <div className="project-form__header mb-6 border-b border-slate-100 pb-5 [&_span]:mb-3 [&_span]:inline-flex [&_span]:rounded-full [&_span]:border [&_span]:px-3 [&_span]:py-1 [&_span]:text-xs [&_span]:font-bold [&_span]:uppercase [&_span]:tracking-wide [&_h2]:mb-2 [&_h2]:text-2xl [&_h2]:font-extrabold [&_h2]:tracking-tight [&_h2]:text-slate-950 [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-500">
+    <form className="project-form" onSubmit={handleSubmit}>
+      <div className="project-form__header">
         <span>{isEditing ? "Modo edición" : "Nuevo proyecto"}</span>
 
         <h2>{isEditing ? "Editar proyecto" : "Crear proyecto"}</h2>
@@ -68,7 +68,7 @@ function ProjectForm({
         </p>
       </div>
 
-      <div className="project-form__group mb-5 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-800">
+      <div className="project-form__group">
         <label>Nombre del proyecto</label>
         <input
           type="text"
@@ -78,7 +78,7 @@ function ProjectForm({
         />
       </div>
 
-      <div className="project-form__group mb-5 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-800">
+      <div className="project-form__group">
         <label>Descripción</label>
         <textarea
           value={descripcion}
@@ -88,7 +88,7 @@ function ProjectForm({
         />
       </div>
 
-      <div className="project-form__actions mt-6 flex flex-wrap gap-3 [&_button]:rounded-2xl [&_button]:bg-emerald-950 [&_button]:px-5 [&_button]:py-3 [&_button]:text-sm [&_button]:font-bold [&_button]:text-white [&_button]:shadow-lg [&_button]:transition-all [&_button]:duration-300 [&_button]:hover:bg-emerald-900 [&_button]:hover:shadow-[0_4px_15px_rgba(16,185,129,0.3)] [&_button]:hover:-translate-y-0.5 [&_button]:disabled:bg-emerald-300">
+      <div className="project-form__actions">
         <button type="submit" disabled={loading}>
           {loading
             ? "Guardando..."
@@ -100,7 +100,7 @@ function ProjectForm({
         {isEditing && onCancelEdit && (
           <button
             type="button"
-            className="project-form__cancel bg-slate-200 text-slate-800 hover:bg-slate-300"
+            className="project-form__cancel"
             onClick={onCancelEdit}
           >
             Cancelar

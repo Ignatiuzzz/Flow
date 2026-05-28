@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -9,15 +9,18 @@
 }
 
 html {
-  font-family: "Manrope", Arial, Helvetica, sans-serif;
+  font-family: "Inter", "Manrope", Arial, Helvetica, sans-serif;
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  font-family: "Manrope", Arial, Helvetica, sans-serif;
-  background: #022c22;
+  font-family: "Inter", "Manrope", Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #022c22 0%, #064e3b 45%, #0f172a 100%);
+  background-attachment: fixed;
   color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button,

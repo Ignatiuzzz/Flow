@@ -8,6 +8,12 @@ module.exports = {
       fontFamily: {
         sans: ["Inter", "Manrope", "Arial", "Helvetica", "sans-serif"],
       },
+      boxShadow: {
+        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+        'premium': '0 10px 40px -10px rgba(0,0,0,0.08)',
+        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+        'glass-sm': '0 4px 16px 0 rgba(31, 38, 135, 0.05)',
+      },
       keyframes: {
         fadeInUp: {
           '0%': { opacity: '0', transform: 'translateY(15px)' },
