@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { highlightApi } from "../../api/highlightApi";
@@ -53,7 +54,7 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
       setRelationsLoaded(true);
     } catch (error) {
       console.error(error);
-      alert("No se pudo cargar el subrayado relacionado a la nota.");
+      toast.error("No se pudo cargar el subrayado relacionado a la nota.");
     } finally {
       setLoadingRelations(false);
     }
@@ -89,8 +90,8 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
 
   return (
     <article className={expanded ? "note-card note-card--expanded" : "note-card"}>
-      <div className="note-card__main">
-        <div className="note-card__top">
+      <div className="note-card__main min-w-0 flex-1">
+        <div className="note-card__top mb-3 flex flex-wrap gap-2">
           <span className="note-card__badge">
             {note.hallazgoId ? "Relacionada a hallazgo" : "Nota general"}
           </span>
@@ -109,7 +110,7 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
         <p>{note.texto}</p>
       </div>
 
-      <div className="note-card__actions">
+      <div className="note-card__actions flex flex-wrap gap-2 border-t border-slate-100 pt-4 [&_button]:rounded-2xl [&_button]:px-4 [&_button]:py-2.5 [&_button]:text-center [&_button]:text-sm [&_button]:font-bold [&_button]:transition-all [&_button]:duration-300 [&_button]:hover:-translate-y-0.5 [&_button]:hover:shadow-lg">
         <button type="button" onClick={handleToggleDetails}>
           {expanded ? "Ver menos" : "Ver más"}
         </button>
@@ -120,7 +121,7 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
 
         <button
           type="button"
-          className="note-card__delete"
+          className="note-card__delete text-red-700"
           onClick={() => onDelete(note.id)}
         >
           Eliminar
@@ -128,8 +129,8 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
       </div>
 
       {expanded && (
-        <section className="note-card__details">
-          <div className="note-card__details-header">
+        <section className="note-card__details relative mt-3 rounded-3xl border p-5 backdrop-blur-md animate-fade-in">
+          <div className="note-card__details-header [&_strong]:inline-flex [&_strong]:rounded-2xl [&_strong]:px-4 [&_strong]:py-2 [&_strong]:text-sm [&_strong]:font-extrabold">
             <div>
               <span>Ficha desplegada</span>
               <h4>Información de la nota</h4>
@@ -138,7 +139,7 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
             <strong>{note.hallazgoId ? "Vinculada" : "General"}</strong>
           </div>
 
-          <div className="note-card__detail-grid">
+          <div className="note-card__detail-grid mb-5 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
             <DetailItem
               label="Hallazgo relacionado"
               value={
@@ -179,7 +180,7 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
             />
           </div>
 
-          <div className="note-card__relations">
+          <div className="note-card__relations mt-5 rounded-3xl border bg-white p-5 shadow-sm">
             <div className="note-card__relations-header">
               <div>
                 <span>Relaciones</span>
@@ -187,7 +188,7 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
               </div>
             </div>
 
-            <div className="note-card__relation-summary">
+            <div className="note-card__relation-summary mb-4 grid grid-cols-1 gap-3 md:grid-cols-3 [&_div]:rounded-2xl [&_div]:border [&_div]:px-4 [&_div]:py-3 [&_strong]:block [&_strong]:text-2xl [&_strong]:font-extrabold [&_span]:mt-1 [&_span]:block [&_span]:text-xs [&_span]:font-bold [&_span]:uppercase [&_span]:tracking-wide [&_span]:text-slate-500">
               <div>
                 <strong>{note.subrayadoId ? 1 : 0}</strong>
                 <span>Subrayados vinculados</span>
@@ -205,20 +206,20 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
             </div>
 
             {loadingRelations && (
-              <p className="note-card__related-state">
+              <p className="note-card__related-state mb-0 rounded-2xl border border-dashed p-5 text-center text-sm font-semibold text-slate-500">
                 Cargando subrayado relacionado...
               </p>
             )}
 
             {!loadingRelations && !relations && (
-              <p className="note-card__related-state">
+              <p className="note-card__related-state mb-0 rounded-2xl border border-dashed p-5 text-center text-sm font-semibold text-slate-500">
                 Esta nota no tiene un subrayado relacionado desde documentos.
               </p>
             )}
 
             {!loadingRelations && relations && (
-              <article className="note-card__highlight-item">
-                <div className="note-card__highlight-top">
+              <article className="note-card__highlight-item rounded-3xl border p-4 shadow-sm [&_h5]:mb-3 [&_h5]:text-base [&_h5]:font-extrabold [&_h5]:text-slate-900">
+                <div className="note-card__highlight-top mb-3 flex flex-wrap items-center gap-2">
                   <span>{relations.subrayado.tipo}</span>
 
                   {relations.hallazgo && <strong>Hallazgo vinculado</strong>}
@@ -233,12 +234,12 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
                     "Documento no disponible"}
                 </h5>
 
-                <div className="note-card__highlight-text">
+                <div className="note-card__highlight-text mb-3 rounded-2xl bg-white p-4 [&_p]:mb-0 [&_p]:whitespace-pre-wrap [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-700">
                   <label>Texto subrayado</label>
                   <p>{showValue(relations.subrayado.textoSubrayado)}</p>
                 </div>
 
-                <div className="note-card__highlight-meta">
+                <div className="note-card__highlight-meta grid grid-cols-1 gap-3 md:grid-cols-2 [&_div]:rounded-2xl [&_div]:bg-white [&_div]:p-4 [&_p]:mb-0 [&_p]:whitespace-pre-wrap [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-700">
                   <div>
                     <label>Subtítulo del subrayado</label>
                     <p>{showValue(relations.subrayado.subtitulo)}</p>
@@ -251,7 +252,7 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
                 </div>
 
                 {(relations.hallazgo || relations.evidencia) && (
-                  <div className="note-card__linked-data">
+                  <div className="note-card__linked-data mt-3 grid grid-cols-1 gap-3 md:grid-cols-2 [&_div]:rounded-2xl [&_div]:border [&_div]:bg-white [&_div]:p-4 [&_p]:mb-0 [&_p]:whitespace-pre-wrap [&_p]:text-sm [&_p]:font-semibold [&_p]:leading-6 [&_p]:text-slate-700">
                     {relations.hallazgo && (
                       <div>
                         <label>Hallazgo relacionado</label>
@@ -274,7 +275,7 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
                   </div>
                 )}
 
-                <div className="note-card__highlight-footer">
+                <div className="note-card__highlight-footer mt-3 flex flex-col gap-3 border-t border-pink-100 pt-3 md:flex-row md:items-center md:justify-between [&_span]:text-xs [&_span]:font-semibold [&_span]:text-slate-500 [&_a]:inline-flex [&_a]:justify-center [&_a]:rounded-2xl [&_a]:px-4 [&_a]:py-2 [&_a]:text-sm [&_a]:font-bold [&_a]:no-underline [&_a]:transition">
                   <span>
                     Creado: {formatDate(relations.subrayado.fechaCreacion)}
                   </span>
@@ -303,7 +304,7 @@ interface DetailItemProps {
 
 function DetailItem({ label, value }: DetailItemProps) {
   return (
-    <div className="note-card__detail-item">
+    <div className="note-card__detail-item rounded-2xl border bg-white px-4 py-3 shadow-sm [&_span]:block [&_span]:text-xs [&_span]:font-bold [&_span]:uppercase [&_span]:tracking-wide [&_span]:text-slate-400 [&_strong]:mt-1 [&_strong]:block [&_strong]:break-words [&_strong]:text-sm [&_strong]:font-extrabold [&_strong]:text-slate-800">
       <span>{label}</span>
       <strong>{value}</strong>
     </div>

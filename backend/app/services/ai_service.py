@@ -3,8 +3,10 @@ import logging
 from typing import Dict, List, Optional
 
 from google import genai
+from google.genai.errors import APIError
 
 from app.config import get_settings
+from app.services.rag_service import search_relevant_chunks
 
 
 logger = logging.getLogger(__name__)
@@ -53,8 +55,19 @@ def _build_finding_prompt(
         prompt_parts.append(
             f"\n## Contexto del Proyecto\n"
             f"- Nombre: {project_context.get('nombre', 'N/A')}\n"
-            f"- Descripción: {project_context.get('descripcion', 'N/A')}"
+            f"- Descripción: {project_context.get('descripcion', 'N/A')}\n"
         )
+        
+        query = context.get('nombre') or context.get('descripcion') or (project_context.get('nombre', ''))
+        rag_context = search_relevant_chunks(query, project_context.get('id', ''))
+        
+        if rag_context:
+            prompt_parts.append(
+                f"\n## Contexto extraído de los documentos del proyecto\n"
+                f"La siguiente información fue encontrada en los documentos del proyecto y es altamente relevante:\n"
+                f"{rag_context}\n"
+                f"Usa este contexto para formular el hallazgo de forma precisa.\n"
+            )
 
     if existing_findings and len(existing_findings) > 0:
         findings_summary = []
@@ -127,6 +140,17 @@ def _build_evidence_prompt(
             f"\n## Contexto del Proyecto\n"
             f"- Nombre: {project_context.get('nombre', 'N/A')}"
         )
+        
+        query = context.get('nombre') or context.get('descripcionEvidencia') or (project_context.get('nombre', ''))
+        rag_context = search_relevant_chunks(query, project_context.get('id', ''))
+        
+        if rag_context:
+            prompt_parts.append(
+                f"\n## Contexto extraído de los documentos del proyecto\n"
+                f"La siguiente información fue encontrada en los documentos del proyecto y es altamente relevante:\n"
+                f"{rag_context}\n"
+                f"Usa este contexto para sugerir campos precisos para esta evidencia.\n"
+            )
 
     if finding_context:
         prompt_parts.append(
@@ -286,17 +310,24 @@ async def suggest_finding_fields(
         existing_findings=existing_findings,
     )
 
-    response = client.models.generate_content(
-        model=model,
-        contents=prompt,
-        config={
-            "system_instruction": SYSTEM_PROMPT,
-            "temperature": 0.7,
-            "max_output_tokens": 2048,
-        },
-    )
-
-    return _parse_json_response(response.text)
+    try:
+        response = client.models.generate_content(
+            model=model,
+            contents=prompt,
+            config={
+                "system_instruction": SYSTEM_PROMPT,
+                "temperature": 0.7,
+                "max_output_tokens": 2048,
+            },
+        )
+        return _parse_json_response(response.text)
+    except APIError as e:
+        if e.code == 429:
+            raise ValueError("Límite de la IA alcanzado (Cuota o Tokens). Por favor, intenta nuevamente en un momento.")
+        raise
+    except Exception as e:
+        logger.error(f"Error generando contenido con Gemini: {e}")
+        raise
 
 
 async def suggest_evidence_fields(
@@ -315,17 +346,24 @@ async def suggest_evidence_fields(
         project_context=project_context,
     )
 
-    response = client.models.generate_content(
-        model=model,
-        contents=prompt,
-        config={
-            "system_instruction": SYSTEM_PROMPT,
-            "temperature": 0.7,
-            "max_output_tokens": 1024,
-        },
-    )
-
-    return _parse_json_response(response.text)
+    try:
+        response = client.models.generate_content(
+            model=model,
+            contents=prompt,
+            config={
+                "system_instruction": SYSTEM_PROMPT,
+                "temperature": 0.7,
+                "max_output_tokens": 1024,
+            },
+        )
+        return _parse_json_response(response.text)
+    except APIError as e:
+        if e.code == 429:
+            raise ValueError("Límite de la IA alcanzado (Cuota o Tokens). Por favor, intenta nuevamente en un momento.")
+        raise
+    except Exception as e:
+        logger.error(f"Error generando contenido con Gemini: {e}")
+        raise
 
 
 async def suggest_from_highlight(
@@ -338,17 +376,24 @@ async def suggest_from_highlight(
 
     prompt = _build_suggest_from_highlight_prompt(texto, tipo, project_context)
 
-    response = client.models.generate_content(
-        model=model,
-        contents=prompt,
-        config={
-            "system_instruction": SYSTEM_PROMPT,
-            "temperature": 0.5,
-            "max_output_tokens": 1024,
-        },
-    )
-
-    return _parse_json_response(response.text)
+    try:
+        response = client.models.generate_content(
+            model=model,
+            contents=prompt,
+            config={
+                "system_instruction": SYSTEM_PROMPT,
+                "temperature": 0.5,
+                "max_output_tokens": 1024,
+            },
+        )
+        return _parse_json_response(response.text)
+    except APIError as e:
+        if e.code == 429:
+            raise ValueError("Límite de la IA alcanzado (Cuota o Tokens). Por favor, intenta nuevamente en un momento.")
+        raise
+    except Exception as e:
+        logger.error(f"Error generando contenido con Gemini: {e}")
+        raise
 
 
 async def improve_text(

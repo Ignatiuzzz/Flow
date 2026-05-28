@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "axios": "^1.16.1",
-    "pydantic": "^0.0.1-security",
-    "react-router-dom": "^7.15.1"
-  }
-}

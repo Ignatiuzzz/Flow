@@ -9,8 +9,8 @@ interface MatrixTableProps {
 function MatrixTable({ findings, loading }: MatrixTableProps) {
   if (loading) {
     return (
-      <div className="matrix-table__state">
-        <div className="matrix-table__loader" />
+      <div className="matrix-table__state flex min-h-[260px] flex-col items-center justify-center rounded-3xl border border-dashed bg-white p-8 text-center [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-extrabold [&_h3]:tracking-tight [&_h3]:text-slate-900 [&_p]:max-w-md [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-500">
+        <div className="matrix-table__loader mb-4 h-10 w-10 animate-spin rounded-full border-4" />
         <p>Cargando matriz...</p>
       </div>
     );
@@ -18,7 +18,7 @@ function MatrixTable({ findings, loading }: MatrixTableProps) {
 
   if (findings.length === 0) {
     return (
-      <div className="matrix-table__state">
+      <div className="matrix-table__state flex min-h-[260px] flex-col items-center justify-center rounded-3xl border border-dashed bg-white p-8 text-center [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-extrabold [&_h3]:tracking-tight [&_h3]:text-slate-900 [&_p]:max-w-md [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-500">
         <h3>No hay hallazgos todavía</h3>
         <p>
           Registra hallazgos en el proyecto para generar automáticamente la
@@ -29,8 +29,8 @@ function MatrixTable({ findings, loading }: MatrixTableProps) {
   }
 
   return (
-    <div className="matrix-table__wrapper">
-      <table className="matrix-table">
+    <div className="matrix-table__wrapper w-full overflow-x-auto rounded-3xl border bg-white/80 backdrop-blur-md shadow-lg animate-fade-in-up">
+      <table className="matrix-table min-w-[1450px] w-full border-collapse text-left text-sm [&_th]:border-b [&_th]:px-4 [&_th]:py-3 [&_th]:text-xs [&_th]:font-extrabold [&_th]:uppercase [&_th]:tracking-wide [&_td]:border-b [&_td]:px-4 [&_td]:py-3 [&_td]:align-top [&_td]:text-slate-600">
         <thead>
           <tr>
             <th>Código</th>
@@ -53,7 +53,7 @@ function MatrixTable({ findings, loading }: MatrixTableProps) {
           {findings.map((finding) => (
             <tr key={finding.id}>
               <td>
-                <span className="matrix-table__code">{finding.codigo}</span>
+                <span className="matrix-table__code inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase">{finding.codigo}</span>
               </td>
               <td>{finding.nombre}</td>
               <td>{finding.descripcion || "-"}</td>
@@ -65,7 +65,7 @@ function MatrixTable({ findings, loading }: MatrixTableProps) {
               <td>{finding.impacto}</td>
               <td>{finding.urgencia}</td>
               <td>
-                <strong className="matrix-table__risk">{finding.riesgo}</strong>
+                <strong className="matrix-table__risk text-sm font-extrabold">{finding.riesgo}</strong>
               </td>
               <td>
                 <span

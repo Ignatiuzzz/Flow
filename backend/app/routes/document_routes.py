@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter, File, UploadFile, BackgroundTasks
 from fastapi.responses import FileResponse
 
 from app.controllers.document_controller import (
@@ -21,7 +21,7 @@ router = APIRouter(
 
 
 @router.post("/upload/{project_id}")
-async def upload_document_route(project_id: str, file: UploadFile = File(...)):
+async def upload_document_route(project_id: str, background_tasks: BackgroundTasks, file: UploadFile = File(...)):
     file_data = await save_document_file(file, project_id)
 
     document_data = DocumentCreate(
@@ -29,12 +29,12 @@ async def upload_document_route(project_id: str, file: UploadFile = File(...)):
         **file_data
     )
 
-    return await create_document(document_data)
+    return await create_document(document_data, background_tasks)
 
 
 @router.post("/")
-async def create_document_route(document_data: DocumentCreate):
-    return await create_document(document_data)
+async def create_document_route(document_data: DocumentCreate, background_tasks: BackgroundTasks):
+    return await create_document(document_data, background_tasks)
 
 
 @router.get("/project/{project_id}")

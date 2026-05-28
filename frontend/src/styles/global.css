@@ -1,35 +1,35 @@
 :root {
-  --color-primary-dark: #3b0764;
-  --color-primary: #6d28d9;
-  --color-primary-hover: #5b21b6;
-  --color-primary-soft: #ede9fe;
+  --color-primary-dark: #1e1b4b; /* indigo-950 */
+  --color-primary: #4f46e5; /* indigo-600 */
+  --color-primary-hover: #4338ca; /* indigo-700 */
+  --color-primary-soft: #e0e7ff; /* indigo-100 */
 
-  --color-background: #faf9ff;
+  --color-background: #f8fafc; /* slate-50 */
   --color-surface: #ffffff;
-  --color-border: #e5e7eb;
+  --color-border: #e2e8f0; /* slate-200 */
 
-  --color-text-main: #111827;
-  --color-text-secondary: #4b5563;
-  --color-text-muted: #6b7280;
+  --color-text-main: #0f172a; /* slate-900 */
+  --color-text-secondary: #334155; /* slate-700 */
+  --color-text-muted: #64748b; /* slate-500 */
 
-  --color-projects: #7c3aed;
-  --color-documents: #4f46e5;
-  --color-findings: #ea580c;
-  --color-evidences: #16a34a;
-  --color-notes: #c026d3;
-  --color-matrix: #6d28d9;
+  --color-projects: #6366f1; /* indigo-500 */
+  --color-documents: #3b82f6; /* blue-500 */
+  --color-findings: #f97316; /* orange-500 */
+  --color-evidences: #10b981; /* emerald-500 */
+  --color-notes: #8b5cf6; /* violet-500 */
+  --color-matrix: #4f46e5; /* indigo-600 */
 }
 
 .app-background {
-  @apply min-h-screen bg-violet-50 text-gray-900;
+  @apply min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300;
 }
 
 .app-card {
-  @apply rounded-2xl border border-gray-200 bg-white shadow-sm;
+  @apply rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow duration-300;
 }
 
 .app-page {
-  @apply min-h-screen bg-violet-50 p-8 text-gray-900;
+  @apply min-h-screen bg-slate-50 p-8 text-slate-900 transition-colors duration-300;
 }
 
 .app-page-header {
@@ -37,40 +37,40 @@
 }
 
 .app-page-title {
-  @apply mb-2 text-3xl font-extrabold text-gray-900;
+  @apply mb-2 text-3xl font-extrabold text-slate-900 tracking-tight;
 }
 
 .app-page-description {
-  @apply max-w-3xl text-sm text-gray-500;
+  @apply max-w-3xl text-sm text-slate-500 leading-relaxed;
 }
 
 .app-button-primary {
-  @apply rounded-xl bg-violet-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-800 disabled:bg-violet-300;
+  @apply rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 hover:shadow disabled:bg-indigo-300 disabled:cursor-not-allowed active:scale-[0.98];
 }
 
 .app-button-secondary {
-  @apply rounded-xl bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 transition hover:bg-gray-300;
+  @apply rounded-lg bg-white px-5 py-2.5 text-sm font-medium text-slate-700 border border-slate-300 shadow-sm transition-all duration-200 hover:bg-slate-50 hover:text-slate-900 active:scale-[0.98];
 }
 
 .app-button-danger {
-  @apply rounded-xl bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100;
+  @apply rounded-lg bg-red-50 px-5 py-2.5 text-sm font-medium text-red-700 border border-red-100 transition-all duration-200 hover:bg-red-100 hover:text-red-800 active:scale-[0.98];
 }
 
 .app-module-badge {
-  @apply inline-flex rounded-full px-3 py-1 text-xs font-bold;
+  @apply inline-flex rounded-full px-3 py-1 text-xs font-semibold tracking-wide shadow-sm;
 }
 
 .app-input {
-  @apply rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-violet-700;
+  @apply rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20;
 }
 
 /* Glassmorphism & Animations */
 .glass-card {
-  @apply bg-white/80 backdrop-blur-md shadow-lg border border-white/20;
+  @apply bg-white/70 backdrop-blur-xl shadow-sm border border-slate-200/50 hover:shadow-md transition-all duration-300;
 }
 
 .glass-hero {
-  @apply bg-white/70 backdrop-blur-lg border border-white/30 shadow-xl;
+  @apply bg-white/60 backdrop-blur-2xl border border-white/40 shadow-lg;
 }
 
 .animate-in {
@@ -82,18 +82,18 @@
 }
 
 .stat-glow:hover {
-  @apply shadow-[0_0_15px_-3px_rgba(16,185,129,0.4)];
+  @apply shadow-[0_0_20px_-5px_rgba(79,70,229,0.3)] border-indigo-200/50 transform -translate-y-0.5;
 }
 
 @keyframes pulse-glow {
-  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
 }
 
 @keyframes float {
   0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-8px); }
   100% { transform: translateY(0px); }
 }
 

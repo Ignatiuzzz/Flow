@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { documentApi } from "../api/documentApi";
 import { evidenceApi } from "../api/evidenceApi";
 import { findingApi } from "../api/findingApi";
@@ -27,17 +29,13 @@ function DocumentViewerPage() {
   const { projectId, documentId } = useParams();
   const navigate = useNavigate();
 
-  const [documentData, setDocumentData] = useState<AuditDocument | null>(null);
-  const [findings, setFindings] = useState<Finding[]>([]);
-  const [evidences, setEvidences] = useState<Evidence[]>([]);
-  const [highlights, setHighlights] = useState<Highlight[]>([]);
+  const queryClient = useQueryClient();
 
   const [selectedText, setSelectedText] = useState("");
   const [selectedCoordinates, setSelectedCoordinates] =
     useState<HighlightCoordinates | null>(null);
 
   const [mode, setMode] = useState<HighlightMode>(null);
-  const [loading, setLoading] = useState(false);
 
   const [selectedRelationsList, setSelectedRelationsList] = useState<
     HighlightRelations[]
@@ -58,39 +56,35 @@ function DocumentViewerPage() {
   const currentProjectId = projectId || "";
   const currentDocumentId = documentId || "";
 
-  const loadPageData = async () => {
-    if (!currentProjectId || !currentDocumentId) return;
+  const { data: documentData, isLoading: loadingDoc } = useQuery({
+    queryKey: ["document", currentDocumentId],
+    queryFn: () => documentApi.getById(currentDocumentId),
+    enabled: !!currentDocumentId,
+  });
 
-    try {
-      setLoading(true);
+  const { data: findings = [] as Finding[], isLoading: loadingFindings } = useQuery({
+    queryKey: ["findings", currentProjectId],
+    queryFn: () => findingApi.getByProject(currentProjectId),
+    enabled: !!currentProjectId,
+  });
 
-      const [
-        documentResponse,
-        findingsResponse,
-        evidencesResponse,
-        highlightsResponse,
-      ] = await Promise.all([
-        documentApi.getById(currentDocumentId),
-        findingApi.getByProject(currentProjectId),
-        evidenceApi.getByProject(currentProjectId),
-        highlightApi.getByDocument(currentDocumentId),
-      ]);
+  const { data: evidences = [] as Evidence[], isLoading: loadingEvidences } = useQuery({
+    queryKey: ["evidences", currentProjectId],
+    queryFn: () => evidenceApi.getByProject(currentProjectId),
+    enabled: !!currentProjectId,
+  });
 
-      setDocumentData(documentResponse);
-      setFindings(findingsResponse);
-      setEvidences(evidencesResponse);
-      setHighlights(highlightsResponse);
-    } catch (error) {
-      console.error(error);
-      alert("No se pudo cargar la información del visor.");
-    } finally {
-      setLoading(false);
-    }
+  const { data: highlights = [] as Highlight[], isLoading: loadingHighlights } = useQuery({
+    queryKey: ["highlights", currentDocumentId],
+    queryFn: () => highlightApi.getByDocument(currentDocumentId),
+    enabled: !!currentDocumentId,
+  });
+
+  const loading = loadingDoc || loadingFindings || loadingEvidences || loadingHighlights;
+
+  const reloadHighlights = () => {
+    queryClient.invalidateQueries({ queryKey: ["highlights", currentDocumentId] });
   };
-
-  useEffect(() => {
-    loadPageData();
-  }, [currentProjectId, currentDocumentId]);
 
   const closeModal = () => {
     setMode(null);
@@ -127,7 +121,7 @@ function DocumentViewerPage() {
       setRelationsPosition(position);
     } catch (error) {
       console.error(error);
-      alert("No se pudieron cargar las relaciones del subrayado.");
+      toast.error("No se pudieron cargar las relaciones del subrayado.");
     }
   };
 
@@ -138,12 +132,12 @@ function DocumentViewerPage() {
 
     try {
       await highlightApi.delete(highlightId);
-      await loadPageData();
+      reloadHighlights();
       closeDeletePopup();
       closeRelationsPopup();
     } catch (error) {
       console.error(error);
-      alert("No se pudo eliminar el subrayado.");
+      toast.error("No se pudo eliminar el subrayado.");
     }
   };
 
@@ -161,12 +155,12 @@ function DocumentViewerPage() {
         )
       );
 
-      await loadPageData();
+      reloadHighlights();
       closeDeletePopup();
       closeRelationsPopup();
     } catch (error) {
       console.error(error);
-      alert("No se pudieron eliminar todos los subrayados.");
+      toast.error("No se pudieron eliminar todos los subrayados.");
     }
   };
 
@@ -190,7 +184,7 @@ function DocumentViewerPage() {
       setDeletePosition(position);
     } catch (error) {
       console.error(error);
-      alert("No se pudieron cargar los subrayados para borrar.");
+      toast.error("No se pudieron cargar los subrayados para borrar.");
     }
   };
 
@@ -199,20 +193,20 @@ function DocumentViewerPage() {
     : "";
 
   return (
-    <main className="document-viewer-page">
+    <main className="document-viewer-page min-h-screen bg-slate-100 text-slate-900">
       <button
-        className="document-viewer-page__back"
+        className="document-viewer-page__back fixed bottom-5 left-5 z-40 rounded-2xl bg-white/70 backdrop-blur-md px-4 py-3 text-sm font-bold text-slate-800 shadow-xl ring-1 ring-slate-200 transition-all hover:bg-white hover:-translate-y-1 hover:shadow-2xl"
         onClick={() => navigate(`/projects/${currentProjectId}/documents`)}
       >
         Volver a documentos
       </button>
 
       {loading && (
-        <p className="document-viewer-page__message">Cargando documento...</p>
+        <p className="document-viewer-page__message mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-slate-300 bg-white/50 backdrop-blur-sm p-6 text-center text-slate-500 animate-fade-in">Cargando documento...</p>
       )}
 
       {!loading && !documentData && (
-        <p className="document-viewer-page__message">
+        <p className="document-viewer-page__message mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-slate-300 bg-white/50 backdrop-blur-sm p-6 text-center text-slate-500 animate-fade-in">
           No se encontró el documento.
         </p>
       )}
@@ -292,8 +286,8 @@ function DocumentViewerPage() {
         recomendaciones: "",
       });
 
-      alert("Hallazgo creado desde subrayado.");
-      await loadPageData();
+      toast.success("Hallazgo creado desde subrayado.");
+      reloadHighlights();
       clearSelection();
     }}
   />
@@ -315,8 +309,8 @@ function DocumentViewerPage() {
               observacion: data.observacion,
             });
 
-            alert("Evidencia relacionada al subrayado.");
-            await loadPageData();
+            toast.success("Evidencia relacionada al subrayado.");
+            reloadHighlights();
             clearSelection();
           }}
         />
@@ -337,8 +331,8 @@ function DocumentViewerPage() {
               subtitulo: data.subtitulo,
             });
 
-            alert("Nota creada desde subrayado.");
-            await loadPageData();
+            toast.success("Nota creada desde subrayado.");
+            reloadHighlights();
             clearSelection();
           }}
         />

@@ -388,8 +388,8 @@ function DocumentViewer({
   };
 
   return (
-    <section className="document-viewer">
-      <div className="document-viewer__toolbar">
+    <section className="document-viewer w-full min-h-screen bg-slate-100 text-slate-900">
+      <div className="document-viewer__toolbar sticky top-0 z-30 mb-6 border-b border-slate-200 bg-white px-5 py-4 shadow-sm flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between [&_h2]:mb-1 [&_h2]:max-w-3xl [&_h2]:truncate [&_h2]:text-lg [&_h2]:font-extrabold [&_h2]:tracking-tight [&_h2]:text-slate-950 [&_p]:text-sm [&_p]:leading-5 [&_p]:text-slate-500">
         <div>
           <h2>{documentName}</h2>
           <p>
@@ -398,9 +398,9 @@ function DocumentViewer({
           </p>
         </div>
 
-        <div className="document-viewer__tools">
-  <div className="document-viewer__tool-group">
-    <span className="document-viewer__tool-label">Herramientas</span>
+        <div className="document-viewer__tools flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between xl:justify-end">
+  <div className="document-viewer__tool-group rounded-2xl border border-slate-200 bg-slate-50 p-2 sm:flex-row sm:items-center">
+    <span className="document-viewer__tool-label text-xs font-bold uppercase tracking-wide text-slate-400">Herramientas</span>
 
     <button
       type="button"
@@ -413,7 +413,7 @@ function DocumentViewer({
       title="Resaltar texto"
       aria-label="Activar resaltador"
     >
-      <Highlighter className="document-viewer__tool-icon" strokeWidth={2.4} />
+      <Highlighter className="document-viewer__tool-icon h-5 w-5" strokeWidth={2.4} />
       <span>Resaltar</span>
     </button>
 
@@ -428,15 +428,15 @@ function DocumentViewer({
       title="Borrar subrayado"
       aria-label="Activar borrador"
     >
-      <Eraser className="document-viewer__tool-icon" strokeWidth={2.4} />
+      <Eraser className="document-viewer__tool-icon h-5 w-5" strokeWidth={2.4} />
       <span>Borrar</span>
     </button>
   </div>
 
-  <div className="document-viewer__zoom-group">
-    <span className="document-viewer__tool-label">Zoom</span>
+  <div className="document-viewer__zoom-group rounded-2xl border border-slate-200 bg-white p-2 shadow-sm sm:flex-row sm:items-center">
+    <span className="document-viewer__tool-label text-xs font-bold uppercase tracking-wide text-slate-400">Zoom</span>
 
-    <div className="document-viewer__zoom">
+    <div className="document-viewer__zoom flex items-center gap-2 [&_button]:flex [&_button]:h-10 [&_button]:w-10 [&_button]:items-center [&_button]:justify-center [&_button]:rounded-xl [&_button]:border [&_button]:border-slate-200 [&_button]:bg-slate-700 [&_button]:text-lg [&_button]:font-bold [&_button]:text-white [&_button]:shadow-sm [&_button]:transition [&_button]:hover:bg-slate-600 [&_span]:min-w-16 [&_span]:rounded-xl [&_span]:border [&_span]:border-slate-200 [&_span]:bg-white [&_span]:px-4 [&_span]:py-2 [&_span]:text-center [&_span]:text-sm [&_span]:font-extrabold [&_span]:text-slate-700">
       <button type="button" onClick={handleZoomOut} aria-label="Alejar">
         <Minus size={18} strokeWidth={3} />
       </button>
@@ -464,9 +464,9 @@ function DocumentViewer({
         <PdfDocument
           file={fileUrl}
           onLoadSuccess={handleLoadSuccess}
-          loading={<p className="document-viewer__message">Cargando PDF...</p>}
+          loading={<p className="document-viewer__message rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500">Cargando PDF...</p>}
           error={
-            <p className="document-viewer__message document-viewer__message--error">
+            <p className="document-viewer__message document-viewer__message--error rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500 border-red-200 bg-red-50 text-red-700">
               No se pudo cargar el PDF.
             </p>
           }
@@ -475,13 +475,13 @@ function DocumentViewer({
             const pageNumber = index + 1;
 
             return (
-              <div className="document-viewer__page" key={`page_${pageNumber}`}>
-                <span className="document-viewer__page-number">
+              <div className="document-viewer__page relative rounded-2xl border border-slate-300 bg-white p-4 shadow-xl" key={`page_${pageNumber}`}>
+                <span className="document-viewer__page-number mb-3 inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-bold text-slate-500">
                   Página {pageNumber}
                 </span>
 
                 <div
-                  className="document-viewer__page-canvas"
+                  className="document-viewer__page-canvas relative overflow-hidden rounded-xl bg-white"
                   data-page-number={pageNumber}
                   ref={(element) => {
                     pageCanvasRefs.current[pageNumber] = element;
@@ -494,7 +494,7 @@ function DocumentViewer({
                     renderAnnotationLayer
                   />
 
-                  <div className="document-viewer__highlight-layer">
+                  <div className="document-viewer__highlight-layer pointer-events-none absolute inset-0 z-20">
                     {renderHighlightRects(pageNumber)}
                   </div>
                 </div>

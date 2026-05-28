@@ -1,15 +1,16 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, BackgroundTasks
 
 from app.database import get_database
 from app.models.document_model import DocumentModel
 from app.schemas.document_schema import DocumentCreate, DocumentUpdate
 from app.utils.mongo import serialize_document, serialize_documents, to_object_id
+from app.services.rag_service import index_document, delete_document_index
 
 
 COLLECTION = "documents"
 
 
-async def create_document(document_data: DocumentCreate):
+async def create_document(document_data: DocumentCreate, background_tasks: BackgroundTasks = None):
     db = get_database()
 
     project = await db["projects"].find_one({"_id": document_data.proyectoId})
@@ -29,8 +30,19 @@ async def create_document(document_data: DocumentCreate):
     )
 
     created_document = await db[COLLECTION].find_one({"_id": result.inserted_id})
+    
+    serialized_doc = serialize_document(created_document)
+    
+    if background_tasks and "rutaArchivo" in serialized_doc:
+        background_tasks.add_task(
+            index_document,
+            file_path=serialized_doc["rutaArchivo"],
+            project_id=serialized_doc["proyectoId"],
+            document_id=serialized_doc["id"],
+            document_name=serialized_doc["nombreOriginal"]
+        )
 
-    return serialize_document(created_document)
+    return serialized_doc
 
 
 async def get_documents_by_project(project_id: str):
@@ -105,6 +117,7 @@ async def delete_document(document_id: str):
         {"_id": document["proyectoId"]},
         {"$pull": {"documentos": document_object_id}}
     )
+    delete_document_index(document_id)
 
     return {
         "message": "Documento eliminado correctamente"

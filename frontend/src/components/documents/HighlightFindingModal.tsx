@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { FormEvent, useState } from "react";
 import { aiApi } from "../../api/aiApi";
 import { AISuggestButton } from "../ai/AISuggestButton";
@@ -31,17 +32,17 @@ function HighlightFindingModal({
         event.preventDefault();
 
         if (!codigo.trim()) {
-            alert("El código del hallazgo es obligatorio.");
+            toast.error("El código del hallazgo es obligatorio.");
             return;
         }
 
         if (!nombre.trim()) {
-            alert("El nombre del hallazgo es obligatorio.");
+            toast.error("El nombre del hallazgo es obligatorio.");
             return;
         }
 
         if (!descripcion.trim()) {
-            alert("La descripción del hallazgo es obligatoria.");
+            toast.error("La descripción del hallazgo es obligatoria.");
             return;
         }
 
@@ -76,9 +77,9 @@ function HighlightFindingModal({
     };
 
     return (
-        <div className="highlight-modal__overlay">
-            <form className="highlight-finding-modal" onSubmit={handleSubmit}>
-                <div className="highlight-finding-modal__header">
+        <div className="highlight-modal__overlay fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/50 p-6">
+            <form className="highlight-finding-modal w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl" onSubmit={handleSubmit}>
+                <div className="highlight-finding-modal__header mb-5 flex items-center justify-between gap-4 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-slate-900 [&_button]:rounded-full [&_button]:bg-slate-100 [&_button]:px-3 [&_button]:py-1 [&_button]:text-xl [&_button]:font-bold [&_button]:text-slate-600 [&_button]:hover:bg-slate-200">
                     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                         <h2>Registrar hallazgo desde subrayado</h2>
                         <AISuggestButton 
@@ -92,13 +93,13 @@ function HighlightFindingModal({
                     </button>
                 </div>
 
-                <div className="highlight-finding-modal__selected">
+                <div className="highlight-finding-modal__selected mb-5 rounded-xl bg-yellow-50 p-4 text-sm text-slate-700 [&_p]:mt-2 [&_p]:max-h-28 [&_p]:overflow-y-auto [&_p]:text-slate-600">
                     <strong>Texto subrayado:</strong>
                     <p>{selectedText}</p>
                 </div>
 
                 <div className="highlight-finding-modal__grid highlight-finding-modal__grid--two">
-                    <div className="highlight-finding-modal__group">
+                    <div className="highlight-finding-modal__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-semibold [&_label]:text-slate-700">
                         <label>Código del hallazgo</label>
                         <input
                             value={codigo}
@@ -107,7 +108,7 @@ function HighlightFindingModal({
                         />
                     </div>
 
-                    <div className="highlight-finding-modal__group">
+                    <div className="highlight-finding-modal__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-semibold [&_label]:text-slate-700">
                         <label>Nombre del hallazgo</label>
                         <input
                             value={nombre}
@@ -117,7 +118,7 @@ function HighlightFindingModal({
                     </div>
                 </div>
 
-                <div className="highlight-finding-modal__group">
+                <div className="highlight-finding-modal__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-semibold [&_label]:text-slate-700">
                     <label>Subtítulo del documento</label>
                     <input
                         value={subtitulo}
@@ -126,7 +127,7 @@ function HighlightFindingModal({
                     />
                 </div>
 
-                <div className="highlight-finding-modal__group">
+                <div className="highlight-finding-modal__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-semibold [&_label]:text-slate-700">
                     <label>Descripción</label>
                     <textarea
                         rows={5}
@@ -136,7 +137,7 @@ function HighlightFindingModal({
                     />
                 </div>
 
-                <div className="highlight-finding-modal__group">
+                <div className="highlight-finding-modal__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-semibold [&_label]:text-slate-700">
                     <label>Observación del subrayado</label>
                     <textarea
                         rows={3}
@@ -146,7 +147,7 @@ function HighlightFindingModal({
                     />
                 </div>
 
-                <div className="highlight-finding-modal__actions">
+                <div className="highlight-finding-modal__actions mt-6 flex flex-wrap gap-3 [&_button]:rounded-xl [&_button]:bg-blue-600 [&_button]:px-5 [&_button]:py-3 [&_button]:text-sm [&_button]:font-semibold [&_button]:text-white [&_button]:hover:bg-blue-700 [&_button]:disabled:bg-blue-300">
                     <button type="submit" disabled={loading}>
                         {loading ? "Guardando..." : "Crear hallazgo"}
                     </button>

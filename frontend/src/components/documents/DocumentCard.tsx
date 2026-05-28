@@ -16,18 +16,18 @@ function DocumentCard({ document, onOpen, onDelete }: DocumentCardProps) {
     : null;
 
   return (
-    <article className="document-card">
-      <div className="document-card__icon">
+    <article className="document-card flex flex-col gap-4 rounded-3xl border bg-white/80 backdrop-blur-md p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:scale-[1.01] animate-fade-in-up [&_h3]:mb-2 [&_h3]:break-words [&_h3]:text-lg [&_h3]:font-extrabold [&_h3]:tracking-tight [&_h3]:text-slate-950 [&_p]:mb-3 [&_p]:text-sm [&_p]:leading-5 [&_p]:text-slate-500">
+      <div className="document-card__icon flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-xs font-extrabold tracking-wide text-white shadow-sm">
         {document.tipoArchivo.toUpperCase()}
       </div>
 
-      <div className="document-card__main">
-        <div className="document-card__top">
-          <span className="document-card__type">
+      <div className="document-card__main min-w-0 flex-1">
+        <div className="document-card__top mb-2 flex flex-wrap items-center gap-2">
+          <span className="document-card__type rounded-full border px-3 py-1 text-xs font-bold uppercase">
             {document.tipoArchivo.toUpperCase()}
           </span>
 
-          {sizeInMb && <span className="document-card__size">{sizeInMb} MB</span>}
+          {sizeInMb && <span className="document-card__size rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">{sizeInMb} MB</span>}
         </div>
 
         <h3>{document.nombreOriginal}</h3>
@@ -37,7 +37,7 @@ function DocumentCard({ document, onOpen, onDelete }: DocumentCardProps) {
         </p>
       </div>
 
-      <div className="document-card__actions">
+      <div className="document-card__actions flex flex-wrap gap-2 border-t border-slate-100 pt-4 xl:min-w-[220px] xl:border-l xl:border-t-0 xl:pl-4 xl:pt-0">
         <button type="button" onClick={() => onOpen(document.id)}>
           Abrir
         </button>
@@ -48,7 +48,7 @@ function DocumentCard({ document, onOpen, onDelete }: DocumentCardProps) {
 
         <button
           type="button"
-          className="document-card__delete"
+          className="document-card__delete text-red-700"
           onClick={() => onDelete(document.id)}
         >
           Eliminar

@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { Sparkles, X, Check, XCircle } from "lucide-react";
 import { AISuggestionResponse } from "../../api/aiApi";
@@ -29,11 +30,16 @@ export function AISuggestButton({ onSuggest, onApply, isLoading, iconOnly }: AIS
         setSelectedFields(initialSelected);
         setModalOpen(true);
       } else {
-        alert("La IA no generó sugerencias para los campos actuales.");
+        toast("La IA no generó sugerencias para los campos actuales.", { icon: "ℹ️" });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error obteniendo sugerencias:", error);
-      alert("Hubo un error al obtener sugerencias de la IA.");
+      
+      if (error.response && error.response.data && error.response.data.detail) {
+        toast.error(error.response.data.detail);
+      } else {
+        toast.error("Hubo un error al comunicarse con la IA. Por favor, intenta de nuevo.");
+      }
     } finally {
       setLoading(false);
     }

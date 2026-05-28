@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Evidence } from "../../types/evidence";
@@ -60,7 +61,7 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
       setRelationsLoaded(true);
     } catch (error) {
       console.error(error);
-      alert("No se pudieron cargar los subrayados de la evidencia.");
+      toast.error("No se pudieron cargar los subrayados de la evidencia.");
     } finally {
       setLoadingRelations(false);
     }
@@ -92,12 +93,12 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
         expanded ? "evidence-card evidence-card--expanded" : "evidence-card"
       }
     >
-      <div className="evidence-card__main">
-        <div className="evidence-card__top">
-          <span className="evidence-card__code">{evidence.codigo}</span>
+      <div className="evidence-card__main min-w-0 flex-1">
+        <div className="evidence-card__top mb-3 flex flex-wrap items-center gap-2">
+          <span className="evidence-card__code rounded-full border px-3 py-1 text-xs font-bold uppercase">{evidence.codigo}</span>
 
           {evidence.hallazgoId && (
-            <span className="evidence-card__linked">
+            <span className="evidence-card__linked rounded-full border px-3 py-1 text-xs font-bold">
               Relacionada a hallazgo
             </span>
           )}
@@ -111,12 +112,12 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
             : "Sin descripción registrada."}
         </p>
 
-        <div className="evidence-card__meta">
+        <div className="evidence-card__meta flex flex-wrap gap-2 text-xs font-semibold text-slate-500 [&_span]:rounded-xl [&_span]:px-3 [&_span]:py-2">
           <span>Subrayados: {evidence.subrayados.length}</span>
         </div>
       </div>
 
-      <div className="evidence-card__actions">
+      <div className="evidence-card__actions flex flex-wrap gap-2 border-t border-slate-100 pt-4">
         <button type="button" onClick={handleToggleDetails}>
           {expanded ? "Ver menos" : "Ver más"}
         </button>
@@ -143,7 +144,7 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
 
         <button
           type="button"
-          className="evidence-card__delete"
+          className="evidence-card__delete text-red-700"
           onClick={() => onDelete(evidence.id)}
         >
           Eliminar
@@ -151,8 +152,8 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
       </div>
 
       {expanded && (
-        <section className="evidence-card__details">
-          <div className="evidence-card__details-header">
+        <section className="evidence-card__details relative mt-3 rounded-3xl border p-5 backdrop-blur-md animate-fade-in">
+          <div className="evidence-card__details-header [&_strong]:inline-flex [&_strong]:rounded-2xl [&_strong]:px-4 [&_strong]:py-2 [&_strong]:text-sm [&_strong]:font-extrabold">
             <div>
               <span>Ficha desplegada</span>
               <h4>Información de la evidencia</h4>
@@ -161,7 +162,7 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
             <strong>{evidence.codigo}</strong>
           </div>
 
-          <div className="evidence-card__detail-grid">
+          <div className="evidence-card__detail-grid mb-5 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
             <DetailItem label="Nombre" value={showValue(evidence.nombre)} />
 
             <DetailItem label="Código" value={showValue(evidence.codigo)} />
@@ -192,7 +193,7 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
           </div>
 
           {evidence.objetivo && (
-            <div className="evidence-card__text-grid">
+            <div className="evidence-card__text-grid grid grid-cols-1 gap-3 xl:grid-cols-2">
               <DetailBlock
                 label="Objetivo"
                 value={showValue(evidence.objetivo)}
@@ -200,7 +201,7 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
             </div>
           )}
 
-          <div className="evidence-card__relations">
+          <div className="evidence-card__relations mt-5 rounded-3xl border bg-white p-5 shadow-sm">
             <div className="evidence-card__relations-header">
               <div>
                 <span>Relaciones</span>
@@ -208,7 +209,7 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
               </div>
             </div>
 
-            <div className="evidence-card__relation-summary">
+            <div className="evidence-card__relation-summary mb-4 grid grid-cols-1 gap-3 md:grid-cols-2 [&_div]:rounded-2xl [&_div]:border [&_div]:px-4 [&_div]:py-3 [&_strong]:block [&_strong]:text-2xl [&_strong]:font-extrabold [&_span]:mt-1 [&_span]:block [&_span]:text-xs [&_span]:font-bold [&_span]:uppercase [&_span]:tracking-wide [&_span]:text-slate-500">
               <div>
                 <strong>{evidence.subrayados.length}</strong>
                 <span>Subrayados vinculados</span>
@@ -221,20 +222,20 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
             </div>
 
             {loadingRelations && (
-              <p className="evidence-card__related-state">
+              <p className="evidence-card__related-state mb-0 rounded-2xl border border-dashed p-5 text-center text-sm font-semibold text-slate-500">
                 Cargando subrayados relacionados...
               </p>
             )}
 
             {!loadingRelations && highlightRelations.length === 0 && (
-              <p className="evidence-card__related-state">
+              <p className="evidence-card__related-state mb-0 rounded-2xl border border-dashed p-5 text-center text-sm font-semibold text-slate-500">
                 Esta evidencia todavía no tiene subrayados relacionados desde
                 documentos.
               </p>
             )}
 
             {!loadingRelations && highlightRelations.length > 0 && (
-              <div className="evidence-card__highlight-list">
+              <div className="evidence-card__highlight-list flex flex-col gap-3">
                 {highlightRelations.map((relations) => {
                   const { subrayado, documento, hallazgo, nota } = relations;
 
@@ -245,9 +246,9 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
                   return (
                     <article
                       key={subrayado.id}
-                      className="evidence-card__highlight-item"
+                      className="evidence-card__highlight-item rounded-3xl border p-4 shadow-sm [&_h5]:mb-3 [&_h5]:text-base [&_h5]:font-extrabold [&_h5]:text-slate-900"
                     >
-                      <div className="evidence-card__highlight-top">
+                      <div className="evidence-card__highlight-top mb-3 flex flex-wrap items-center gap-2">
                         <span>{subrayado.tipo}</span>
 
                         {hallazgo && <strong>Hallazgo vinculado</strong>}
@@ -257,12 +258,12 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
 
                       <h5>{documentName}</h5>
 
-                      <div className="evidence-card__highlight-text">
+                      <div className="evidence-card__highlight-text mb-3 rounded-2xl bg-white p-4 [&_p]:mb-0 [&_p]:whitespace-pre-wrap [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-700">
                         <label>Texto subrayado</label>
                         <p>{showValue(subrayado.textoSubrayado)}</p>
                       </div>
 
-                      <div className="evidence-card__highlight-meta">
+                      <div className="evidence-card__highlight-meta grid grid-cols-1 gap-3 md:grid-cols-2 [&_div]:rounded-2xl [&_div]:bg-white [&_div]:p-4 [&_p]:mb-0 [&_p]:whitespace-pre-wrap [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-700">
                         <div>
                           <label>Subtítulo</label>
                           <p>{showValue(subrayado.subtitulo)}</p>
@@ -275,7 +276,7 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
                       </div>
 
                       {(hallazgo || nota) && (
-                        <div className="evidence-card__linked-data">
+                        <div className="evidence-card__linked-data mt-3 grid grid-cols-1 gap-3 md:grid-cols-2 [&_div]:rounded-2xl [&_div]:border [&_div]:bg-white [&_div]:p-4 [&_p]:mb-0 [&_p]:whitespace-pre-wrap [&_p]:text-sm [&_p]:font-semibold [&_p]:leading-6 [&_p]:text-slate-700">
                           {hallazgo && (
                             <div>
                               <label>Hallazgo relacionado</label>
@@ -294,7 +295,7 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
                         </div>
                       )}
 
-                      <div className="evidence-card__highlight-footer">
+                      <div className="evidence-card__highlight-footer mt-3 flex flex-col gap-3 border-t border-blue-100 pt-3 md:flex-row md:items-center md:justify-between [&_span]:text-xs [&_span]:font-semibold [&_span]:text-slate-500 [&_a]:inline-flex [&_a]:justify-center [&_a]:rounded-2xl [&_a]:px-4 [&_a]:py-2 [&_a]:text-sm [&_a]:font-bold [&_a]:no-underline [&_a]:transition">
                         <span>
                           Creado: {formatDate(subrayado.fechaCreacion)}
                         </span>
@@ -326,7 +327,7 @@ interface DetailItemProps {
 
 function DetailItem({ label, value }: DetailItemProps) {
   return (
-    <div className="evidence-card__detail-item">
+    <div className="evidence-card__detail-item rounded-2xl border bg-white px-4 py-3 shadow-sm [&_span]:block [&_span]:text-xs [&_span]:font-bold [&_span]:uppercase [&_span]:tracking-wide [&_span]:text-slate-400 [&_strong]:mt-1 [&_strong]:block [&_strong]:break-words [&_strong]:text-sm [&_strong]:font-extrabold [&_strong]:text-slate-800">
       <span>{label}</span>
       <strong>{value}</strong>
     </div>
@@ -340,7 +341,7 @@ interface DetailBlockProps {
 
 function DetailBlock({ label, value }: DetailBlockProps) {
   return (
-    <div className="evidence-card__detail-block">
+    <div className="evidence-card__detail-block rounded-2xl border bg-white p-4 shadow-sm [&_span]:mb-2 [&_span]:block [&_span]:text-xs [&_span]:font-bold [&_span]:uppercase [&_span]:tracking-wide [&_span]:text-slate-400 [&_p]:mb-0 [&_p]:whitespace-pre-wrap [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-700">
       <span>{label}</span>
       <p>{value}</p>
     </div>
