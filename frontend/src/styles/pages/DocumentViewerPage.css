@@ -1,12 +1,11 @@
 .document-viewer-page {
-  @apply min-h-screen bg-slate-100 text-slate-900;
-  background: radial-gradient(circle at 50% 50%, rgba(15, 89, 99, 0.03) 0%, transparent 80%);
+  @apply min-h-screen bg-slate-50 text-slate-900;
 }
 
 .document-viewer-page__back {
-  @apply fixed bottom-5 left-5 z-40 rounded-2xl bg-white/70 backdrop-blur-md px-4 py-3 text-sm font-bold text-slate-800 shadow-xl ring-1 ring-slate-200 transition-all hover:bg-white hover:-translate-y-1 hover:shadow-2xl;
+  @apply fixed bottom-5 left-5 z-40 rounded-xl bg-white/90 backdrop-blur-xl px-5 py-3 text-sm font-bold text-slate-800 shadow-premium border border-slate-200/60 transition-all hover:bg-white hover:-translate-y-1 hover:shadow-2xl;
 }
 
 .document-viewer-page__message {
-  @apply mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-slate-300 bg-white/50 backdrop-blur-sm p-6 text-center text-slate-500 animate-fade-in;
+  @apply mx-auto mt-10 max-w-xl rounded-2xl border-2 border-dashed border-slate-300 bg-white/70 backdrop-blur-md p-8 text-center text-slate-600 animate-fade-in font-medium;
 }

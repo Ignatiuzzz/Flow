@@ -1,14 +1,10 @@
 .finding-card {
-  @apply flex flex-col gap-4 rounded-3xl border bg-white/80 backdrop-blur-md p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:scale-[1.01] animate-fade-in-up;
-  border-color: rgba(138, 69, 21, 0.15);
+  @apply flex flex-col gap-5 rounded-3xl border border-white/50 bg-white/90 backdrop-blur-xl p-6 shadow-premium transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl animate-fade-in-up;
 }
 
 .finding-card--expanded {
-  @apply relative shadow-2xl;
+  @apply relative shadow-2xl bg-white;
   border-color: #8a4515;
-  background:
-    linear-gradient(90deg, rgba(138, 69, 21, 0.08), transparent 14px),
-    #ffffff;
 }
 
 .finding-card--expanded::before {
@@ -33,18 +29,18 @@
 }
 
 .finding-card__top {
-  @apply mb-3 flex flex-wrap items-center gap-2;
+  @apply mb-4 flex flex-wrap items-center gap-3;
 }
 
 .finding-card__code {
-  @apply rounded-full border px-3 py-1 text-xs font-bold uppercase;
+  @apply rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider;
   background-color: #f7e7d8;
   border-color: #dfb58e;
   color: #8a4515;
 }
 
 .finding-card__level {
-  @apply rounded-full border px-3 py-1 text-xs font-bold;
+  @apply rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider;
 }
 
 .finding-card__level--muy-bajo {
@@ -78,30 +74,27 @@
 }
 
 .finding-card h3 {
-  @apply mb-2 text-lg font-extrabold tracking-tight text-slate-950;
+  @apply mb-3 text-xl font-bold tracking-tight text-slate-900;
 }
 
 .finding-card p {
-  @apply mb-4 text-sm leading-5 text-slate-500;
+  @apply mb-5 text-sm leading-relaxed text-slate-600;
 }
 
 .finding-card__risk {
-  @apply mb-3 grid grid-cols-3 gap-2;
+  @apply mb-5 grid grid-cols-3 gap-3;
 }
 
 .finding-card__risk div {
-  @apply rounded-2xl border px-3 py-2 transition-all duration-300 hover:scale-105 hover:shadow-md;
-  background-color: #fbf1e8;
-  border-color: #e8c8aa;
+  @apply flex flex-col items-center justify-center rounded-2xl border border-orange-200/50 bg-orange-50/50 p-4 transition-all duration-300 hover:scale-105 hover:shadow-md hover:border-orange-200;
 }
 
 .finding-card__risk strong {
-  @apply block text-lg font-extrabold;
-  color: #8a4515;
+  @apply block text-2xl font-extrabold text-slate-800;
 }
 
 .finding-card__risk span {
-  @apply block text-xs font-bold text-slate-500;
+  @apply mt-1 block text-xs font-semibold uppercase tracking-wider text-slate-500;
 }
 
 .finding-card__meta {
@@ -109,66 +102,48 @@
 }
 
 .finding-card__meta span {
-  @apply rounded-xl bg-slate-50 px-3 py-2;
+  @apply rounded-xl bg-slate-50 border border-slate-100 px-4 py-2.5;
 }
 
 .finding-card__actions {
-  @apply flex flex-wrap gap-2 border-t border-slate-100 pt-4;
+  @apply flex flex-wrap gap-3 border-t border-slate-100 pt-5;
 }
 
 .finding-card__actions button,
 .finding-card__actions a {
-  @apply rounded-2xl px-4 py-2.5 text-center text-sm font-bold no-underline transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg;
-  background-color: rgba(138, 69, 21, 0.05);
-  color: #8a4515;
+  @apply inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm;
+  background-color: #f1f5f9;
+  color: #334155;
 }
 
 .finding-card__actions button:hover,
 .finding-card__actions a:hover {
-  background-color: #8a4515;
-  color: white;
-  box-shadow: 0 4px 15px rgba(138, 69, 21, 0.3);
+  background-color: #e2e8f0;
+  color: #0f172a;
 }
 
-.finding-card__delete {
-  @apply text-red-700;
+.finding-card__actions .finding-card__delete {
+  @apply text-red-600;
   background-color: #fef2f2 !important;
 }
 
-.finding-card__delete:hover {
+.finding-card__actions .finding-card__delete:hover {
   background-color: #fee2e2 !important;
+  color: #991b1b !important;
 }
 
 .finding-card__details {
-  @apply relative mt-3 rounded-3xl border p-5 backdrop-blur-md animate-fade-in;
-  background:
-    linear-gradient(135deg, rgba(247, 231, 216, 0.76), rgba(255, 255, 255, 0.98));
-  border-color: rgba(138, 69, 21, 0.34);
-  box-shadow:
-    inset 5px 0 0 #8a4515,
-    0 18px 35px rgba(138, 69, 21, 0.15);
-}
-
-.finding-card__details::before {
-  content: "";
-  position: absolute;
-  left: 22px;
-  right: 22px;
-  top: -10px;
-  height: 10px;
-  border-radius: 9999px 9999px 0 0;
-  background: linear-gradient(90deg, #8a4515, #dfb58e, rgba(247, 231, 216, 0.4));
+  @apply relative mt-4 rounded-3xl border border-slate-200/80 bg-slate-50/50 p-6 animate-fade-in;
 }
 
 .finding-card__details-header,
 .finding-card__relations-header {
-  @apply mb-4 flex flex-col gap-3 border-b pb-4 md:flex-row md:items-center md:justify-between;
-  border-color: rgba(138, 69, 21, 0.16);
+  @apply mb-6 flex flex-col gap-3 border-b border-slate-200/60 pb-5 md:flex-row md:items-center md:justify-between;
 }
 
 .finding-card__details-header span,
 .finding-card__relations-header span {
-  @apply inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide;
+  @apply inline-flex rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider;
   background-color: #f7e7d8;
   border-color: #dfb58e;
   color: #8a4515;
@@ -176,156 +151,134 @@
 
 .finding-card__details-header h4,
 .finding-card__relations-header h4 {
-  @apply mt-2 text-lg font-extrabold tracking-tight text-slate-950;
+  @apply mt-2 text-xl font-bold tracking-tight text-slate-900;
 }
 
 .finding-card__details-header strong {
-  @apply inline-flex rounded-2xl px-4 py-2 text-sm font-extrabold;
-  background-color: #8a4515;
+  @apply inline-flex rounded-xl px-5 py-2.5 text-sm font-bold shadow-sm;
+  background-color: #1e293b;
   color: #ffffff;
 }
 
 .finding-card__detail-grid {
-  @apply mb-5 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4;
+  @apply mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4;
 }
 
 .finding-card__detail-item {
-  @apply rounded-2xl border bg-white px-4 py-3 shadow-sm;
-  border-color: rgba(138, 69, 21, 0.14);
+  @apply rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition-all hover:shadow-md;
 }
 
 .finding-card__detail-item span {
-  @apply block text-xs font-bold uppercase tracking-wide text-slate-400;
+  @apply block text-xs font-semibold uppercase tracking-wider text-slate-500;
 }
 
 .finding-card__detail-item strong {
-  @apply mt-1 block break-words text-sm font-extrabold text-slate-800;
+  @apply mt-1 block break-words text-sm font-bold text-slate-900;
 }
 
 .finding-card__text-grid {
-  @apply grid grid-cols-1 gap-3 xl:grid-cols-2;
+  @apply grid grid-cols-1 gap-4 xl:grid-cols-2;
 }
 
 .finding-card__detail-block {
-  @apply rounded-2xl border bg-white p-4 shadow-sm;
-  border-color: rgba(138, 69, 21, 0.14);
+  @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md;
 }
 
 .finding-card__detail-block span {
-  @apply mb-2 block text-xs font-bold uppercase tracking-wide text-slate-400;
+  @apply mb-3 block text-xs font-semibold uppercase tracking-wider text-slate-500;
 }
 
 .finding-card__detail-block p {
-  @apply mb-0 whitespace-pre-wrap text-sm leading-6 text-slate-700;
+  @apply mb-0 whitespace-pre-wrap text-sm leading-relaxed text-slate-700;
 }
 
 .finding-card__relations {
-  @apply mt-5 rounded-3xl border bg-white p-5 shadow-sm;
-  border-color: rgba(138, 69, 21, 0.24);
-  box-shadow: inset 4px 0 0 rgba(138, 69, 21, 0.35);
+  @apply mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm;
 }
 
 .finding-card__relation-summary {
-  @apply mb-4 grid grid-cols-1 gap-3 md:grid-cols-2;
+  @apply mb-6 grid grid-cols-1 gap-4 md:grid-cols-2;
 }
 
 .finding-card__relation-summary div {
-  @apply rounded-2xl border px-4 py-3;
-  background-color: #fbf1e8;
-  border-color: #e8c8aa;
+  @apply flex flex-col items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 p-5 transition-all hover:shadow-sm;
 }
 
 .finding-card__relation-summary strong {
-  @apply block text-2xl font-extrabold;
-  color: #8a4515;
+  @apply block text-3xl font-extrabold text-slate-900;
 }
 
 .finding-card__relation-summary span {
-  @apply mt-1 block text-xs font-bold uppercase tracking-wide text-slate-500;
+  @apply mt-2 block text-xs font-semibold uppercase tracking-wider text-slate-500;
 }
 
 .finding-card__related-state {
-  @apply mb-0 rounded-2xl border border-dashed p-5 text-center text-sm font-semibold text-slate-500;
-  border-color: #dfb58e;
-  background-color: #fffaf5;
+  @apply mb-0 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-8 text-center text-sm font-semibold text-slate-500;
 }
 
 .finding-card__highlight-list {
-  @apply flex flex-col gap-3;
+  @apply flex flex-col gap-4;
+}
+
+.finding-card__highlight-item {
+  @apply block w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md;
 }
 
 .finding-card__highlight-top {
-  @apply mb-3 flex flex-wrap items-center gap-2;
+  @apply mb-4 flex flex-wrap items-center gap-3;
 }
 
 .finding-card__highlight-top span,
 .finding-card__highlight-top strong {
-  @apply rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide;
+  @apply rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider;
 }
 
 .finding-card__highlight-top span {
-  background-color: #f7e7d8;
-  border-color: #dfb58e;
-  color: #8a4515;
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+  color: #475569;
 }
 
 .finding-card__highlight-top strong {
-  background-color: #ede9fe;
-  border-color: #c4b5fd;
-  color: #5b21b6;
+  background-color: #f0fdfa;
+  border-color: #ccfbf1;
+  color: #0f766e;
 }
 
 .finding-card__highlight-item h5 {
-  @apply mb-3 text-base font-extrabold text-slate-900;
-}
-
-.finding-card__highlight-text label,
-.finding-card__highlight-meta label {
-  @apply mb-1 block text-xs font-bold uppercase tracking-wide text-slate-400;
-}
-
-.finding-card__highlight-list {
-  @apply flex w-full flex-col gap-3;
-}
-
-.finding-card__highlight-item {
-  @apply block w-full max-w-none rounded-3xl border p-4 shadow-sm;
-  background:
-    linear-gradient(90deg, rgba(138, 69, 21, 0.06), transparent 10px),
-    #fffaf5;
-  border-color: #e8c8aa;
+  @apply mb-4 text-lg font-bold tracking-tight text-slate-900;
 }
 
 .finding-card__highlight-text {
-  @apply mb-3 block w-full max-w-none rounded-2xl bg-white p-4;
+  @apply mb-4 block w-full rounded-2xl bg-slate-50 p-5;
 }
 
 .finding-card__highlight-text label {
-  @apply mb-2 block w-full text-xs font-bold uppercase tracking-wide text-slate-400;
+  @apply mb-2 block w-full text-xs font-semibold uppercase tracking-wider text-slate-500;
 }
 
 .finding-card__highlight-text p {
-  @apply block w-full max-w-none whitespace-pre-wrap text-sm leading-6 text-slate-700;
-  margin-bottom: 0 !important;
-  max-width: none !important;
-  width: 100% !important;
+  @apply block w-full whitespace-pre-wrap text-sm leading-relaxed text-slate-700;
 }
 
-
 .finding-card__highlight-meta {
-  @apply grid grid-cols-1 gap-3 md:grid-cols-2;
+  @apply grid grid-cols-1 gap-4 md:grid-cols-2;
 }
 
 .finding-card__highlight-meta div {
-  @apply rounded-2xl bg-white p-4;
+  @apply rounded-2xl border border-slate-100 bg-white p-5;
+}
+
+.finding-card__highlight-meta label {
+  @apply mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500;
 }
 
 .finding-card__highlight-meta p {
-  @apply mb-0 whitespace-pre-wrap text-sm leading-6 text-slate-700;
+  @apply mb-0 whitespace-pre-wrap text-sm leading-relaxed text-slate-700;
 }
 
 .finding-card__highlight-footer {
-  @apply mt-3 flex flex-col gap-3 border-t border-orange-100 pt-3 md:flex-row md:items-center md:justify-between;
+  @apply mt-4 flex flex-col gap-4 border-t border-slate-100 pt-4 md:flex-row md:items-center md:justify-between;
 }
 
 .finding-card__highlight-footer span {
@@ -333,31 +286,11 @@
 }
 
 .finding-card__highlight-footer a {
-  @apply inline-flex justify-center rounded-2xl px-4 py-2 text-sm font-bold no-underline transition;
-  background-color: #8a4515;
+  @apply inline-flex justify-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-all hover:-translate-y-0.5 hover:shadow-sm;
+  background-color: #1e293b;
   color: #ffffff;
 }
 
 .finding-card__highlight-footer a:hover {
-  background-color: #6f3510;
-}
-
-.finding-card__highlight-text {
-  grid-column: 1 / -1;
-  width: 100% !important;
-  max-width: none !important;
-}
-
-.finding-card__highlight-text p {
-  width: 100% !important;
-  max-width: none !important;
-}
-
-.finding-card__highlight-meta {
-  width: 100%;
-}
-
-.finding-card__highlight-item {
-  width: 100%;
-  max-width: none;
+  background-color: #0f172a;
 }

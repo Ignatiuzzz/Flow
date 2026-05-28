@@ -1,29 +1,28 @@
 .finding-form {
-  @apply rounded-3xl border bg-white p-6 shadow-2xl;
-  border-color: rgba(138, 69, 21, 0.22);
+  @apply rounded-3xl border border-white/40 bg-white/90 backdrop-blur-xl p-8 shadow-premium animate-slide-in-left;
 }
 
 .finding-form__header {
-  @apply mb-5 border-b border-slate-100 pb-5;
+  @apply mb-6 border-b border-slate-200/60 pb-6;
 }
 
 .finding-form__header span {
-  @apply mb-3 inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide;
+  @apply mb-4 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider;
   background-color: #f7e7d8;
   border-color: #dfb58e;
   color: #8a4515;
 }
 
 .finding-form__header h2 {
-  @apply mb-2 text-2xl font-extrabold tracking-tight text-slate-950;
+  @apply mb-2 text-2xl font-bold tracking-tight text-slate-900;
 }
 
 .finding-form__header p {
-  @apply text-sm leading-6 text-slate-500;
+  @apply text-sm leading-relaxed text-slate-600;
 }
 
 .finding-form__grid {
-  @apply grid gap-4;
+  @apply grid gap-5;
 }
 
 .finding-form__grid--two {
@@ -31,43 +30,38 @@
 }
 
 .finding-form__group {
-  @apply mb-4 flex flex-col gap-2;
+  @apply flex flex-col gap-2;
 }
 
 .finding-form__group label {
-  @apply text-sm font-bold text-slate-700;
+  @apply text-sm font-semibold text-slate-700;
 }
 
 .finding-form__group input,
-.finding-form__group textarea {
-  @apply rounded-2xl border bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:bg-white focus:ring-4;
-  border-color: #ead0b8;
-}
-
-.finding-form__group input:focus,
-.finding-form__group textarea:focus {
-  border-color: #8a4515;
-  --tw-ring-color: rgba(247, 231, 216, 0.9);
+.finding-form__group textarea,
+.finding-form__group select {
+  @apply rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-900 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-slate-400 focus:bg-white focus:ring-4 focus:ring-slate-100 focus:shadow-sm hover:border-slate-300;
 }
 
 .finding-form__actions {
-  @apply mt-5 flex flex-wrap gap-3;
+  @apply mt-8 flex flex-wrap gap-4;
 }
 
 .finding-form__actions button {
-  @apply rounded-2xl px-5 py-3 text-sm font-bold text-white shadow-sm transition disabled:opacity-60;
-  background-color: #8a4515;
+  @apply inline-flex items-center justify-center rounded-xl px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:shadow disabled:opacity-60 hover:-translate-y-0.5;
+  background-color: #1e293b;
 }
 
 .finding-form__actions button:hover {
-  background-color: #6f3510;
+  background-color: #0f172a;
 }
 
 .finding-form__cancel {
-  @apply text-slate-800;
-  background-color: #e5e7eb !important;
+  @apply text-slate-700 shadow-none hover:shadow-sm;
+  background-color: #f1f5f9 !important;
 }
 
 .finding-form__cancel:hover {
-  background-color: #d1d5db !important;
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
 }

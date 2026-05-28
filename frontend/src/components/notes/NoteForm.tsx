@@ -83,8 +83,8 @@ function NoteForm({
   };
 
   return (
-    <form className="note-form rounded-3xl border bg-white p-6 shadow-2xl" onSubmit={handleSubmit}>
-      <div className="note-form__header mb-5 border-b border-slate-100 pb-5 [&_h2]:mb-2 [&_h2]:text-2xl [&_h2]:font-extrabold [&_h2]:tracking-tight [&_h2]:text-slate-950 [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-500">
+    <form className="note-form" onSubmit={handleSubmit}>
+      <div className="note-form__header">
         <h2>{isEditing ? "Editar nota" : "Registrar nota"}</h2>
 
         <p>
@@ -93,7 +93,7 @@ function NoteForm({
         </p>
       </div>
 
-      <div className="note-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="note-form__group">
         <label>Hallazgo relacionado</label>
         <select
           value={hallazgoId}
@@ -109,7 +109,7 @@ function NoteForm({
         </select>
       </div>
 
-      <div className="note-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="note-form__group">
         <label>Subtítulo</label>
         <input
           value={subtitulo}
@@ -118,7 +118,7 @@ function NoteForm({
         />
       </div>
 
-      <div className="note-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="note-form__group">
         <label>Texto de la nota</label>
         <textarea
           value={texto}
@@ -128,7 +128,7 @@ function NoteForm({
         />
       </div>
 
-      <div className="note-form__actions mt-5 flex flex-wrap gap-3 [&_button]:rounded-2xl [&_button]:px-5 [&_button]:py-3 [&_button]:text-sm [&_button]:font-bold [&_button]:text-white [&_button]:shadow-sm [&_button]:transition [&_button]:disabled:opacity-60">
+      <div className="note-form__actions">
         <button type="submit" disabled={loading}>
           {loading
             ? "Guardando..."
@@ -140,7 +140,7 @@ function NoteForm({
         {isEditing && onCancelEdit && (
           <button
             type="button"
-            className="note-form__cancel text-slate-800"
+            className="note-form__cancel"
             onClick={onCancelEdit}
           >
             Cancelar

@@ -193,20 +193,20 @@ function DocumentViewerPage() {
     : "";
 
   return (
-    <main className="document-viewer-page min-h-screen bg-slate-100 text-slate-900">
+    <main className="document-viewer-page">
       <button
-        className="document-viewer-page__back fixed bottom-5 left-5 z-40 rounded-2xl bg-white/70 backdrop-blur-md px-4 py-3 text-sm font-bold text-slate-800 shadow-xl ring-1 ring-slate-200 transition-all hover:bg-white hover:-translate-y-1 hover:shadow-2xl"
+        className="document-viewer-page__back"
         onClick={() => navigate(`/projects/${currentProjectId}/documents`)}
       >
         Volver a documentos
       </button>
 
       {loading && (
-        <p className="document-viewer-page__message mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-slate-300 bg-white/50 backdrop-blur-sm p-6 text-center text-slate-500 animate-fade-in">Cargando documento...</p>
+        <p className="document-viewer-page__message">Cargando documento...</p>
       )}
 
       {!loading && !documentData && (
-        <p className="document-viewer-page__message mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-slate-300 bg-white/50 backdrop-blur-sm p-6 text-center text-slate-500 animate-fade-in">
+        <p className="document-viewer-page__message">
           No se encontró el documento.
         </p>
       )}
@@ -261,37 +261,37 @@ function DocumentViewerPage() {
       )}
 
       {mode === "finding" && selectedText && selectedCoordinates && (
-  <HighlightFindingModal
-    selectedText={selectedText}
-    onClose={closeModal}
-    onSubmit={async (data) => {
-      await findingApi.createFromHighlight({
-        proyectoId: currentProjectId,
-        documentoId: currentDocumentId,
-        textoSubrayado: selectedText,
-        coordenadas: selectedCoordinates,
-        subtitulo: data.subtitulo,
-        observacion: data.observacion,
-        nombre: data.nombre,
-        codigo: data.codigo,
-        descripcion: data.descripcion,
-        criterio: "",
-        objetivo: "",
-        causa: "",
-        efecto: "",
-        conclusion: "",
-        impacto: 1,
-        urgencia: 1,
-        justificacionRiesgo: "",
-        recomendaciones: "",
-      });
+        <HighlightFindingModal
+          selectedText={selectedText}
+          onClose={closeModal}
+          onSubmit={async (data) => {
+            await findingApi.createFromHighlight({
+              proyectoId: currentProjectId,
+              documentoId: currentDocumentId,
+              textoSubrayado: selectedText,
+              coordenadas: selectedCoordinates,
+              subtitulo: data.subtitulo,
+              observacion: data.observacion,
+              nombre: data.nombre,
+              codigo: data.codigo,
+              descripcion: data.descripcion,
+              criterio: "",
+              objetivo: "",
+              causa: "",
+              efecto: "",
+              conclusion: "",
+              impacto: 1,
+              urgencia: 1,
+              justificacionRiesgo: "",
+              recomendaciones: "",
+            });
 
-      toast.success("Hallazgo creado desde subrayado.");
-      reloadHighlights();
-      clearSelection();
-    }}
-  />
-)}
+            toast.success("Hallazgo creado desde subrayado.");
+            reloadHighlights();
+            clearSelection();
+          }}
+        />
+      )}
 
       {mode === "evidence" && selectedText && selectedCoordinates && (
         <HighlightEvidenceModal

@@ -1,10 +1,9 @@
 .document-card {
-  @apply flex flex-col gap-4 rounded-3xl border bg-white/80 backdrop-blur-md p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:scale-[1.01] animate-fade-in-up;
-  border-color: rgba(15, 89, 99, 0.15);
+  @apply flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-xl p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-premium animate-fade-in-up;
 }
 
 .document-card__icon {
-  @apply flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-xs font-extrabold tracking-wide text-white shadow-sm;
+  @apply flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-xs font-bold tracking-wide text-white shadow-sm;
   background-color: #0f5963;
 }
 
@@ -17,22 +16,22 @@
 }
 
 .document-card__type {
-  @apply rounded-full border px-3 py-1 text-xs font-bold uppercase;
+  @apply rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-wider;
   background-color: #e4f1f3;
   border-color: #aacdd2;
   color: #0f5963;
 }
 
 .document-card__size {
-  @apply rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500;
+  @apply rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-500 tracking-wider;
 }
 
 .document-card h3 {
-  @apply mb-2 break-words text-lg font-extrabold tracking-tight text-slate-950;
+  @apply mb-2 break-words text-lg font-bold tracking-tight text-slate-900;
 }
 
 .document-card p {
-  @apply mb-3 text-sm leading-5 text-slate-500;
+  @apply mb-3 text-sm leading-relaxed text-slate-500;
 }
 
 .document-card__meta {
@@ -41,17 +40,17 @@
 
 .document-card__meta span {
   @apply rounded-xl px-3 py-2 font-semibold;
-  background-color: #f6fbfc;
+  background-color: #f8fafc;
 }
 
 .document-card__actions {
-  @apply flex flex-wrap gap-2 border-t border-slate-100 pt-4 xl:min-w-[220px] xl:border-l xl:border-t-0 xl:pl-4 xl:pt-0;
+  @apply flex flex-wrap gap-3 border-t border-slate-200/60 pt-4 xl:min-w-[220px] xl:border-l xl:border-t-0 xl:pl-4 xl:pt-0;
 }
 
 .document-card__actions button,
 .document-card__actions a {
-  @apply rounded-2xl px-4 py-2.5 text-center text-sm font-bold no-underline transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg;
-  background-color: rgba(15, 89, 99, 0.05);
+  @apply inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-center text-sm font-semibold no-underline transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm;
+  background-color: #f1f5f9;
   color: #0f5963;
 }
 
@@ -59,14 +58,14 @@
 .document-card__actions a:hover {
   background-color: #0f5963;
   color: white;
-  box-shadow: 0 4px 15px rgba(15, 89, 99, 0.3);
 }
 
 .document-card__delete {
-  @apply text-red-700;
+  @apply text-red-600;
   background-color: #fef2f2 !important;
 }
 
 .document-card__delete:hover {
-  background-color: #fee2e2 !important;
+  background-color: #dc2626 !important;
+  color: white !important;
 }

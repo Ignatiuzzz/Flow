@@ -1,30 +1,30 @@
   .document-uploader {
-    @apply rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md p-6 shadow-2xl animate-slide-in-left;
+    @apply rounded-3xl border border-white/40 bg-white/90 backdrop-blur-xl p-8 shadow-premium animate-slide-in-left;
   }
 
   .document-uploader__header {
-    @apply mb-5 border-b border-slate-100 pb-5;
+    @apply mb-6 border-b border-slate-200/60 pb-6;
   }
 
   .document-uploader__header span {
-    @apply mb-3 inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide;
+    @apply mb-4 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider;
     background-color: #e4f1f3;
     border-color: #aacdd2;
     color: #0f5963;
   }
 
   .document-uploader__header h2 {
-    @apply mb-2 text-2xl font-extrabold tracking-tight text-slate-950;
+    @apply mb-2 text-2xl font-bold tracking-tight text-slate-900;
   }
 
   .document-uploader__header p {
-    @apply text-sm leading-6 text-slate-500;
+    @apply text-sm leading-relaxed text-slate-600;
   }
 
   .document-uploader__dropzone {
-    @apply mb-4 flex min-h-[150px] cursor-pointer items-center justify-center rounded-3xl border border-dashed px-5 py-6 text-center transition-all duration-300 hover:bg-white/80 hover:shadow-[0_0_20px_rgba(15,89,99,0.15)] hover:-translate-y-0.5 hover:border-[#0f5963];
-    border-color: #aacdd2;
-    background-color: rgba(237, 247, 248, 0.7);
+    @apply mb-6 flex min-h-[160px] cursor-pointer items-center justify-center rounded-2xl border-2 border-dashed px-6 py-8 text-center transition-all duration-300 hover:bg-slate-50 hover:shadow-sm hover:border-slate-400;
+    border-color: #cbd5e1;
+    background-color: #f8fafc;
   }
 
   .document-uploader__dropzone input {
@@ -32,39 +32,29 @@
   }
 
   .document-uploader__dropzone strong {
-    @apply block text-base font-extrabold;
-    color: #0f5963;
+    @apply block text-base font-semibold text-slate-700;
   }
 
   .document-uploader__dropzone small {
-    @apply mt-1 block text-sm font-semibold text-slate-500;
+    @apply mt-1.5 block text-sm font-medium text-slate-500;
   }
 
   .document-uploader__selected {
-    @apply mb-4 rounded-2xl border px-4 py-3 text-sm;
-    background-color: #f6fbfc;
-    border-color: #c7dde1;
+    @apply mb-6 rounded-xl border border-slate-200 bg-slate-50 px-5 py-4 shadow-sm;
   }
 
   .document-uploader__selected span {
-    @apply block text-xs font-bold uppercase tracking-wide text-slate-400;
+    @apply block text-xs font-bold uppercase tracking-wider text-slate-500;
   }
 
   .document-uploader__selected strong {
-    @apply mt-1 block break-words text-sm font-extrabold text-slate-900;
+    @apply mt-1 block break-words text-sm font-bold text-slate-900;
   }
 
   .document-uploader__selected small {
-    @apply mt-1 block text-xs font-semibold text-slate-500;
+    @apply mt-1 block text-xs font-medium text-slate-500;
   }
 
   .document-uploader button {
-    @apply w-full rounded-2xl px-5 py-3 text-sm font-bold text-white shadow-lg transition-all duration-300 disabled:opacity-60;
-    background-color: #0f5963;
-  }
-
-  .document-uploader button:hover {
-    background-color: #0b4650;
-    box-shadow: 0 4px 15px rgba(15, 89, 99, 0.3);
-    transform: translateY(-2px);
-  }
+    @apply w-full rounded-xl bg-slate-900 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-slate-800 hover:shadow hover:-translate-y-0.5 disabled:bg-slate-300;
+  }

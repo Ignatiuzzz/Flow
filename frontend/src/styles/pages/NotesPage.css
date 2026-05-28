@@ -1,5 +1,5 @@
 .notes-page {
-  @apply relative min-h-screen overflow-hidden px-5 pt-5 pb-4 text-slate-900 md:px-6 md:pt-6 md:pb-4;
+  @apply relative min-h-screen overflow-hidden px-4 py-8 text-slate-900 md:px-8 md:py-10;
   background:
     radial-gradient(circle at 10% 8%, rgba(52, 211, 153, 0.22), transparent 22rem),
     radial-gradient(circle at 92% 18%, rgba(167, 243, 208, 0.14), transparent 20rem),
@@ -24,19 +24,10 @@
     center 40px,
     0 0,
     0 0;
-  opacity: 1;
+  opacity: 0.8;
   pointer-events: none;
   z-index: 0;
   animation: float 20s ease-in-out infinite;
-}
-
-.notes-page::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(122, 46, 73, 0.05) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 .notes-page__back,
@@ -48,23 +39,22 @@
 }
 
 .notes-page__back {
-  @apply mb-4 rounded-2xl bg-white/70 backdrop-blur-md px-4 py-2 text-sm font-bold text-emerald-950 shadow-lg ring-1 ring-emerald-900/10 transition-all hover:bg-white hover:-translate-x-1;
+  @apply mb-6 inline-flex rounded-2xl bg-white/70 backdrop-blur-xl px-5 py-2.5 text-sm font-bold text-slate-700 shadow-sm ring-1 ring-slate-200/50 transition-all hover:bg-white hover:-translate-x-1 hover:shadow-md;
 }
 
 .notes-page__hero {
-  @apply relative mb-4 flex flex-col gap-4 overflow-hidden rounded-3xl border bg-white/70 backdrop-blur-lg p-5 shadow-2xl lg:flex-row lg:items-center lg:justify-between animate-fade-in-up;
-  border-color: rgba(255, 255, 255, 0.2);
+  @apply relative mb-8 flex flex-col gap-6 overflow-hidden rounded-[2rem] border border-white/60 bg-white/80 backdrop-blur-2xl p-8 shadow-premium lg:flex-row lg:items-center lg:justify-between animate-fade-in-up;
 }
 
 .notes-page__hero::after {
   content: "";
   position: absolute;
-  right: -70px;
-  top: -90px;
-  width: 240px;
-  height: 240px;
+  right: -50px;
+  top: -50px;
+  width: 300px;
+  height: 300px;
   border-radius: 9999px;
-  background: radial-gradient(circle, rgba(122, 46, 73, 0.14), transparent 68%);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.15), transparent 70%);
   pointer-events: none;
 }
 
@@ -78,60 +68,55 @@
 }
 
 .notes-page__eyebrow {
-  @apply mb-2 inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide;
-  background-color: #f2dfe5;
-  border-color: #d9b4c1;
-  color: #7a2e49;
+  @apply mb-3 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700 shadow-sm;
 }
 
 .notes-page__hero h1 {
-  @apply mb-2 text-3xl font-extrabold tracking-tight text-slate-950;
+  @apply mb-4 text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl;
 }
 
 .notes-page__hero p {
-  @apply max-w-3xl text-sm leading-6 text-slate-600;
+  @apply max-w-3xl text-base leading-relaxed text-slate-600;
 }
 
 .notes-page__summary {
-  @apply flex min-w-[160px] flex-col items-center justify-center rounded-2xl px-4 py-4 text-center text-white shadow-xl ring-1 hover:shadow-[0_0_20px_rgba(122,46,73,0.3)] transition-all duration-300;
-  background-color: #7a2e49;
-  --tw-ring-color: rgba(214, 151, 173, 0.45);
+  @apply flex min-w-[200px] flex-col items-center justify-center rounded-2xl px-6 py-5 text-center shadow-lg ring-1 ring-emerald-500/20 transition-all duration-300 hover:shadow-emerald-500/30;
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
   animation: pulse-glow 3s infinite;
 }
 
 .notes-page__summary span {
-  @apply text-center text-sm font-bold uppercase tracking-wide text-white;
+  @apply text-center text-xs font-bold uppercase tracking-wider text-emerald-100;
 }
 
 .notes-page__summary strong {
-  @apply mt-1 text-center text-3xl font-extrabold text-white;
+  @apply mt-2 text-center text-4xl font-extrabold text-white;
 }
 
 .notes-page__stats {
-  @apply mb-4 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4;
+  @apply mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
 }
 
 .notes-page__stats article {
-  @apply rounded-2xl border bg-white/80 backdrop-blur-sm px-5 py-4 shadow-xl animate-fade-in-up hover:-translate-y-1 hover:shadow-2xl transition-all duration-300;
-  border-color: rgba(122, 46, 73, 0.18);
+  @apply rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl px-6 py-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-premium animate-fade-in-up;
   animation-fill-mode: both;
 }
 
 .notes-page__stats article:nth-child(1) { animation-delay: 0.1s; }
 .notes-page__stats article:nth-child(2) { animation-delay: 0.2s; }
 .notes-page__stats article:nth-child(3) { animation-delay: 0.3s; }
+.notes-page__stats article:nth-child(4) { animation-delay: 0.4s; }
 
 .notes-page__stats strong {
-  @apply block text-2xl font-extrabold tracking-tight;
-  color: #7a2e49;
+  @apply block text-3xl font-extrabold tracking-tight text-emerald-600;
 }
 
 .notes-page__stats span {
-  @apply mt-1 block text-sm font-bold text-slate-500;
+  @apply mt-2 block text-xs font-bold uppercase tracking-wider text-slate-500;
 }
 
 .notes-page__content {
-  @apply grid grid-cols-1 gap-5 xl:grid-cols-[480px_1fr];
+  @apply grid grid-cols-1 gap-8 xl:grid-cols-[480px_1fr];
 }
 
 .notes-page__form,
@@ -140,20 +125,19 @@
 }
 
 .notes-page__main {
-  @apply rounded-3xl border bg-white/80 backdrop-blur-md p-5 shadow-2xl animate-fade-in-up;
-  border-color: rgba(255, 255, 255, 0.2);
-  animation-delay: 0.4s;
+  @apply rounded-[2rem] border border-white/60 bg-white/80 backdrop-blur-xl p-8 shadow-premium animate-fade-in-up;
+  animation-delay: 0.5s;
   animation-fill-mode: both;
 }
 
 .notes-page__section-header {
-  @apply mb-4 flex flex-col gap-1 border-b border-slate-100 pb-4;
+  @apply mb-8 flex flex-col gap-2 border-b border-slate-200/60 pb-5;
 }
 
 .notes-page__section-header h2 {
-  @apply text-xl font-bold tracking-tight text-slate-950;
+  @apply text-2xl font-bold tracking-tight text-slate-900;
 }
 
 .notes-page__section-header p {
-  @apply mt-1 text-sm text-slate-500;
+  @apply mt-2 text-sm text-slate-500;
 }

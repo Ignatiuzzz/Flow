@@ -3,20 +3,20 @@
 }
 
 .note-list__state {
-  @apply flex min-h-[260px] flex-col items-center justify-center rounded-3xl border border-dashed bg-white p-8 text-center;
-  border-color: #d9b4c1;
+  @apply flex min-h-[260px] flex-col items-center justify-center rounded-3xl border-2 border-dashed bg-slate-50/50 p-8 text-center transition-all;
+  border-color: #cbd5e1;
 }
 
 .note-list__state h3 {
-  @apply mb-2 text-lg font-extrabold tracking-tight text-slate-900;
+  @apply mb-2 text-xl font-bold tracking-tight text-slate-900;
 }
 
 .note-list__state p {
-  @apply max-w-md text-sm leading-6 text-slate-500;
+  @apply max-w-md text-sm leading-relaxed text-slate-500;
 }
 
 .note-list__loader {
-  @apply mb-4 h-10 w-10 animate-spin rounded-full border-4;
-  border-color: #f2dfe5;
-  border-top-color: #7a2e49;
+  @apply mb-5 h-10 w-10 animate-spin rounded-full border-4;
+  border-color: #d1fae5;
+  border-top-color: #059669;
 }

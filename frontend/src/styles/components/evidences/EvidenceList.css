@@ -3,6 +3,9 @@
 }
 
 .evidence-list__message {
-  @apply flex min-h-[260px] flex-col items-center justify-center rounded-3xl border border-dashed bg-white p-8 text-center text-sm leading-6 text-slate-500;
-  border-color: #9cc7f0;
+  @apply flex min-h-[260px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-8 text-center text-sm leading-relaxed text-slate-500;
+}
+
+.evidence-list__loader {
+  @apply mb-4 h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-slate-800;
 }

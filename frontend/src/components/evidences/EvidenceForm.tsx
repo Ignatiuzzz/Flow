@@ -137,8 +137,8 @@ function EvidenceForm({
   };
 
   return (
-    <form className="evidence-form rounded-3xl border bg-white p-6 shadow-2xl" onSubmit={handleSubmit}>
-      <div className="evidence-form__header mb-5 border-b border-slate-100 pb-5 [&_h2]:mb-2 [&_h2]:text-2xl [&_h2]:font-extrabold [&_h2]:tracking-tight [&_h2]:text-slate-950 [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-500">
+    <form className="evidence-form" onSubmit={handleSubmit}>
+      <div className="evidence-form__header">
         <h2>{isEditing ? "Editar evidencia" : "Registrar evidencia"}</h2>
         <p>
           Puedes relacionar la evidencia con un hallazgo existente o registrarla
@@ -154,7 +154,7 @@ function EvidenceForm({
         </div>
       </div>
 
-      <div className="evidence-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="evidence-form__group">
         <label>Hallazgo relacionado</label>
         <select
           value={hallazgoId}
@@ -170,8 +170,8 @@ function EvidenceForm({
         </select>
       </div>
 
-      <div className="evidence-form__grid evidence-form__grid--two grid gap-4 grid-cols-1 md:grid-cols-2">
-        <div className="evidence-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="evidence-form__grid evidence-form__grid--two">
+        <div className="evidence-form__group">
           <label>Código</label>
           <input
             value={codigo}
@@ -180,7 +180,7 @@ function EvidenceForm({
           />
         </div>
 
-        <div className="evidence-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+        <div className="evidence-form__group">
           <label>Nombre</label>
           <input
             value={nombre}
@@ -190,8 +190,8 @@ function EvidenceForm({
         </div>
       </div>
 
-      <div className="evidence-form__grid evidence-form__grid--two grid gap-4 grid-cols-1 md:grid-cols-2">
-        <div className="evidence-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="evidence-form__grid evidence-form__grid--two">
+        <div className="evidence-form__group">
           <label>Criterio</label>
           <textarea
             value={criterio}
@@ -200,7 +200,7 @@ function EvidenceForm({
           />
         </div>
 
-        <div className="evidence-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+        <div className="evidence-form__group">
           <label>Objetivo</label>
           <textarea
             value={objetivo}
@@ -210,7 +210,7 @@ function EvidenceForm({
         </div>
       </div>
 
-      <div className="evidence-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="evidence-form__group">
         <label>Descripción de evidencia</label>
         <textarea
           value={descripcionEvidencia}
@@ -220,8 +220,8 @@ function EvidenceForm({
         />
       </div>
 
-      <div className="evidence-form__grid evidence-form__grid--two grid gap-4 grid-cols-1 md:grid-cols-2">
-        <div className="evidence-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="evidence-form__grid evidence-form__grid--two">
+        <div className="evidence-form__group">
           <label>Documento</label>
           <input
             value={documentoNombre}
@@ -230,7 +230,7 @@ function EvidenceForm({
           />
         </div>
 
-        <div className="evidence-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+        <div className="evidence-form__group">
           <label>Subtítulo o sección</label>
           <input
             value={subtitulo}
@@ -240,7 +240,7 @@ function EvidenceForm({
         </div>
       </div>
 
-      <div className="evidence-form__actions mt-5 flex flex-wrap gap-3 [&_button]:rounded-2xl [&_button]:px-5 [&_button]:py-3 [&_button]:text-sm [&_button]:font-bold [&_button]:text-white [&_button]:shadow-sm [&_button]:transition [&_button]:disabled:opacity-60">
+      <div className="evidence-form__actions">
         <button type="submit" disabled={loading}>
           {loading
             ? "Guardando..."
@@ -252,7 +252,7 @@ function EvidenceForm({
         {isEditing && onCancelEdit && (
           <button
             type="button"
-            className="evidence-form__cancel text-slate-800"
+            className="evidence-form__cancel"
             onClick={onCancelEdit}
           >
             Cancelar

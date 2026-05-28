@@ -132,8 +132,8 @@ function FindingForm({
   };
 
   return (
-    <form className="finding-form rounded-3xl border bg-white p-6 shadow-2xl" onSubmit={handleSubmit}>
-      <div className="finding-form__header mb-5 border-b border-slate-100 pb-5 [&_span]:mb-3 [&_span]:inline-flex [&_span]:rounded-full [&_span]:border [&_span]:px-3 [&_span]:py-1 [&_span]:text-xs [&_span]:font-bold [&_span]:uppercase [&_span]:tracking-wide [&_h2]:mb-2 [&_h2]:text-2xl [&_h2]:font-extrabold [&_h2]:tracking-tight [&_h2]:text-slate-950 [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-500">
+    <form className="finding-form" onSubmit={handleSubmit}>
+      <div className="finding-form__header">
         <span>{isEditing ? "Modo edición" : "Nuevo hallazgo"}</span>
 
         <h2>{isEditing ? "Editar hallazgo" : "Registrar hallazgo"}</h2>
@@ -152,8 +152,8 @@ function FindingForm({
         </div>
       </div>
 
-      <div className="finding-form__grid finding-form__grid--two grid gap-4 grid-cols-1 md:grid-cols-2">
-        <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="finding-form__grid finding-form__grid--two">
+        <div className="finding-form__group">
           <label>Código</label>
           <input
             value={codigo}
@@ -162,7 +162,7 @@ function FindingForm({
           />
         </div>
 
-        <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+        <div className="finding-form__group">
           <label>Nombre</label>
           <input
             value={nombre}
@@ -172,7 +172,7 @@ function FindingForm({
         </div>
       </div>
 
-      <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="finding-form__group">
         <label>Descripción</label>
         <textarea
           value={descripcion}
@@ -182,8 +182,8 @@ function FindingForm({
         />
       </div>
 
-      <div className="finding-form__grid finding-form__grid--two grid gap-4 grid-cols-1 md:grid-cols-2">
-        <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="finding-form__grid finding-form__grid--two">
+        <div className="finding-form__group">
           <label>Criterio</label>
           <textarea
             value={criterio}
@@ -193,7 +193,7 @@ function FindingForm({
           />
         </div>
 
-        <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+        <div className="finding-form__group">
           <label>Objetivo</label>
           <textarea
             value={objetivo}
@@ -204,8 +204,8 @@ function FindingForm({
         </div>
       </div>
 
-      <div className="finding-form__grid finding-form__grid--two grid gap-4 grid-cols-1 md:grid-cols-2">
-        <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="finding-form__grid finding-form__grid--two">
+        <div className="finding-form__group">
           <label>Causa</label>
           <textarea
             value={causa}
@@ -214,7 +214,7 @@ function FindingForm({
           />
         </div>
 
-        <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+        <div className="finding-form__group">
           <label>Efecto</label>
           <textarea
             value={efecto}
@@ -224,7 +224,7 @@ function FindingForm({
         </div>
       </div>
 
-      <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="finding-form__group">
         <label>Conclusión</label>
         <textarea
           value={conclusion}
@@ -233,8 +233,8 @@ function FindingForm({
         />
       </div>
 
-      <div className="finding-form__grid finding-form__grid--two grid gap-4 grid-cols-1 md:grid-cols-2">
-        <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="finding-form__grid finding-form__grid--two">
+        <div className="finding-form__group">
           <label>Impacto</label>
           <input
             type="number"
@@ -248,7 +248,7 @@ function FindingForm({
           />
         </div>
 
-        <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+        <div className="finding-form__group">
           <label>Urgencia</label>
           <input
             type="number"
@@ -263,7 +263,7 @@ function FindingForm({
         </div>
       </div>
 
-      <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="finding-form__group">
         <label>Justificación del riesgo</label>
         <textarea
           value={justificacionRiesgo}
@@ -272,7 +272,7 @@ function FindingForm({
         />
       </div>
 
-      <div className="finding-form__group mb-4 flex flex-col gap-2 [&_label]:text-sm [&_label]:font-bold [&_label]:text-slate-700">
+      <div className="finding-form__group">
         <label>Recomendaciones</label>
         <textarea
           value={recomendaciones}
@@ -281,7 +281,7 @@ function FindingForm({
         />
       </div>
 
-      <div className="finding-form__actions mt-5 flex flex-wrap gap-3 [&_button]:rounded-2xl [&_button]:px-5 [&_button]:py-3 [&_button]:text-sm [&_button]:font-bold [&_button]:text-white [&_button]:shadow-sm [&_button]:transition [&_button]:disabled:opacity-60">
+      <div className="finding-form__actions">
         <button type="submit" disabled={loading}>
           {loading
             ? "Guardando..."
@@ -293,7 +293,7 @@ function FindingForm({
         {isEditing && onCancelEdit && (
           <button
             type="button"
-            className="finding-form__cancel text-slate-800"
+            className="finding-form__cancel"
             onClick={onCancelEdit}
           >
             Cancelar
