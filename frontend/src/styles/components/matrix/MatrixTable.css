@@ -1,6 +1,6 @@
 .matrix-table__wrapper {
-  @apply w-full overflow-x-auto rounded-3xl border bg-white shadow-sm;
-  border-color: #b8c5d9;
+  @apply w-full overflow-x-auto rounded-3xl border bg-white/80 backdrop-blur-md shadow-lg animate-fade-in-up;
+  border-color: rgba(39, 63, 104, 0.15);
 }
 
 .matrix-table {
@@ -8,12 +8,13 @@
 }
 
 .matrix-table thead {
-  background-color: #e7ecf5;
+  background-color: rgba(39, 63, 104, 0.05);
+  backdrop-filter: blur(10px);
 }
 
 .matrix-table th {
   @apply border-b px-4 py-3 text-xs font-extrabold uppercase tracking-wide;
-  border-color: #b8c5d9;
+  border-color: rgba(39, 63, 104, 0.1);
   color: #273f68;
 }
 
@@ -23,11 +24,12 @@
 }
 
 .matrix-table tbody tr {
-  @apply transition;
+  @apply transition-all duration-300;
 }
 
 .matrix-table tbody tr:hover {
-  background-color: #f7f9fc;
+  background-color: rgba(39, 63, 104, 0.03);
+  box-shadow: inset 3px 0 0 #273f68;
 }
 
 .matrix-table__code {

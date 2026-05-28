@@ -63,3 +63,41 @@
 .app-input {
   @apply rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none transition focus:border-violet-700;
 }
+
+/* Glassmorphism & Animations */
+.glass-card {
+  @apply bg-white/80 backdrop-blur-md shadow-lg border border-white/20;
+}
+
+.glass-hero {
+  @apply bg-white/70 backdrop-blur-lg border border-white/30 shadow-xl;
+}
+
+.animate-in {
+  @apply animate-fade-in-up;
+}
+
+.stat-glow {
+  @apply transition-all duration-300;
+}
+
+.stat-glow:hover {
+  @apply shadow-[0_0_15px_-3px_rgba(16,185,129,0.4)];
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}

@@ -1,6 +1,5 @@
   .document-uploader {
-    @apply rounded-3xl border bg-white p-6 shadow-2xl;
-    border-color: rgba(15, 89, 99, 0.22);
+    @apply rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md p-6 shadow-2xl animate-slide-in-left;
   }
 
   .document-uploader__header {
@@ -23,9 +22,9 @@
   }
 
   .document-uploader__dropzone {
-    @apply mb-4 flex min-h-[150px] cursor-pointer items-center justify-center rounded-3xl border border-dashed px-5 py-6 text-center transition hover:bg-slate-50;
+    @apply mb-4 flex min-h-[150px] cursor-pointer items-center justify-center rounded-3xl border border-dashed px-5 py-6 text-center transition-all duration-300 hover:bg-white/80 hover:shadow-[0_0_20px_rgba(15,89,99,0.15)] hover:-translate-y-0.5 hover:border-[#0f5963];
     border-color: #aacdd2;
-    background-color: #edf7f8;
+    background-color: rgba(237, 247, 248, 0.7);
   }
 
   .document-uploader__dropzone input {
@@ -60,10 +59,12 @@
   }
 
   .document-uploader button {
-    @apply w-full rounded-2xl px-5 py-3 text-sm font-bold text-white shadow-sm transition disabled:opacity-60;
+    @apply w-full rounded-2xl px-5 py-3 text-sm font-bold text-white shadow-lg transition-all duration-300 disabled:opacity-60;
     background-color: #0f5963;
   }
 
   .document-uploader button:hover {
     background-color: #0b4650;
+    box-shadow: 0 4px 15px rgba(15, 89, 99, 0.3);
+    transform: translateY(-2px);
   }

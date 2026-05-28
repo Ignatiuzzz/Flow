@@ -1,11 +1,12 @@
 .document-viewer-page {
   @apply min-h-screen bg-slate-100 text-slate-900;
+  background: radial-gradient(circle at 50% 50%, rgba(15, 89, 99, 0.03) 0%, transparent 80%);
 }
 
 .document-viewer-page__back {
-  @apply fixed bottom-5 left-5 z-40 rounded-2xl bg-white px-4 py-3 text-sm font-bold text-slate-800 shadow-xl ring-1 ring-slate-200 transition hover:bg-slate-50;
+  @apply fixed bottom-5 left-5 z-40 rounded-2xl bg-white/70 backdrop-blur-md px-4 py-3 text-sm font-bold text-slate-800 shadow-xl ring-1 ring-slate-200 transition-all hover:bg-white hover:-translate-y-1 hover:shadow-2xl;
 }
 
 .document-viewer-page__message {
-  @apply mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500;
+  @apply mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-slate-300 bg-white/50 backdrop-blur-sm p-6 text-center text-slate-500 animate-fade-in;
 }

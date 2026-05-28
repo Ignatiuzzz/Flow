@@ -10,6 +10,7 @@
 
 html {
   font-family: "Manrope", Arial, Helvetica, sans-serif;
+  scroll-behavior: smooth;
 }
 
 body {

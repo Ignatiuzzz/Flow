@@ -27,6 +27,16 @@
   opacity: 1;
   pointer-events: none;
   z-index: 0;
+  animation: float 20s ease-in-out infinite;
+}
+
+.projects-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .projects-page__hero,
@@ -36,7 +46,7 @@
 }
 
 .projects-page__hero {
-  @apply relative mb-8 flex flex-col gap-6 overflow-hidden rounded-3xl border border-emerald-900/20 bg-white p-7 shadow-2xl lg:flex-row lg:items-center lg:justify-between;
+  @apply relative mb-8 flex flex-col gap-6 overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-lg p-7 shadow-2xl lg:flex-row lg:items-center lg:justify-between animate-fade-in-up;
 }
 
 .projects-page__hero::after {
@@ -76,7 +86,8 @@
 }
 
 .projects-page__summary {
-  @apply flex min-w-[160px] flex-col items-center justify-center rounded-2xl bg-emerald-950 px-4 py-4 text-center text-white shadow-xl ring-1 ring-emerald-700/40;
+  @apply flex min-w-[160px] flex-col items-center justify-center rounded-2xl bg-emerald-950 px-4 py-4 text-center text-white shadow-xl ring-1 ring-emerald-700/40 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300;
+  animation: pulse-glow 3s infinite;
 }
 
 .projects-page__summary span {
@@ -97,7 +108,8 @@
 }
 
 .projects-page__main {
-  @apply rounded-3xl border border-emerald-900/20 bg-white p-6 shadow-2xl;
+  @apply rounded-3xl border border-white/20 bg-white/80 backdrop-blur-md p-6 shadow-2xl animate-fade-in-up;
+  animation-delay: 0.1s;
 }
 
 .projects-page__section-header {

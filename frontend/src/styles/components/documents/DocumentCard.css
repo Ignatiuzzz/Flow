@@ -1,6 +1,6 @@
 .document-card {
-  @apply flex flex-col gap-4 rounded-3xl border bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg xl:flex-row xl:items-start;
-  border-color: #bfdadd;
+  @apply flex flex-col gap-4 rounded-3xl border bg-white/80 backdrop-blur-md p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:scale-[1.01] animate-fade-in-up;
+  border-color: rgba(15, 89, 99, 0.15);
 }
 
 .document-card__icon {
@@ -50,14 +50,16 @@
 
 .document-card__actions button,
 .document-card__actions a {
-  @apply rounded-2xl px-4 py-2.5 text-center text-sm font-bold no-underline transition;
-  background-color: #eef3f4;
+  @apply rounded-2xl px-4 py-2.5 text-center text-sm font-bold no-underline transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg;
+  background-color: rgba(15, 89, 99, 0.05);
   color: #0f5963;
 }
 
 .document-card__actions button:hover,
 .document-card__actions a:hover {
-  background-color: #ddebed;
+  background-color: #0f5963;
+  color: white;
+  box-shadow: 0 4px 15px rgba(15, 89, 99, 0.3);
 }
 
 .document-card__delete {
