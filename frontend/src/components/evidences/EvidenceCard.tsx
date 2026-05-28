@@ -76,6 +76,16 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
     }
   };
 
+  const relatedFinding = highlightRelations.find(
+    (relation) => relation.hallazgo
+  )?.hallazgo;
+
+  const relatedFindingLabel = relatedFinding
+    ? `${relatedFinding.codigo} - ${relatedFinding.nombre}`
+    : evidence.hallazgoId
+    ? "Hallazgo relacionado"
+    : "No registrado";
+
   return (
     <article
       className={
@@ -102,8 +112,6 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
         </p>
 
         <div className="evidence-card__meta">
-          <span>Documento: {evidence.documentoNombre || "No registrado"}</span>
-          <span>Subtítulo: {evidence.subtitulo || "No registrado"}</span>
           <span>Subrayados: {evidence.subrayados.length}</span>
         </div>
       </div>
@@ -155,47 +163,42 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
 
           <div className="evidence-card__detail-grid">
             <DetailItem label="Nombre" value={showValue(evidence.nombre)} />
+
             <DetailItem label="Código" value={showValue(evidence.codigo)} />
-            <DetailItem
-              label="Proyecto"
-              value={showValue(evidence.proyectoId)}
-            />
+
             <DetailItem
               label="Hallazgo relacionado"
-              value={showValue(evidence.hallazgoId)}
+              value={
+                loadingRelations
+                  ? "Cargando hallazgo..."
+                  : showValue(relatedFindingLabel)
+              }
             />
-            <DetailItem
-              label="Documento"
-              value={showValue(evidence.documentoNombre)}
-            />
-            <DetailItem
-              label="Subtítulo"
-              value={showValue(evidence.subtitulo)}
-            />
+
             <DetailItem
               label="Subrayados"
               value={evidence.subrayados.length}
             />
+
             <DetailItem
               label="Fecha de creación"
               value={formatDate(evidence.fechaCreacion)}
             />
+
             <DetailItem
               label="Fecha de actualización"
               value={formatDate(evidence.fechaActualizacion)}
             />
           </div>
 
-          <div className="evidence-card__text-grid">
-            <DetailBlock
-              label="Descripción de evidencia"
-              value={showValue(evidence.descripcionEvidencia)}
-            />
-
-            <DetailBlock label="Criterio" value={showValue(evidence.criterio)} />
-
-            <DetailBlock label="Objetivo" value={showValue(evidence.objetivo)} />
-          </div>
+          {evidence.objetivo && (
+            <div className="evidence-card__text-grid">
+              <DetailBlock
+                label="Objetivo"
+                value={showValue(evidence.objetivo)}
+              />
+            </div>
+          )}
 
           <div className="evidence-card__relations">
             <div className="evidence-card__relations-header">
@@ -212,7 +215,7 @@ function EvidenceCard({ evidence, onEdit, onDelete }: EvidenceCardProps) {
               </div>
 
               <div>
-                <strong>{evidence.hallazgoId ? 1 : 0}</strong>
+                <strong>{relatedFinding || evidence.hallazgoId ? 1 : 0}</strong>
                 <span>Hallazgos relacionados</span>
               </div>
             </div>

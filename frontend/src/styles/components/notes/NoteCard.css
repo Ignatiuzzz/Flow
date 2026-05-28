@@ -284,3 +284,19 @@
 .note-card__highlight-footer a:hover {
   background-color: #612039;
 }
+
+.note-card__highlight-text {
+  grid-column: 1 / -1;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.note-card__highlight-text p {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.note-card__highlight-item {
+  width: 100%;
+  max-width: none;
+}

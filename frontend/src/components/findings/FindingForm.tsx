@@ -200,8 +200,12 @@ function FindingForm({
           <input
             type="number"
             min={1}
+            max={5}
             value={impacto}
-            onChange={(event) => setImpacto(Number(event.target.value))}
+            onChange={(event) => {
+              const value = Number(event.target.value);
+              setImpacto(Math.min(Math.max(value, 1), 5));
+            }}
           />
         </div>
 
@@ -210,8 +214,12 @@ function FindingForm({
           <input
             type="number"
             min={1}
+            max={5}
             value={urgencia}
-            onChange={(event) => setUrgencia(Number(event.target.value))}
+            onChange={(event) => {
+              const value = Number(event.target.value);
+              setUrgencia(Math.min(Math.max(value, 1), 5));
+            }}
           />
         </div>
       </div>
@@ -239,8 +247,8 @@ function FindingForm({
           {loading
             ? "Guardando..."
             : isEditing
-            ? "Guardar cambios"
-            : "Crear hallazgo"}
+              ? "Guardar cambios"
+              : "Crear hallazgo"}
         </button>
 
         {isEditing && onCancelEdit && (

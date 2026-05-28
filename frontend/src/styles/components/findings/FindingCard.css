@@ -252,14 +252,6 @@
   @apply flex flex-col gap-3;
 }
 
-.finding-card__highlight-item {
-  @apply rounded-3xl border p-4 shadow-sm;
-  background:
-    linear-gradient(90deg, rgba(138, 69, 21, 0.06), transparent 10px),
-    #fffaf5;
-  border-color: #e8c8aa;
-}
-
 .finding-card__highlight-top {
   @apply mb-3 flex flex-wrap items-center gap-2;
 }
@@ -285,18 +277,38 @@
   @apply mb-3 text-base font-extrabold text-slate-900;
 }
 
-.finding-card__highlight-text {
-  @apply mb-3 rounded-2xl bg-white p-4;
-}
-
 .finding-card__highlight-text label,
 .finding-card__highlight-meta label {
   @apply mb-1 block text-xs font-bold uppercase tracking-wide text-slate-400;
 }
 
-.finding-card__highlight-text p {
-  @apply mb-0 whitespace-pre-wrap text-sm leading-6 text-slate-700;
+.finding-card__highlight-list {
+  @apply flex w-full flex-col gap-3;
 }
+
+.finding-card__highlight-item {
+  @apply block w-full max-w-none rounded-3xl border p-4 shadow-sm;
+  background:
+    linear-gradient(90deg, rgba(138, 69, 21, 0.06), transparent 10px),
+    #fffaf5;
+  border-color: #e8c8aa;
+}
+
+.finding-card__highlight-text {
+  @apply mb-3 block w-full max-w-none rounded-2xl bg-white p-4;
+}
+
+.finding-card__highlight-text label {
+  @apply mb-2 block w-full text-xs font-bold uppercase tracking-wide text-slate-400;
+}
+
+.finding-card__highlight-text p {
+  @apply block w-full max-w-none whitespace-pre-wrap text-sm leading-6 text-slate-700;
+  margin-bottom: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
 
 .finding-card__highlight-meta {
   @apply grid grid-cols-1 gap-3 md:grid-cols-2;
@@ -326,4 +338,24 @@
 
 .finding-card__highlight-footer a:hover {
   background-color: #6f3510;
+}
+
+.finding-card__highlight-text {
+  grid-column: 1 / -1;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.finding-card__highlight-text p {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.finding-card__highlight-meta {
+  width: 100%;
+}
+
+.finding-card__highlight-item {
+  width: 100%;
+  max-width: none;
 }

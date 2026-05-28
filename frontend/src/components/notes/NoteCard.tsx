@@ -69,6 +69,24 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
     }
   };
 
+  const relatedFindingLabel = relations?.hallazgo
+    ? `${relations.hallazgo.codigo} - ${relations.hallazgo.nombre}`
+    : note.hallazgoId
+    ? "Hallazgo relacionado"
+    : "No registrado";
+
+  const relatedDocumentLabel = relations?.documento
+    ? relations.documento.nombreOriginal
+    : note.documentoId
+    ? "Documento relacionado"
+    : "No registrado";
+
+  const relatedHighlightLabel = relations?.subrayado
+    ? relations.subrayado.textoSubrayado
+    : note.subrayadoId
+    ? "Subrayado relacionado"
+    : "No registrado";
+
   return (
     <article className={expanded ? "note-card note-card--expanded" : "note-card"}>
       <div className="note-card__main">
@@ -121,26 +139,33 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
           </div>
 
           <div className="note-card__detail-grid">
-            <DetailItem label="ID de nota" value={showValue(note.id)} />
-
-            <DetailItem
-              label="Proyecto"
-              value={showValue(note.proyectoId)}
-            />
-
             <DetailItem
               label="Hallazgo relacionado"
-              value={showValue(note.hallazgoId)}
+              value={
+                loadingRelations
+                  ? "Cargando hallazgo..."
+                  : showValue(relatedFindingLabel)
+              }
             />
 
             <DetailItem
               label="Documento relacionado"
-              value={showValue(note.documentoId)}
+              value={
+                loadingRelations
+                  ? "Cargando documento..."
+                  : showValue(relatedDocumentLabel)
+              }
             />
 
             <DetailItem
               label="Subrayado relacionado"
-              value={showValue(note.subrayadoId)}
+              value={
+                loadingRelations
+                  ? "Cargando subrayado..."
+                  : note.subrayadoId
+                  ? "Sí"
+                  : "No registrado"
+              }
             />
 
             <DetailItem
@@ -152,15 +177,6 @@ function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
               label="Fecha de actualización"
               value={formatDate(note.fechaActualizacion)}
             />
-          </div>
-
-          <div className="note-card__text-grid">
-            <DetailBlock
-              label="Subtítulo"
-              value={showValue(note.subtitulo)}
-            />
-
-            <DetailBlock label="Texto de la nota" value={showValue(note.texto)} />
           </div>
 
           <div className="note-card__relations">
@@ -290,20 +306,6 @@ function DetailItem({ label, value }: DetailItemProps) {
     <div className="note-card__detail-item">
       <span>{label}</span>
       <strong>{value}</strong>
-    </div>
-  );
-}
-
-interface DetailBlockProps {
-  label: string;
-  value: string | number;
-}
-
-function DetailBlock({ label, value }: DetailBlockProps) {
-  return (
-    <div className="note-card__detail-block">
-      <span>{label}</span>
-      <p>{value}</p>
     </div>
   );
 }
