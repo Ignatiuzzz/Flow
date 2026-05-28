@@ -7,22 +7,21 @@ function App() {
       <Toaster 
         position="top-right"
         toastOptions={{
-          className: 'bg-white text-slate-900 shadow-lg rounded-xl border border-slate-100',
+          className: 'bg-white/95 backdrop-blur-xl text-slate-900 shadow-premium rounded-2xl border border-slate-200/60 font-semibold tracking-tight !px-5 !py-4',
           duration: 4000,
           style: {
-            padding: '16px',
             color: '#0f172a',
             fontFamily: 'Inter, Manrope, sans-serif'
           },
           success: {
             iconTheme: {
-              primary: '#10b981',
+              primary: '#059669',
               secondary: 'white',
             },
           },
           error: {
             iconTheme: {
-              primary: '#ef4444',
+              primary: '#dc2626', 
               secondary: 'white',
             },
           },
