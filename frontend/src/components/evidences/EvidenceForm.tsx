@@ -1,6 +1,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Evidence, EvidenceCreate } from "../../types/evidence";
 import { Finding } from "../../types/finding";
+import { AISuggestButton } from "../ai/AISuggestButton";
+import { aiApi } from "../../api/aiApi";
 import "../../styles/components/evidences/EvidenceForm.css";
 
 interface EvidenceFormProps {
@@ -54,6 +56,26 @@ function EvidenceForm({
     setDescripcionEvidencia("");
     setDocumentoNombre("");
     setSubtitulo("");
+  };
+
+  const handleSuggest = async () => {
+    return await aiApi.suggestEvidence({
+      proyectoId: projectId,
+      hallazgoId: hallazgoId || undefined,
+      nombre: nombre.trim(),
+      descripcionEvidencia: descripcionEvidencia.trim(),
+      camposExistentes: {
+        criterio: criterio.trim(),
+        objetivo: objetivo.trim(),
+        descripcionEvidencia: descripcionEvidencia.trim(),
+      }
+    });
+  };
+
+  const handleApplySuggestions = (suggestions: Record<string, string>) => {
+    if (suggestions.criterio) setCriterio(suggestions.criterio);
+    if (suggestions.objetivo) setObjetivo(suggestions.objetivo);
+    if (suggestions.descripcionEvidencia) setDescripcionEvidencia(suggestions.descripcionEvidencia);
   };
 
   const handleFindingChange = (selectedFindingId: string) => {
@@ -121,6 +143,14 @@ function EvidenceForm({
           Puedes relacionar la evidencia con un hallazgo existente o registrarla
           como evidencia general del proyecto.
         </p>
+
+        <div style={{ marginTop: '16px' }}>
+          <AISuggestButton 
+            onSuggest={handleSuggest} 
+            onApply={handleApplySuggestions} 
+            isLoading={loading}
+          />
+        </div>
       </div>
 
       <div className="evidence-form__group">

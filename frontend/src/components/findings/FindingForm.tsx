@@ -1,5 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Finding, FindingCreate } from "../../types/finding";
+import { AISuggestButton } from "../ai/AISuggestButton";
+import { aiApi } from "../../api/aiApi";
 import "../../styles/components/findings/FindingForm.css";
 
 interface FindingFormProps {
@@ -65,6 +67,34 @@ function FindingForm({
     setRecomendaciones("");
   };
 
+  const handleSuggest = async () => {
+    return await aiApi.suggestFinding({
+      proyectoId: projectId,
+      nombre: nombre.trim(),
+      codigo: codigo.trim(),
+      descripcion: descripcion.trim(),
+      camposExistentes: {
+        criterio: criterio.trim(),
+        objetivo: objetivo.trim(),
+        causa: causa.trim(),
+        efecto: efecto.trim(),
+        conclusion: conclusion.trim(),
+        justificacionRiesgo: justificacionRiesgo.trim(),
+        recomendaciones: recomendaciones.trim(),
+      }
+    });
+  };
+
+  const handleApplySuggestions = (suggestions: Record<string, string>) => {
+    if (suggestions.criterio) setCriterio(suggestions.criterio);
+    if (suggestions.objetivo) setObjetivo(suggestions.objetivo);
+    if (suggestions.causa) setCausa(suggestions.causa);
+    if (suggestions.efecto) setEfecto(suggestions.efecto);
+    if (suggestions.conclusion) setConclusion(suggestions.conclusion);
+    if (suggestions.justificacionRiesgo) setJustificacionRiesgo(suggestions.justificacionRiesgo);
+    if (suggestions.recomendaciones) setRecomendaciones(suggestions.recomendaciones);
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
@@ -111,6 +141,14 @@ function FindingForm({
           Completa la ficha del hallazgo. El riesgo se calcula a partir del
           impacto y la urgencia.
         </p>
+
+        <div style={{ marginTop: '16px' }}>
+          <AISuggestButton 
+            onSuggest={handleSuggest} 
+            onApply={handleApplySuggestions} 
+            isLoading={loading}
+          />
+        </div>
       </div>
 
       <div className="finding-form__grid finding-form__grid--two">

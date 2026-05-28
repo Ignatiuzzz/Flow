@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.database import close_mongo_connection, connect_to_mongo
 from app.routes import (
+    ai_routes,
     document_routes,
     evidence_routes,
     finding_routes,
@@ -80,6 +81,11 @@ app.include_router(
 
 app.include_router(
     matrix_routes.router,
+    prefix=settings.API_PREFIX
+)
+
+app.include_router(
+    ai_routes.router,
     prefix=settings.API_PREFIX
 )
 

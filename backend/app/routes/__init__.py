@@ -1,4 +1,5 @@
 from app.routes import (
+    ai_routes,
     document_routes,
     evidence_routes,
     finding_routes,
@@ -10,6 +11,7 @@ from app.routes import (
 )
 
 __all__ = [
+    "ai_routes",
     "health_routes",
     "project_routes",
     "document_routes",
