@@ -150,15 +150,13 @@ function FindingForm({
           impacto y la urgencia.
         </p>
 
-        {isEditing && (
-          <div style={{ marginTop: '16px' }}>
-            <AISuggestButton 
-              onSuggest={handleSuggest} 
-              onApply={handleApplySuggestions} 
-              isLoading={loading}
-            />
-          </div>
-        )}
+        <div style={{ marginTop: '16px' }}>
+          <AISuggestButton 
+            onSuggest={handleSuggest} 
+            onApply={handleApplySuggestions} 
+            isLoading={loading}
+          />
+        </div>
       </div>
 
       <div className="finding-form__grid finding-form__grid--two">
