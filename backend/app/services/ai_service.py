@@ -169,6 +169,45 @@ def _build_evidence_prompt(
     return "\n".join(prompt_parts)
 
 
+def _build_suggest_from_highlight_prompt(texto: str, tipo: str, project_context: Optional[dict] = None) -> str:
+    prompt_parts = []
+
+    if tipo == "hallazgo":
+        prompt_parts.append("Necesito extraer la idea principal de un hallazgo a partir del siguiente texto subrayado en un documento de auditoría.")
+    else:
+        prompt_parts.append("Necesito extraer detalles para una evidencia a partir del siguiente texto subrayado en un documento de auditoría.")
+
+    if project_context:
+        prompt_parts.append(
+            f"\n## Contexto del Proyecto\n"
+            f"- Nombre: {project_context.get('nombre', 'N/A')}"
+        )
+
+    prompt_parts.append(f"\n## Texto Subrayado:\n\"{texto}\"")
+
+    prompt_parts.append("\n## Instrucciones\n")
+    
+    if tipo == "hallazgo":
+        prompt_parts.append(
+            f"A partir de este texto, genera las siguientes sugerencias breves:\n"
+            f"- nombre: Un título corto y descriptivo para el hallazgo (máximo 10 palabras).\n"
+            f"- descripcion: Un resumen claro del problema o situación encontrada basada EXCLUSIVAMENTE en el texto (1 a 3 oraciones).\n"
+            f"- observacion: Un breve comentario adicional de auditoría sobre el hallazgo.\n\n"
+            f"Responde ÚNICAMENTE con un JSON con estas claves:\n"
+            f'{{"nombre": "...", "descripcion": "...", "observacion": "..."}}'
+        )
+    else:
+        prompt_parts.append(
+            f"A partir de este texto, genera las siguientes sugerencias breves:\n"
+            f"- subtitulo: Un posible título o categoría breve de donde proviene la evidencia (ej: 'Manual de Operaciones').\n"
+            f"- observacion: Un comentario de qué evidencia potencial demuestra este texto.\n\n"
+            f"Responde ÚNICAMENTE con un JSON con estas claves:\n"
+            f'{{"subtitulo": "...", "observacion": "..."}}'
+        )
+
+    return "\n".join(prompt_parts)
+
+
 def _build_improve_prompt(text: str, field_name: str, context: Optional[str] = None) -> str:
     field_descriptions = {
         "criterio": "criterio de auditoría (norma, ley o estándar aplicable)",
@@ -282,6 +321,29 @@ async def suggest_evidence_fields(
         config={
             "system_instruction": SYSTEM_PROMPT,
             "temperature": 0.7,
+            "max_output_tokens": 1024,
+        },
+    )
+
+    return _parse_json_response(response.text)
+
+
+async def suggest_from_highlight(
+    texto: str,
+    tipo: str,
+    project_context: Optional[dict] = None
+) -> dict:
+    client = _get_client()
+    model = _get_model()
+
+    prompt = _build_suggest_from_highlight_prompt(texto, tipo, project_context)
+
+    response = client.models.generate_content(
+        model=model,
+        contents=prompt,
+        config={
+            "system_instruction": SYSTEM_PROMPT,
+            "temperature": 0.5,
             "max_output_tokens": 1024,
         },
     )

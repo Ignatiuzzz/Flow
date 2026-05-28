@@ -1,5 +1,7 @@
 import { FormEvent, useState } from "react";
 import { Evidence } from "../../types/evidence";
+import { aiApi } from "../../api/aiApi";
+import { AISuggestButton } from "../ai/AISuggestButton";
 import "../../styles/components/documents/HighlightEvidenceModal.css";
 
 interface HighlightEvidenceModalProps {
@@ -47,11 +49,30 @@ function HighlightEvidenceModal({
         }
     };
 
+    const handleSuggest = async () => {
+        return await aiApi.suggestFromHighlight({
+            textoSubrayado: selectedText,
+            tipo: "evidencia"
+        });
+    };
+
+    const handleApplySuggestions = (suggestions: Record<string, string>) => {
+        if (suggestions.subtitulo) setSubtitulo(suggestions.subtitulo);
+        if (suggestions.observacion) setObservacion(suggestions.observacion);
+    };
+
     return (
         <div className="highlight-modal__overlay">
             <form className="highlight-evidence-modal" onSubmit={handleSubmit}>
                 <div className="highlight-evidence-modal__header">
-                    <h2>Relacionar evidencia desde subrayado</h2>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                        <h2>Relacionar evidencia</h2>
+                        <AISuggestButton 
+                            onSuggest={handleSuggest} 
+                            onApply={handleApplySuggestions} 
+                            iconOnly 
+                        />
+                    </div>
                     <button type="button" onClick={onClose}>
                         ×
                     </button>

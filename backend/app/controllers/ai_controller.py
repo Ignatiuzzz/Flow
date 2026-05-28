@@ -7,12 +7,14 @@ from app.schemas.ai_schema import (
     AIImproveTextRequest,
     AISuggestEvidenceRequest,
     AISuggestFindingRequest,
+    AISuggestFromHighlightRequest,
     AISuggestionResponse,
 )
 from app.services.ai_service import (
     improve_text as ai_improve_text,
     suggest_evidence_fields as ai_suggest_evidence,
     suggest_finding_fields as ai_suggest_finding,
+    suggest_from_highlight as ai_suggest_from_highlight,
 )
 from app.utils.mongo import to_object_id
 
@@ -143,6 +145,42 @@ async def suggest_evidence(request: AISuggestEvidenceRequest) -> AISuggestionRes
         )
     except Exception as e:
         logger.error(f"Error al generar sugerencias de evidencia: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al comunicarse con la IA: {str(e)}"
+        )
+
+
+async def suggest_from_highlight(request: AISuggestFromHighlightRequest) -> AISuggestionResponse:
+    db = get_database()
+    
+    project_context = None
+    if request.proyectoId:
+        project = await db["projects"].find_one({"_id": request.proyectoId})
+        if project:
+            project_context = {
+                "nombre": project.get("nombre"),
+                "descripcion": project.get("descripcion")
+            }
+            
+    try:
+        suggestions = await ai_suggest_from_highlight(
+            texto=request.textoSubrayado,
+            tipo=request.tipo,
+            project_context=project_context
+        )
+        
+        return AISuggestionResponse(
+            sugerencias=suggestions,
+            mensaje="Sugerencias generadas correctamente"
+        )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        logger.error(f"Error al generar sugerencias desde subrayado: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error al comunicarse con la IA: {str(e)}"

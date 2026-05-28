@@ -1,4 +1,6 @@
 import { FormEvent, useState } from "react";
+import { aiApi } from "../../api/aiApi";
+import { AISuggestButton } from "../ai/AISuggestButton";
 import "../../styles/components/documents/HighlightFindingModal.css";
 
 interface HighlightFindingModalProps {
@@ -60,11 +62,31 @@ function HighlightFindingModal({
         }
     };
 
+    const handleSuggest = async () => {
+        return await aiApi.suggestFromHighlight({
+            textoSubrayado: selectedText,
+            tipo: "hallazgo"
+        });
+    };
+
+    const handleApplySuggestions = (suggestions: Record<string, string>) => {
+        if (suggestions.nombre) setNombre(suggestions.nombre);
+        if (suggestions.descripcion) setDescripcion(suggestions.descripcion);
+        if (suggestions.observacion) setObservacion(suggestions.observacion);
+    };
+
     return (
         <div className="highlight-modal__overlay">
             <form className="highlight-finding-modal" onSubmit={handleSubmit}>
                 <div className="highlight-finding-modal__header">
-                    <h2>Registrar hallazgo desde subrayado</h2>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                        <h2>Registrar hallazgo desde subrayado</h2>
+                        <AISuggestButton 
+                            onSuggest={handleSuggest} 
+                            onApply={handleApplySuggestions} 
+                            iconOnly 
+                        />
+                    </div>
                     <button type="button" onClick={onClose}>
                         ×
                     </button>

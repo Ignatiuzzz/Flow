@@ -26,6 +26,12 @@ class AISuggestEvidenceRequest(BaseModel):
     camposExistentes: Dict[str, str] = {}
 
 
+class AISuggestFromHighlightRequest(BaseModel):
+    textoSubrayado: str
+    tipo: str
+    proyectoId: Optional[PyObjectId] = None
+
+
 class AIImproveTextRequest(BaseModel):
     texto: str
     nombreCampo: str

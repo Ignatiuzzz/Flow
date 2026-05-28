@@ -7,9 +7,10 @@ interface AISuggestButtonProps {
   onSuggest: () => Promise<AISuggestionResponse>;
   onApply: (suggestions: Record<string, string>) => void;
   isLoading?: boolean;
+  iconOnly?: boolean;
 }
 
-export function AISuggestButton({ onSuggest, onApply, isLoading }: AISuggestButtonProps) {
+export function AISuggestButton({ onSuggest, onApply, isLoading, iconOnly }: AISuggestButtonProps) {
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<Record<string, string>>({});
@@ -61,6 +62,10 @@ export function AISuggestButton({ onSuggest, onApply, isLoading }: AISuggestButt
 
   const getFieldLabel = (field: string) => {
     const labels: Record<string, string> = {
+      nombre: "Nombre",
+      descripcion: "Descripción",
+      subtitulo: "Subtítulo",
+      observacion: "Observación",
       criterio: "Criterio",
       objetivo: "Objetivo",
       causa: "Causa",
@@ -77,12 +82,13 @@ export function AISuggestButton({ onSuggest, onApply, isLoading }: AISuggestButt
     <>
       <button 
         type="button" 
-        className="ai-suggest-button" 
+        className={`ai-suggest-button ${iconOnly ? 'ai-suggest-button--icon-only' : ''}`}
         onClick={handleSuggest}
         disabled={loading || isLoading}
+        title="Sugerencias IA"
       >
         <Sparkles size={16} />
-        {loading ? "Generando..." : "Sugerencias IA"}
+        {!iconOnly && (loading ? "Generando..." : "Sugerencias IA")}
       </button>
 
       {modalOpen && (

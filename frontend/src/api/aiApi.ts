@@ -17,6 +17,12 @@ export interface AISuggestEvidenceRequest {
   camposExistentes?: Record<string, string>;
 }
 
+export interface AISuggestFromHighlightRequest {
+  textoSubrayado: string;
+  tipo: "hallazgo" | "evidencia";
+  proyectoId?: string;
+}
+
 export interface AIImproveTextRequest {
   texto: string;
   nombreCampo: string;
@@ -45,6 +51,13 @@ export const aiApi = {
     data: AISuggestEvidenceRequest
   ): Promise<AISuggestionResponse> => {
     const response = await axiosClient.post("/ai/suggest-evidence", data);
+    return response.data;
+  },
+
+  suggestFromHighlight: async (
+    data: AISuggestFromHighlightRequest
+  ): Promise<AISuggestionResponse> => {
+    const response = await axiosClient.post("/ai/suggest-from-highlight", data);
     return response.data;
   },
 

@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     MONGO_DB_NAME: str
 
     GEMINI_API_KEY: Optional[str] = None
-    GEMINI_MODEL: str = "gemini-3-pro"
+    GEMINI_MODEL: str = "gemini-3.5-flash"
 
     BACKEND_CORS_ORIGINS: str = "http://localhost:5173"
 

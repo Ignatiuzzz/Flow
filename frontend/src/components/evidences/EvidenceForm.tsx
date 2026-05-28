@@ -145,11 +145,13 @@ function EvidenceForm({
         </p>
 
         <div style={{ marginTop: '16px' }}>
-          <AISuggestButton 
-            onSuggest={handleSuggest} 
-            onApply={handleApplySuggestions} 
-            isLoading={loading}
-          />
+          {isEditing && (
+            <AISuggestButton 
+              onSuggest={handleSuggest} 
+              onApply={handleApplySuggestions} 
+              isLoading={loading}
+            />
+          )}
         </div>
       </div>
 
