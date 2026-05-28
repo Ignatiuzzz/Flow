@@ -1,61 +1,94 @@
 .document-viewer {
-  @apply w-full;
+  @apply w-full min-h-screen bg-slate-100 text-slate-900;
 }
 
 .document-viewer__toolbar {
-  @apply sticky top-0 z-30 mb-6 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm backdrop-blur lg:flex-row lg:items-center lg:justify-between;
+  @apply sticky top-0 z-30 mb-6 border-b border-slate-200 bg-white px-5 py-4 shadow-sm;
+}
+
+.document-viewer__toolbar {
+  @apply flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between;
 }
 
 .document-viewer__toolbar h2 {
-  @apply mb-1 text-xl font-bold text-slate-900;
+  @apply mb-1 max-w-3xl truncate text-lg font-extrabold tracking-tight text-slate-950;
 }
 
 .document-viewer__toolbar p {
-  @apply text-sm text-slate-500;
+  @apply text-sm leading-5 text-slate-500;
 }
 
 .document-viewer__tools {
-  @apply flex flex-wrap items-center gap-3;
+  @apply flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between xl:justify-end;
+}
+
+.document-viewer__tool-group,
+.document-viewer__zoom-group {
+  @apply flex flex-col gap-2;
+}
+
+.document-viewer__tool-label {
+  @apply text-xs font-bold uppercase tracking-wide text-slate-400;
+}
+
+.document-viewer__tool-group {
+  @apply rounded-2xl border border-slate-200 bg-slate-50 p-2;
+}
+
+.document-viewer__tool-group {
+  @apply sm:flex-row sm:items-center;
+}
+
+.document-viewer__zoom-group {
+  @apply rounded-2xl border border-slate-200 bg-white p-2 shadow-sm;
+}
+
+.document-viewer__zoom-group {
+  @apply sm:flex-row sm:items-center;
 }
 
 .document-viewer__tool-button {
-  @apply flex h-10 w-10 items-center justify-center rounded-xl border transition;
+  @apply flex min-h-10 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold transition;
 }
 
-.document-viewer__tool-button--highlight {
-  @apply border-yellow-200 bg-yellow-50 text-yellow-700 hover:bg-yellow-100;
-}
-
-.document-viewer__tool-button--erase {
-  @apply border-red-200 bg-red-50 text-red-700 hover:bg-red-100;
-}
-
-.document-viewer__tool-button--active.document-viewer__tool-button--highlight {
-  @apply border-yellow-400 bg-yellow-200 text-slate-900 shadow-md ring-2 ring-yellow-100;
-}
-
-.document-viewer__tool-button--active.document-viewer__tool-button--erase {
-  @apply border-red-400 bg-red-200 text-red-900 shadow-md ring-2 ring-red-100;
+.document-viewer__tool-button span {
+  @apply hidden sm:inline;
 }
 
 .document-viewer__tool-icon {
-  @apply h-5 w-5 fill-current;
+  @apply h-5 w-5;
+}
+
+.document-viewer__tool-button--highlight {
+  @apply border-yellow-200 bg-white text-yellow-700 hover:bg-yellow-50;
+}
+
+.document-viewer__tool-button--erase {
+  @apply border-red-200 bg-white text-red-700 hover:bg-red-50;
+}
+
+.document-viewer__tool-button--active.document-viewer__tool-button--highlight {
+  @apply border-yellow-300 bg-yellow-100 text-yellow-900 shadow-sm ring-2 ring-yellow-100;
+}
+
+.document-viewer__tool-button--active.document-viewer__tool-button--erase {
+  @apply border-red-300 bg-red-100 text-red-900 shadow-sm ring-2 ring-red-100;
 }
 
 .document-viewer__zoom {
-  @apply flex items-center gap-3;
+  @apply flex items-center gap-2;
 }
 
 .document-viewer__zoom button {
-  @apply flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold text-white transition hover:bg-blue-700;
+  @apply flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-700 text-lg font-bold text-white shadow-sm transition hover:bg-slate-600;
 }
 
 .document-viewer__zoom span {
-  @apply min-w-16 rounded-xl bg-slate-100 px-4 py-2 text-center text-sm font-bold text-slate-700;
+  @apply min-w-16 rounded-xl border border-slate-200 bg-white px-4 py-2 text-center text-sm font-extrabold text-slate-700;
 }
 
 .document-viewer__content {
-  @apply relative flex flex-col items-center gap-8;
+  @apply relative flex flex-col items-center gap-8 px-4 pb-10;
 }
 
 .document-viewer__content--highlighting {
@@ -67,15 +100,15 @@
 }
 
 .document-viewer__page {
-  @apply relative rounded-2xl border border-slate-200 bg-white p-4 shadow-sm;
+  @apply relative rounded-2xl border border-slate-300 bg-white p-4 shadow-xl;
 }
 
 .document-viewer__page-number {
-  @apply mb-3 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600;
+  @apply mb-3 inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-bold text-slate-500;
 }
 
 .document-viewer__page-canvas {
-  @apply relative;
+  @apply relative overflow-hidden rounded-xl bg-white;
 }
 
 .document-viewer__highlight-layer {

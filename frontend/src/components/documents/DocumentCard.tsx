@@ -35,11 +35,6 @@ function DocumentCard({ document, onOpen, onDelete }: DocumentCardProps) {
         <p>
           Archivo documental registrado en el proyecto para revisión y respaldo.
         </p>
-
-        <div className="document-card__meta">
-          <span>Extensión: {document.extension}</span>
-          <span>Nombre interno: {document.nombreArchivo}</span>
-        </div>
       </div>
 
       <div className="document-card__actions">

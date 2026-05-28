@@ -1,6 +1,7 @@
 import { axiosClient } from "./axiosClient";
+import { AuditDocument } from "../types/document";
 import { Finding, FindingCreate, FindingUpdate } from "../types/finding";
-import { HighlightCoordinates } from "../types/highlight";
+import { Highlight, HighlightCoordinates } from "../types/highlight";
 
 export interface FindingFromHighlightCreate {
   proyectoId: string;
@@ -28,6 +29,16 @@ export interface FindingFromHighlightCreate {
   recomendaciones?: string;
 }
 
+export interface FindingRelatedDocumentItem {
+  documento: AuditDocument | null;
+  subrayado: Highlight;
+}
+
+export interface FindingRelatedDocumentsResponse {
+  hallazgoId: string;
+  documentosRelacionados: FindingRelatedDocumentItem[];
+}
+
 export const findingApi = {
   create: async (data: FindingCreate): Promise<Finding> => {
     const response = await axiosClient.post<Finding>("/findings/", data);
@@ -48,6 +59,16 @@ export const findingApi = {
 
   getById: async (findingId: string): Promise<Finding> => {
     const response = await axiosClient.get<Finding>(`/findings/${findingId}`);
+    return response.data;
+  },
+
+  getRelatedDocuments: async (
+    findingId: string
+  ): Promise<FindingRelatedDocumentsResponse> => {
+    const response = await axiosClient.get<FindingRelatedDocumentsResponse>(
+      `/findings/${findingId}/related-documents`
+    );
+
     return response.data;
   },
 

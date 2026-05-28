@@ -10,6 +10,7 @@ import {
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import "../../styles/components/documents/DocumentViewer.css";
+import { Eraser, Highlighter, Minus, Plus } from "lucide-react";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -266,12 +267,12 @@ function DocumentViewer({
         (page) => page.pagina === pageNumber
       )
         ? [
-            {
-              id: temporaryHighlight.id,
-              status: "temporary" as const,
-              coordinates: temporaryHighlight.coordinates,
-            },
-          ]
+          {
+            id: temporaryHighlight.id,
+            status: "temporary" as const,
+            coordinates: temporaryHighlight.coordinates,
+          },
+        ]
         : [];
 
     return [...saved, ...temporary];
@@ -362,8 +363,8 @@ function DocumentViewer({
               highlight.status === "temporary"
                 ? "document-viewer__highlight-rect document-viewer__highlight-rect--temporary"
                 : activeTool === "erase"
-                ? "document-viewer__highlight-rect document-viewer__highlight-rect--saved document-viewer__highlight-rect--eraser-hover"
-                : "document-viewer__highlight-rect document-viewer__highlight-rect--saved"
+                  ? "document-viewer__highlight-rect document-viewer__highlight-rect--saved document-viewer__highlight-rect--eraser-hover"
+                  : "document-viewer__highlight-rect document-viewer__highlight-rect--saved"
             }
             style={{
               left: visibleRect.x,
@@ -398,61 +399,56 @@ function DocumentViewer({
         </div>
 
         <div className="document-viewer__tools">
-          <button
-            type="button"
-            className={
-              activeTool === "highlight"
-                ? "document-viewer__tool-button document-viewer__tool-button--highlight document-viewer__tool-button--active"
-                : "document-viewer__tool-button document-viewer__tool-button--highlight"
-            }
-            onClick={() => toggleTool("highlight")}
-            title="Resaltador"
-            aria-label="Activar resaltador"
-          >
-            <svg
-              className="document-viewer__tool-icon"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path d="M4 20h16v2H4v-2Z" />
-              <path d="M15.2 3.4 20.6 8.8 9.7 19.7H4.3v-5.4L15.2 3.4Z" />
-              <path d="M16.6 2 22 7.4l-1.4 1.4-5.4-5.4L16.6 2Z" />
-            </svg>
-          </button>
+  <div className="document-viewer__tool-group">
+    <span className="document-viewer__tool-label">Herramientas</span>
 
-          <button
-            type="button"
-            className={
-              activeTool === "erase"
-                ? "document-viewer__tool-button document-viewer__tool-button--erase document-viewer__tool-button--active"
-                : "document-viewer__tool-button document-viewer__tool-button--erase"
-            }
-            onClick={() => toggleTool("erase")}
-            title="Borrador"
-            aria-label="Activar borrador"
-          >
-            <svg
-              className="document-viewer__tool-icon"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path d="M16.2 3.8 21 8.6 10.8 18.8H6L3 15.8 16.2 3.8Z" />
-              <path d="M5.2 20h15.6v2H5.2v-2Z" />
-            </svg>
-          </button>
+    <button
+      type="button"
+      className={
+        activeTool === "highlight"
+          ? "document-viewer__tool-button document-viewer__tool-button--highlight document-viewer__tool-button--active"
+          : "document-viewer__tool-button document-viewer__tool-button--highlight"
+      }
+      onClick={() => toggleTool("highlight")}
+      title="Resaltar texto"
+      aria-label="Activar resaltador"
+    >
+      <Highlighter className="document-viewer__tool-icon" strokeWidth={2.4} />
+      <span>Resaltar</span>
+    </button>
 
-          <div className="document-viewer__zoom">
-            <button type="button" onClick={handleZoomOut}>
-              -
-            </button>
+    <button
+      type="button"
+      className={
+        activeTool === "erase"
+          ? "document-viewer__tool-button document-viewer__tool-button--erase document-viewer__tool-button--active"
+          : "document-viewer__tool-button document-viewer__tool-button--erase"
+      }
+      onClick={() => toggleTool("erase")}
+      title="Borrar subrayado"
+      aria-label="Activar borrador"
+    >
+      <Eraser className="document-viewer__tool-icon" strokeWidth={2.4} />
+      <span>Borrar</span>
+    </button>
+  </div>
 
-            <span>{Math.round(scale * 100)}%</span>
+  <div className="document-viewer__zoom-group">
+    <span className="document-viewer__tool-label">Zoom</span>
 
-            <button type="button" onClick={handleZoomIn}>
-              +
-            </button>
-          </div>
-        </div>
+    <div className="document-viewer__zoom">
+      <button type="button" onClick={handleZoomOut} aria-label="Alejar">
+        <Minus size={18} strokeWidth={3} />
+      </button>
+
+      <span>{Math.round(scale * 100)}%</span>
+
+      <button type="button" onClick={handleZoomIn} aria-label="Acercar">
+        <Plus size={18} strokeWidth={3} />
+      </button>
+    </div>
+  </div>
+</div>
       </div>
 
       <div
@@ -460,8 +456,8 @@ function DocumentViewer({
           activeTool === "highlight"
             ? "document-viewer__content document-viewer__content--highlighting"
             : activeTool === "erase"
-            ? "document-viewer__content document-viewer__content--erasing"
-            : "document-viewer__content"
+              ? "document-viewer__content document-viewer__content--erasing"
+              : "document-viewer__content"
         }
         onMouseUp={handleMouseUp}
       >
