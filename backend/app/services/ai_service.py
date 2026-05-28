@@ -323,7 +323,7 @@ async def suggest_finding_fields(
         return _parse_json_response(response.text)
     except APIError as e:
         if e.code == 429:
-            raise ValueError("Límite de la IA alcanzado (Cuota o Tokens). Por favor, intenta nuevamente en un momento.")
+            raise ValueError("Límite de la IA alcanzado (Cuota o Tokens). Por favor, espera 1 minuto para volver a intentarlo.")
         raise
     except Exception as e:
         logger.error(f"Error generando contenido con Gemini: {e}")
@@ -359,7 +359,7 @@ async def suggest_evidence_fields(
         return _parse_json_response(response.text)
     except APIError as e:
         if e.code == 429:
-            raise ValueError("Límite de la IA alcanzado (Cuota o Tokens). Por favor, intenta nuevamente en un momento.")
+            raise ValueError("Límite de la IA alcanzado (Cuota o Tokens). Por favor, espera 1 minuto para volver a intentarlo.")
         raise
     except Exception as e:
         logger.error(f"Error generando contenido con Gemini: {e}")
